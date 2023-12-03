@@ -3,9 +3,9 @@ import Link from 'next/link';
 import Image from 'next/image';
 const Footer = () => {
   return (
-    <footer className='flex justify-center sm:px-0 p-3 pt-5 bg-neutral text-neutral-content  sm:p-10'>
-      <div className='container footer  '>
-        <aside>
+    <footer className='flex justify-center sm:px-0 pl-3 pr-3 pt-10 pb-10 bg-neutral text-neutral-content  sm:p-10'>
+      <div className='container footer flex flex-wrap-reverse '>
+        <aside className='w-full sm:w-fit flex flex-col items-center m-auto'>
           <div className='w-72'>
             <Link href='/'>
               <Image src={drawerLogo} alt='Crewboard' priority={true} />
@@ -18,26 +18,28 @@ const Footer = () => {
             Find your perfect job © Crewboard 2023
           </p>
         </aside>
-        <nav>
-          <header className='footer-title'>Services</header>
-          <a className='link link-hover'>Branding</a>
-          <a className='link link-hover'>Design</a>
-          <a className='link link-hover'>Marketing</a>
-          <a className='link link-hover'>Advertisement</a>
-        </nav>
-        <nav>
-          <header className='footer-title'>Company</header>
-          <a className='link link-hover'>About us</a>
-          <a className='link link-hover'>Contact</a>
-          <a className='link link-hover'>Jobs</a>
-          <a className='link link-hover'>Press kit</a>
-        </nav>
-        <nav>
-          <header className='footer-title'>Legal</header>
-          <a className='link link-hover'>Terms of use</a>
-          <a className='link link-hover'>Privacy policy</a>
-          <a className='link link-hover'>Cookie policy</a>
-        </nav>
+        <div className='flex w-full sm:w-fit justify-center gap-10 md:gap-24 lg:gap-40 m-auto'>
+          <nav className='flex flex-col gap-3'>
+            <header className='footer-title'>Services</header>
+            <a className='link link-hover'>Branding</a>
+            <a className='link link-hover'>Design</a>
+            <a className='link link-hover'>Marketing</a>
+            <a className='link link-hover'>Advertisement</a>
+          </nav>
+          <nav className='flex flex-col gap-3'>
+            <header className='footer-title'>Company</header>
+            <a className='link link-hover'>About us</a>
+            <a className='link link-hover'>Contact</a>
+            <a className='link link-hover'>Jobs</a>
+            <a className='link link-hover'>Press kit</a>
+          </nav>
+          <nav className='flex flex-col gap-3'>
+            <header className='footer-title'>Legal</header>
+            <a className='link link-hover'>Terms of use</a>
+            <a className='link link-hover'>Privacy policy</a>
+            <a className='link link-hover'>Cookie policy</a>
+          </nav>
+        </div>
       </div>
     </footer>
   );

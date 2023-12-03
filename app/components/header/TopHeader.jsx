@@ -23,10 +23,10 @@ const TopHeader = async () => {
   const users = await countUsers();
   return (
     <div className='bg-sky-400 flex justify-center'>
-      <div className='container flex justify-center gap-3'>
-        <div className='flex flex-col p-2 text-white justify-center items-center '>
-          <p className='font-bold'>{users.total}</p>
-          <p>Users</p>
+      <div className='container flex justify-center gap-3 text-sm sm:text-base'>
+        <div className='flex flex-col p-2 text-white justify-center items-center  '>
+          <p className='font-bold '>{users.total}</p>
+          <p className=''>Users</p>
         </div>
         <div className='flex flex-col p-2 text-white justify-center items-center'>
           <p className='font-bold'>{users.seamen}</p>
