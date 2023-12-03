@@ -206,19 +206,16 @@ const RegistrationForm = () => {
           />
         </div>
       ) : (
-        <div className='flex justify-center items-center w-min lg:w-fit bg-white p-6 sm:p-8 mt-2 mb-2 sm:mt-8 sm:mb-8 shadow-xl flex-wrap-reverse'>
+        <div className='flex justify-center items-center w-full sm:w-min lg:w-fit bg-white p-6 sm:p-8 mt-2 mb-2 sm:mt-8 sm:mb-8 shadow-xl flex-wrap-reverse'>
           <Form
             form={form}
             name='register'
-            className='w-80 sm:m-10'
+            className='w-80 sm:ml-10 sm:mr-10'
             onFinish={onFinish}
             scrollToFirstError
             labelCol={{ span: 24 }}
             wrapperCol={{ span: 24 }}
           >
-            <center>
-              <h1 className='text-2xl font-bold mb-6'> Registration</h1>
-            </center>
             {responseError ? (
               <div className='error-message'>
                 <Space direction='vertical' style={{ width: '100%' }}>
@@ -443,11 +440,12 @@ const RegistrationForm = () => {
           </Form>
           <div className='divider md:divider-horizontal hidden lg:flex '></div>
           <div className='w-fit  flex flex-col items-center justify-center'>
-            <div className='w-80 lg:m-10'>
-              <Link href='/'>
-                <Image src={drawerLogo} alt='Crewboard' priority={true} />
-              </Link>
+            <div className='w-80 lg:ml-10 lg:mr-10'>
+              <Image src={drawerLogo} alt='Crewboard' priority={true} />
             </div>
+            <center>
+              <h1 className='text-2xl font-bold mb-6'> Registration</h1>
+            </center>
           </div>
         </div>
       )}

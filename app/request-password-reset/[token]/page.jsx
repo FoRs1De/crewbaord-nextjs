@@ -2,10 +2,10 @@
 import { useState, useEffect } from 'react';
 import { useParams } from 'next/navigation';
 import { Button, Form, Input, Result, Alert, Space } from 'antd';
-
+import Image from 'next/image';
+import drawerLogo from '../../../public/images/DrawerLogo.png';
 import Link from 'next/link.js';
 import Loader from '@/app/components/Loader';
-
 import axios from 'axios';
 
 const ResetPassword = () => {
@@ -65,9 +65,9 @@ const ResetPassword = () => {
       ) : (
         <>
           {validToken ? (
-            <div>
+            <>
               {!isSubmitted ? (
-                <div className='flex justify-center items-center  lg:w-fit bg-white p-6 sm:p-8 w-full mt-2 mb-2 sm:mt-8 sm:mb-8 shadow-xl'>
+                <div className='flex justify-center items-center  w-full sm:w-fit bg-white p-6 sm:p-8 sm:pl-14 sm:pr-14  mt-2 mb-2 sm:mt-8 sm:mb-8 shadow-xl '>
                   <Form
                     form={form}
                     name='resetPassword'
@@ -77,6 +77,15 @@ const ResetPassword = () => {
                     labelCol={{ span: 24 }}
                     wrapperCol={{ span: 24 }}
                   >
+                    <div className='w-full  flex flex-col items-center justify-center'>
+                      <div className='w-80 '>
+                        <Image
+                          src={drawerLogo}
+                          alt='Crewboard'
+                          priority={true}
+                        />
+                      </div>
+                    </div>
                     <center>
                       <h1 className='text-2xl font-bold mb-4'>
                         Reset password
@@ -173,7 +182,7 @@ const ResetPassword = () => {
                   ]}
                 />
               )}
-            </div>
+            </>
           ) : (
             <Result
               status='warning'

@@ -10,6 +10,12 @@ export const metadata = {
   description: 'Crewboard - jobs portal for Seafarers and Employers',
 };
 
+export const viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  maximumScale: 1,
+};
+
 export default function RootLayout({ children }) {
   return (
     <html lang='en'>

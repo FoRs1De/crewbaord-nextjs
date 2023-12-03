@@ -3,6 +3,8 @@ import { useState } from 'react';
 import { Button, Form, Input, Result, Alert, Space, message } from 'antd';
 import Loader from '../components/Loader';
 import axios from 'axios';
+import Image from 'next/image';
+import drawerLogo from '../../public/images/DrawerLogo.png';
 
 const RequestPasswordReset = () => {
   const [isSubmitted, setIsSubmitted] = useState(false);
@@ -50,7 +52,7 @@ const RequestPasswordReset = () => {
   return (
     <main className='flex  mx-auto justify-center items-center container flex-1 p-2 sm:px-0'>
       {!isSubmitted ? (
-        <div className='flex justify-center items-center  lg:w-fit bg-white p-6 sm:p-8 w-full mt-2 mb-2 sm:mt-8 sm:mb-8 shadow-xl '>
+        <div className='flex justify-center items-center   sm:w-fit bg-white p-6 sm:p-8 sm:pl-14 sm:pr-14 w-full mt-2 mb-2 sm:mt-8 sm:mb-8 shadow-xl '>
           <Form
             form={form}
             name='resetPassword'
@@ -60,8 +62,13 @@ const RequestPasswordReset = () => {
             labelCol={{ span: 24 }}
             wrapperCol={{ span: 24 }}
           >
+            <div className='w-full  flex flex-col items-center justify-center'>
+              <div className='w-80 '>
+                <Image src={drawerLogo} alt='Crewboard' priority={true} />
+              </div>
+            </div>
             <center>
-              <h1 className='text-2xl font-bold mb-4'>Reset password</h1>
+              <h1 className='text-2xl font-bold mb-6'>Reset password</h1>
             </center>
             <Space
               direction='vertical'
@@ -76,7 +83,7 @@ const RequestPasswordReset = () => {
             </Space>
             <Form.Item
               name='email'
-              label='Enter your email to receive the password reset link'
+              label='Email'
               rules={[
                 {
                   type: 'email',
