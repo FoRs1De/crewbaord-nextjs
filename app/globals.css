@@ -17,11 +17,32 @@
 }
 
 body {
-  color: rgb(var(--foreground-rgb));
-  background: linear-gradient(
-      to bottom,
-      transparent,
-      rgb(var(--background-end-rgb))
-    )
-    rgb(var(--background-start-rgb));
+  background-color: #f9f9f9;
+  font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  color: black;
+}
+
+/* for Windows */
+@media screen and (-webkit-min-device-pixel-ratio: 0) {
+  body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  }
+}
+
+/* for macOS */
+@media screen and (-apple-system-font: inherit) {
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Lucida Grande',
+      'Helvetica Neue', sans-serif;
+  }
+}
+
+/* for Linux/Ubuntu */
+@media screen and (font-family: 'Ubuntu, Cantarell, Fira Sans, Droid Sans') {
+  body {
+    font-family: 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans',
+      'Helvetica Neue', sans-serif;
+  }
 }
