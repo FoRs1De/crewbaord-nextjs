@@ -33,9 +33,13 @@ export const POST = async (req, res) => {
     }
 
     if (existingSeaman) {
-      const token = sign({ id: existingSeaman.id }, secret, {
-        expiresIn: maxAgeRemember,
-      });
+      const token = sign(
+        { id: existingSeaman.id, userRole: 'seaman' },
+        secret,
+        {
+          expiresIn: maxAgeRemember,
+        }
+      );
 
       cookies().set('JWT', token, {
         httpOnly: true,
@@ -55,9 +59,13 @@ export const POST = async (req, res) => {
     }
 
     if (existingEmployer) {
-      const token = sign({ id: existingEmployer }, secret, {
-        expiresIn: maxAgeRemember,
-      });
+      const token = sign(
+        { id: existingEmployer.id, userRole: 'seaman' },
+        secret,
+        {
+          expiresIn: maxAgeRemember,
+        }
+      );
       cookies().set('JWT', token, {
         httpOnly: true,
         secure: true,

@@ -18,7 +18,7 @@ const Footer = () => {
             Find your perfect job © Crewboard 2023
           </p>
         </aside>
-        <div className='flex w-full sm:w-fit justify-center gap-10 md:gap-24 lg:gap-40 m-auto'>
+        <div className='flex w-full sm:w-fit justify-center gap-10 md:gap-20 lg:gap-40 m-auto pr-3'>
           <nav className='flex flex-col gap-3'>
             <header className='footer-title'>Services</header>
             <a className='link link-hover'>Branding</a>

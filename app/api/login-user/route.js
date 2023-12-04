@@ -52,11 +52,11 @@ export const POST = async (req, res) => {
       if (passwordsMatch) {
         let token;
         if (remember) {
-          token = sign({ id: existingSeaman.id }, secret, {
+          token = sign({ id: existingSeaman.id, userRole: 'seaman' }, secret, {
             expiresIn: maxAgeRemember,
           });
         } else {
-          token = sign({ id: existingSeaman.id }, secret, {
+          token = sign({ id: existingSeaman.id, userRole: 'seaman' }, secret, {
             expiresIn: maxAge,
           });
         }
@@ -87,13 +87,21 @@ export const POST = async (req, res) => {
       if (passwordsMatch) {
         let token;
         if (remember) {
-          token = sign({ id: existingEmployer.id }, secret, {
-            expiresIn: maxAgeRemember,
-          });
+          token = sign(
+            { id: existingEmployer.id, userRole: 'employer' },
+            secret,
+            {
+              expiresIn: maxAgeRemember,
+            }
+          );
         } else {
-          token = sign({ id: existingEmployer.id }, secret, {
-            expiresIn: maxAge,
-          });
+          token = sign(
+            { id: existingEmployer.id, userRole: 'employer' },
+            secret,
+            {
+              expiresIn: maxAge,
+            }
+          );
         }
         cookies().set('JWT', token, {
           httpOnly: true,

@@ -120,7 +120,7 @@ const Header = () => {
             checked={drawerChecked}
             onChange={() => setDrawerChecked(!drawerChecked)}
           />
-          <div className='drawer-content flex flex-col'>
+          <div className='drawer-content flex flex-col '>
             {/* Navbar */}
             <div className='w-full  bg-sky-500 flex justify-center '>
               <div className='container flex justify-between items-center'>
@@ -152,7 +152,7 @@ const Header = () => {
                     </svg>
                   </label>
                 </div>
-                <div className='flex-none hidden lg:block '>
+                <div className='flex-none hidden lg:block pr-2'>
                   <ul className='text-white px-2 sm:px-0 flex gap-5 items-center'>
                     <li
                       className={
