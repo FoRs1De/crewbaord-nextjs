@@ -16,6 +16,7 @@ export const POST = async (req, res) => {
 
   try {
     const receivedData = await req.json();
+
     const email = receivedData.email;
     const password = receivedData.password;
     const remember = receivedData.remember;

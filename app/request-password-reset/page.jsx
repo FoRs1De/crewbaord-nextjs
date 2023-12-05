@@ -52,7 +52,7 @@ const RequestPasswordReset = () => {
   return (
     <main className='flex  mx-auto justify-center items-center container flex-1 p-2 sm:px-0'>
       {!isSubmitted ? (
-        <div className='flex justify-center items-center   sm:w-fit bg-white p-6 sm:p-8 sm:pl-14 sm:pr-14 w-full mt-2 mb-2 sm:mt-8 sm:mb-8 shadow-xl '>
+        <div className='flex rounded-lg justify-center items-center   sm:w-fit bg-white p-6 sm:p-8 sm:pl-14 sm:pr-14 w-full mt-2 mb-2 sm:mt-8 sm:mb-8 shadow-xl '>
           <Form
             form={form}
             name='resetPassword'

@@ -10,12 +10,19 @@ body {
 
 h1 {
   font-size: 2em;
+  font-weight: 600;
 }
 h2 {
   font-size: 1.8em;
+  font-weight: 600;
 }
 h3 {
   font-size: 1.6em;
+  font-weight: 600;
+}
+
+.ant-btn-primary {
+  background-color: #3c82f6;
 }
 
 /* for Windows */

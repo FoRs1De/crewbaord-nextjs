@@ -51,16 +51,19 @@ const Header = () => {
     setDrawerChecked(false);
   };
 
+  const profileLink = '/profile';
+  const cvLink = '/profile/cv';
+  const settingsLink = '/profile/settings';
   const items = [
     {
       label: (
         <Link
-          href='/profile'
+          href={profileLink}
           className='flex items-center gap-2 '
           onClick={closeDrawer}
         >
           <VscAccount />
-          <p className='ml-2 text-base '>Profile</p>
+          <p className=' text-base '>Profile</p>
         </Link>
       ),
       key: '0',
@@ -68,12 +71,12 @@ const Header = () => {
     {
       label: (
         <Link
-          href='/my-cv'
+          href={cvLink}
           className='flex items-center gap-2'
           onClick={closeDrawer}
         >
           <IoDocumentTextOutline />
-          <p className='ml-2 text-base'>My CV</p>
+          <p className=' text-base'>My CV</p>
         </Link>
       ),
       key: '1',
@@ -81,12 +84,12 @@ const Header = () => {
     {
       label: (
         <Link
-          href='/settings'
+          href={settingsLink}
           className='flex items-center gap-2'
           onClick={closeDrawer}
         >
           <RxGear />
-          <p className='ml-2 text-base'>Settings</p>
+          <p className='text-base'>Settings</p>
         </Link>
       ),
       key: '3',
@@ -298,7 +301,7 @@ const Header = () => {
                   <div className='w-full p-4 flex flex-col gap-4'>
                     <div>
                       <Link
-                        href='/profile'
+                        href={profileLink}
                         className='flex items-center gap-2'
                         onClick={closeDrawer}
                       >
@@ -308,7 +311,7 @@ const Header = () => {
                     </div>
                     <div>
                       <Link
-                        href='/my-cv'
+                        href={cvLink}
                         className='flex items-center gap-2'
                         onClick={closeDrawer}
                       >
@@ -318,7 +321,7 @@ const Header = () => {
                     </div>
                     <div>
                       <Link
-                        href='/settings'
+                        href={settingsLink}
                         className='flex items-center gap-2'
                         onClick={closeDrawer}
                       >

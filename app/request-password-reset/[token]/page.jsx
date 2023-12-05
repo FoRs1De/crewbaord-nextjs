@@ -67,7 +67,7 @@ const ResetPassword = () => {
           {validToken ? (
             <>
               {!isSubmitted ? (
-                <div className='flex justify-center items-center  w-full sm:w-fit bg-white p-6 sm:p-8 sm:pl-14 sm:pr-14  mt-2 mb-2 sm:mt-8 sm:mb-8 shadow-xl '>
+                <div className='flex rounded-lg justify-center items-center  w-full sm:w-fit bg-white p-6 sm:p-8 sm:pl-14 sm:pr-14  mt-2 mb-2 sm:mt-8 sm:mb-8 shadow-xl '>
                   <Form
                     form={form}
                     name='resetPassword'

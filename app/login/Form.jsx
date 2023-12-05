@@ -16,15 +16,19 @@ const LoginForm = () => {
   const [form] = Form.useForm();
   const router = useRouter();
   const [responseError, setResponseError] = useState(null);
-  const [email, setEmail] = useState(null);
+  const [emailDisplay, setEmailDisplay] = useState(null);
   const [isVerified, setIsVerified] = useState(true);
   const [buttonDisabled, setButtonDisabled] = useState(false);
   const dispatch = useDispatch();
 
   const onFinish = async (values) => {
-    setEmail(values.email);
+    let { email, ...otherValues } = values;
+    const emailLower = email.toLowerCase();
+    setEmailDisplay(emailLower);
+    const valuesToSend = { ...otherValues, email: emailLower };
+    console.log(valuesToSend);
     try {
-      const res = await axios.post('/api/login-user', values);
+      const res = await axios.post('/api/login-user', valuesToSend);
       if (res.data.message === 'Authenticated') {
         form.setFieldsValue({ password: '', email: '' });
         setResponseError(null);
@@ -37,7 +41,7 @@ const LoginForm = () => {
         const url = new URL(currentUrl);
         const originUrl = url.origin;
         await axios.post(`/api/email-verification/email-verification-resend`, {
-          email,
+          emailDisplay,
           url: originUrl,
         });
         setResponseError('');
@@ -58,7 +62,7 @@ const LoginForm = () => {
     const url = new URL(currentUrl);
     const originUrl = url.origin;
     try {
-      if (email) {
+      if (emailDisplay) {
         await axios.post(`/api/email-verification/email-verification-resend`, {
           email,
           url: originUrl,
@@ -75,7 +79,7 @@ const LoginForm = () => {
 
   return (
     <>
-      <div className='flex justify-center items-center w-full sm:w-min lg:w-fit bg-white p-6 sm:p-8 mt-2 mb-2 sm:mt-8 sm:mb-8 shadow-xl flex-wrap-reverse'>
+      <div className='flex rounded-lg justify-center items-center w-full sm:w-min lg:w-fit bg-white p-6 sm:p-8 mt-2 mb-2 sm:mt-8 sm:mb-8 shadow-xl flex-wrap-reverse'>
         <Form
           scrollToFirstError
           form={form}
@@ -177,7 +181,7 @@ const LoginForm = () => {
                     <center>
                       <p>
                         The email has been sent to your designated address (
-                        <strong>{email}</strong>).
+                        <strong>{emailDisplay}</strong>).
                       </p>{' '}
                     </center>
                     <br />

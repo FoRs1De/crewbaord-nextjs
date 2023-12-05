@@ -110,6 +110,8 @@ export const POST = async (req) => {
         seaServiceUpdated: null,
         dataUpdated: null,
         registered: currentDateTime,
+        hidden: false,
+        hiddenTill: null,
       };
       const insertedData = await seamenCollection.insertOne(seaman);
 

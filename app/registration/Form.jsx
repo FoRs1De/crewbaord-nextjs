@@ -73,11 +73,14 @@ const RegistrationForm = () => {
       const currentURL = window.location.href;
       const url = new URL(currentURL);
       const originUrl = url.origin;
-      const { confirm, ...valuesWithoutConfirm } = values;
+      let { email, confirm, ...valuesWithoutConfirm } = values;
+      const emailLower = email.toLowerCase();
+
       setLoader(true);
       try {
         const res = await axios.post(`/api/post-user`, {
           ...valuesWithoutConfirm,
+          email: emailLower,
           url: originUrl,
         });
         console.log(res);
@@ -206,7 +209,7 @@ const RegistrationForm = () => {
           />
         </div>
       ) : (
-        <div className='flex justify-center items-center w-full sm:w-min lg:w-fit bg-white p-6 sm:p-8 mt-2 mb-2 sm:mt-8 sm:mb-8 shadow-xl flex-wrap-reverse'>
+        <div className='flex rounded-lg justify-center items-center w-full sm:w-min lg:w-fit bg-white p-6 sm:p-8 mt-2 mb-2 sm:mt-8 sm:mb-8 shadow-xl flex-wrap-reverse'>
           <Form
             form={form}
             name='register'
