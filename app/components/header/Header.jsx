@@ -26,7 +26,7 @@ const Header = () => {
 
   const dispatch = useDispatch();
   const sessionStatus = useSelector((state) => state.authReducer);
-  console.log(sessionStatus);
+
   useEffect(() => {
     const authenticate = async () => {
       try {

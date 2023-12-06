@@ -1,14 +1,41 @@
 'use client';
 import { Button, Form, Input } from 'antd';
+import { useSelector } from 'react-redux';
+import axios from 'axios';
+import { useState } from 'react';
+import { Alert } from 'antd';
 
 const ChangePassword = () => {
   const [form] = Form.useForm();
-  const onFinish = (values) => {
-    console.log('Success:', values);
+  const sessionStatus = useSelector((state) => state.authReducer);
+  const [responseMessage, setResponseMessage] = useState(null);
+
+  const onFinish = async (values) => {
+    const userId = sessionStatus.id;
+    const userRole = sessionStatus.userRole;
+    const password = values.password;
+    const dataToSend = { userId, userRole, password };
+
+    try {
+      const res = await axios.put(
+        `/api/profile/settings/change-password`,
+        dataToSend
+      );
+      if (res.data.message === 'Password updated') {
+        setResponseMessage(res.data.message);
+        setTimeout(() => {
+          setResponseMessage(null);
+        }, 5000);
+        form.setFieldsValue({ password: '', confirm: '' });
+      } else {
+        setResponseMessage(res.data.message);
+      }
+    } catch (error) {
+      setResponseMessage('Internal server error please contact support');
+    }
   };
   return (
     <>
-      {' '}
       <div className='flex rounded-lg justify-center items-center w-full sm:w-min lg:w-fit bg-white p-6 sm:p-8 mt-2 mb-2 sm:mt-8 sm:mb-8 shadow-xl flex-wrap-reverse'>
         <Form
           form={form}
@@ -20,30 +47,45 @@ const ChangePassword = () => {
           onFinish={onFinish}
           layout='vertical'
         >
-          <h1 className='m-auto w-fit lg:m-0'>Password</h1>
+          <div className='flex flex-wrap flex-col lg:flex-row lg:justify-between'>
+            <h1 className='m-auto w-fit mb-5 lg:m-0 '>Password</h1>
+            {responseMessage && (
+              <Alert
+                className='mb-5 lg:m-0'
+                message={responseMessage}
+                type={
+                  responseMessage === 'Password updated' ? 'success' : 'error'
+                }
+                showIcon
+              />
+            )}
+          </div>
           <div className='flex font-semibold   flex-wrap justify-center lg:gap-10 w-64 sm:w-full '>
             <Form.Item
               name='password'
               label='New password'
               rules={[
                 {
-                  type: 'email',
-                  message: 'The input is not valid E-mail!',
+                  type: 'password',
+                  message: 'Please input your password!',
                 },
                 {
                   required: true,
-                  message: 'Please input your E-mail!',
+                  min: 6,
+                  message: 'Password must be at least 6 characters',
                 },
               ]}
             >
-              <Input className='w-64' placeholder='Enter new password' />
+              <Input.Password
+                className='w-64'
+                placeholder='Enter new password'
+              />
             </Form.Item>
 
             <Form.Item
               name='confirm'
               label='Confirm password'
               dependencies={['password']}
-              hasFeedback
               rules={[
                 {
                   required: true,
@@ -59,13 +101,16 @@ const ChangePassword = () => {
                 }),
               ]}
             >
-              <Input className='w-64' placeholder='Enter new password again' />
+              <Input.Password
+                className='w-64'
+                placeholder='Enter new password again'
+              />
             </Form.Item>
 
-            <Form.Item>
+            <Form.Item className=' flex items-end'>
               <Button
                 type='primary'
-                className='bg-blue-500 mt-7 w-28'
+                className='bg-blue-500  w-28'
                 htmlType='submit'
               >
                 Submit

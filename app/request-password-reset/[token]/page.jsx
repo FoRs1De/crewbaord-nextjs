@@ -136,7 +136,7 @@ const ResetPassword = () => {
                               return Promise.resolve();
                             }
                             return Promise.reject(
-                              new Error('Entered passwords do not match!')
+                              new Error('Passwords do not match!')
                             );
                           },
                         }),

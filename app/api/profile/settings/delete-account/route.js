@@ -3,7 +3,6 @@ import { cookies } from 'next/headers';
 
 export const POST = async (req) => {
   const receivedData = await req.json();
-  console.log(receivedData);
 
   client.connect();
   const db = client.db('admin');
