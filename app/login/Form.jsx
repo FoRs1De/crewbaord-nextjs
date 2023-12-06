@@ -35,16 +35,9 @@ const LoginForm = () => {
         dispatch(setAuth(res.data));
         router.push('/');
       } else if (res.data.message === 'Account not verified') {
+        setResponseError(null);
         setIsVerified(false);
         form.setFieldsValue({ password: '', email: '' });
-        const currentUrl = window.location.href;
-        const url = new URL(currentUrl);
-        const originUrl = url.origin;
-        await axios.post(`/api/email-verification/email-verification-resend`, {
-          emailDisplay,
-          url: originUrl,
-        });
-        setResponseError('');
       } else {
         form.setFieldsValue({ password: '', email: '' });
         setResponseError(res.data.message);
@@ -64,7 +57,7 @@ const LoginForm = () => {
     try {
       if (emailDisplay) {
         await axios.post(`/api/email-verification/email-verification-resend`, {
-          email,
+          email: emailDisplay,
           url: originUrl,
         });
         setButtonDisabled(true);
@@ -73,7 +66,7 @@ const LoginForm = () => {
         }, 60000);
       }
     } catch (error) {
-      console.error('Something went wrong', error.response.data.error);
+      console.error('Something went wrong', error);
     }
   };
 
@@ -88,11 +81,6 @@ const LoginForm = () => {
           initialValues={{ remember: false }}
           onFinish={onFinish}
         >
-          {responseError && (
-            <div className='mb-5'>
-              <Alert message={responseError} type='error' showIcon />
-            </div>
-          )}
           <div className='mt-6'>
             {' '}
             <GoogleButton
@@ -102,6 +90,71 @@ const LoginForm = () => {
           </div>
 
           <Divider className='text-black'>OR</Divider>
+          <div className='flex justify-center'>
+            {responseError && (
+              <div className='mb-5 w-full'>
+                <Alert message={responseError} type='error' showIcon />
+              </div>
+            )}
+            {!isVerified && (
+              <div className='w-full mb-5'>
+                <Alert
+                  message={
+                    <center>
+                      <p>
+                        <strong>
+                          Please confirm your email to complete the process of
+                          registration.
+                        </strong>
+                      </p>
+                    </center>
+                  }
+                  description={
+                    <div>
+                      <br />
+                      <center>
+                        <p>
+                          Thank you for registration! An activation email has
+                          been sent to (<strong>{emailDisplay}</strong>).
+                        </p>{' '}
+                      </center>
+                      <br />
+                      <center>
+                        <p>
+                          Please check your inbox and, if needed, your Spam
+                          folder for the activation message. Follow the link
+                          provided to activate your account.
+                        </p>
+                      </center>
+                      <center>
+                        <p>
+                          <br /> {`Didn't`} receive the email? Please click
+                          <>
+                            <Button
+                              disabled={buttonDisabled}
+                              onClick={resendEmailHandler}
+                              type='link'
+                            >
+                              Resend Email
+                            </Button>
+                          </>
+                        </p>
+                      </center>
+                      <Divider className='text-black'>OR</Divider>
+                      <center>
+                        <p>
+                          Alternatively, use the Google button at the top to
+                          login. If you registered with a Google-associated
+                          email, your account will be automatically verified.
+                        </p>
+                      </center>
+                    </div>
+                  }
+                  type='info'
+                />
+              </div>
+            )}
+          </div>
           <Form.Item
             name='email'
             rules={[
@@ -162,57 +215,6 @@ const LoginForm = () => {
           <center>
             <h1 className='text-2xl font-bold '>Login</h1>
           </center>
-          {!isVerified && (
-            <div className='w-80 lg:m-10 mt-10 sm:md-0 mb-10 sm:mb-0'>
-              <Alert
-                message={
-                  <center>
-                    <p>
-                      <strong>
-                        Please confirm your email to complete the process of
-                        registration.
-                      </strong>
-                    </p>
-                  </center>
-                }
-                description={
-                  <div>
-                    <br />
-                    <center>
-                      <p>
-                        The email has been sent to your designated address (
-                        <strong>{emailDisplay}</strong>).
-                      </p>{' '}
-                    </center>
-                    <br />
-                    <center>
-                      <p>
-                        {' '}
-                        Kindly follow the link from our message to activate your
-                        account. Check the Spam folder if the email is not in
-                        the Inbox.
-                      </p>
-                    </center>
-                    <center>
-                      <p>
-                        <br /> No Email? Please click
-                        <>
-                          <Button
-                            disabled={buttonDisabled}
-                            onClick={resendEmailHandler}
-                            type='link'
-                          >
-                            Resend Email
-                          </Button>
-                        </>
-                      </p>
-                    </center>
-                  </div>
-                }
-                type='info'
-              />
-            </div>
-          )}
         </div>
       </div>
     </>

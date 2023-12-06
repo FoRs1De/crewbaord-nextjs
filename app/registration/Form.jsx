@@ -68,14 +68,13 @@ const RegistrationForm = () => {
   };
 
   const onFinish = async (values) => {
-    setUserEmail(values.email);
     if (isCaptchaVerified) {
       const currentURL = window.location.href;
       const url = new URL(currentURL);
       const originUrl = url.origin;
-      let { email, confirm, ...valuesWithoutConfirm } = values;
+      const { email, confirm, ...valuesWithoutConfirm } = values;
       const emailLower = email.toLowerCase();
-
+      setUserEmail(emailLower);
       setLoader(true);
       try {
         const res = await axios.post(`/api/post-user`, {
@@ -110,7 +109,7 @@ const RegistrationForm = () => {
             agreement: '',
           });
           setFormIsSubmitted(true);
-          setUserEmail(valuesWithoutConfirm.email);
+          setUserEmail(emailLower);
           setLoader(false);
         }
       } catch (error) {

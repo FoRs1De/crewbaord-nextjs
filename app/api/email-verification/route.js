@@ -8,6 +8,7 @@ export const PUT = async (req) => {
   const token = base64url.decode(codedToken);
   try {
     const tokenData = jwt.verify(token, process.env.JWT_SECRET);
+    console.log(tokenData);
     if (tokenData) {
       const userId = tokenData.userId;
       await client.connect();
@@ -26,7 +27,7 @@ export const PUT = async (req) => {
           { $set: { verified: true } }
         );
       }
-      console.log(userData);
+
       if (userData) {
         return Response.json({ message: 'Account verified' });
       } else {

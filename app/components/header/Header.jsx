@@ -396,7 +396,7 @@ const Header = () => {
                   {sessionStatus && (
                     <div>
                       <Link
-                        href='/login'
+                        href='/'
                         className='flex items-center gap-2 text-base'
                         onClick={logout}
                       >

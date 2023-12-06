@@ -2,7 +2,11 @@ import { NextResponse } from 'next/server';
 import { cookies } from 'next/headers';
 import jwt from 'jsonwebtoken';
 
-const visitorsProtectedRoutes = ['/profile'];
+const visitorsProtectedRoutes = [
+  '/profile',
+  '/profile/settings',
+  '/profile/cv',
+];
 const loggedInProtectedRoutes = ['/login', '/registration'];
 const seamanProtectedRoutes = [];
 const employerProtectedRoutes = [];

@@ -2,8 +2,15 @@
 import { Button, Modal, Alert, Space } from 'antd';
 import { ExclamationCircleOutlined } from '@ant-design/icons';
 import { useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { setAuth } from '../../redux/actions/auth';
+import axios from 'axios';
+import { useRouter } from 'next/navigation';
 
 const DeleteAccount = () => {
+  const sessionStatus = useSelector((state) => state.authReducer);
+  const router = useRouter();
+  const dispatch = useDispatch();
   const { confirm } = Modal;
   const [responseDeleteUser, setResponseDeleteUser] = useState(null);
   const showConfirm = () => {
@@ -14,16 +21,20 @@ const DeleteAccount = () => {
       centered: true,
       async onOk() {
         try {
-          await axios.delete(``);
-          setUser(null);
-          setIsloggedIn(false);
-          navigate('/');
+          const res = await axios.post(`/api/profile/settings/delete-account`, {
+            userId: sessionStatus.id,
+          });
+
+          if (res.data.message === 'User deleted') {
+            dispatch(setAuth(false));
+            router.push('/');
+          } else {
+            setResponseDeleteUser(
+              'Internal server error please contact support'
+            );
+          }
         } catch (error) {
-          setResponseDeleteUser(error.response.data.error);
-          setTimeout(() => {
-            setResponseDeleteUser(null);
-          }, 10000);
-          console.log(error);
+          console.log(error.message);
         }
       },
       onCancel() {
@@ -46,7 +57,12 @@ const DeleteAccount = () => {
           }}
         >
           {responseDeleteUser ? (
-            <Alert message={responseDeleteUser} type='error' showIcon />
+            <Alert
+              className='mt-5'
+              message={responseDeleteUser}
+              type='error'
+              showIcon
+            />
           ) : null}
         </Space>
         <div className='mt-5'>

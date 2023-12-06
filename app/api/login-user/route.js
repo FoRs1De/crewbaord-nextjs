@@ -34,23 +34,16 @@ export const POST = async (req, res) => {
     }
 
     if (existingSeaman) {
-      let verified = existingSeaman.verified;
-      if (!verified) {
-        return Response.json({ message: 'Account not verified' });
-      }
-    } else if (existingEmployer) {
-      let verified = existingEmployer.verified;
-      if (!verified) {
-        return Response.json({ message: 'Account not verified' });
-      }
-    }
-
-    if (existingSeaman) {
       const passwordsMatch = await bcrypt.compare(
         password,
         existingSeaman.password
       );
       if (passwordsMatch) {
+        let verified = existingSeaman.verified;
+        if (!verified) {
+          return Response.json({ message: 'Account not verified' });
+        }
+
         let token;
         if (remember) {
           token = sign({ id: existingSeaman.id, userRole: 'seaman' }, secret, {
@@ -86,6 +79,11 @@ export const POST = async (req, res) => {
         existingEmployer.password
       );
       if (passwordsMatch) {
+        let verified = existingEmployer.verified;
+        if (!verified) {
+          return Response.json({ message: 'Account not verified' });
+        }
+
         let token;
         if (remember) {
           token = sign(

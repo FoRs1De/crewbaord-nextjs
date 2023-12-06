@@ -54,8 +54,9 @@ export const POST = async (req) => {
 
     if (receivedData.userRole === 'seaman') {
       const currentDateTime = moment().format('DD.MM.YYYY');
+      const userId = uuid();
       const seaman = {
-        id: uuid(),
+        id: userId,
         userRole: receivedData.userRole,
         email: receivedData.email,
         name: receivedData.name,
@@ -113,17 +114,13 @@ export const POST = async (req) => {
         hidden: false,
         hiddenTill: null,
       };
-      const insertedData = await seamenCollection.insertOne(seaman);
+      await seamenCollection.insertOne(seaman);
 
       const generateTimeLimitedLink = () => {
         const expiresInMinutes = 60;
-        const token = jwt.sign(
-          { userId: insertedData.id },
-          process.env.JWT_SECRET,
-          {
-            expiresIn: expiresInMinutes * 60,
-          }
-        );
+        const token = jwt.sign({ userId }, process.env.JWT_SECRET, {
+          expiresIn: expiresInMinutes * 60,
+        });
         const linkEncoded = base64url.encode(token);
         return linkEncoded;
       };
@@ -158,8 +155,9 @@ export const POST = async (req) => {
       }
     } else {
       const currentDateTime = moment().format('DD.MM.YYYY');
+      const userId = uuid();
       const employer = {
-        id: uuid(),
+        id: userId,
         userRole: receivedData.userRole,
         email: receivedData.email,
         name: receivedData.name,
@@ -181,17 +179,13 @@ export const POST = async (req) => {
         registered: currentDateTime,
       };
 
-      const insertedData = await employersCollection.insertOne(employer);
+      await employersCollection.insertOne(employer);
 
       const generateTimeLimitedLink = () => {
         const expiresInMinutes = 60;
-        const token = jwt.sign(
-          { userId: insertedData.id },
-          process.env.JWT_SECRET,
-          {
-            expiresIn: expiresInMinutes * 60,
-          }
-        );
+        const token = jwt.sign({ userId }, process.env.JWT_SECRET, {
+          expiresIn: expiresInMinutes * 60,
+        });
         const linkEncoded = base64url.encode(token);
         return linkEncoded;
       };

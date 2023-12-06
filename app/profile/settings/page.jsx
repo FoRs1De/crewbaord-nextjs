@@ -12,7 +12,6 @@ const Login = () => {
         <HideAccount />
         <ChangeEmail />
         <ChangePassword />
-
         <DeleteAccount />
       </main>
     </>
