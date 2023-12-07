@@ -9,8 +9,9 @@ import { useRouter } from 'next/navigation';
 import axios from 'axios';
 import { useState } from 'react';
 import { Divider } from 'antd';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { setAuth } from '../redux/actions/auth';
+import { setUpdateTrigger } from '../redux/actions/updateTrigger';
 
 const LoginForm = () => {
   const [form] = Form.useForm();
@@ -20,19 +21,22 @@ const LoginForm = () => {
   const [isVerified, setIsVerified] = useState(true);
   const [buttonDisabled, setButtonDisabled] = useState(false);
   const dispatch = useDispatch();
+  const updateTrigger = useSelector((state) => state.updateTriggerReducer);
 
   const onFinish = async (values) => {
     let { email, ...otherValues } = values;
     const emailLower = email.toLowerCase();
     setEmailDisplay(emailLower);
     const valuesToSend = { ...otherValues, email: emailLower };
-    console.log(valuesToSend);
+
     try {
       const res = await axios.post('/api/login-user', valuesToSend);
       if (res.data.message === 'Authenticated') {
         form.setFieldsValue({ password: '', email: '' });
         setResponseError(null);
         dispatch(setAuth(res.data));
+
+        dispatch(setUpdateTrigger(!updateTrigger));
         router.push('/');
       } else if (res.data.message === 'Account not verified') {
         setResponseError(null);

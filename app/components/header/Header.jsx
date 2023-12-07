@@ -13,20 +13,27 @@ import Image from 'next/image';
 import axios from 'axios';
 import { useDispatch, useSelector } from 'react-redux';
 import { setAuth } from '../../redux/actions/auth';
-import { Avatar, Badge } from 'antd';
+import { Avatar, Badge, Dropdown } from 'antd';
 import { TbLogout } from 'react-icons/tb';
-import { Dropdown } from 'antd';
 import { VscAccount } from 'react-icons/vsc';
 import { IoDocumentTextOutline } from 'react-icons/io5';
 import { RxGear } from 'react-icons/rx';
+import moment from 'moment';
+import { GoInfo } from 'react-icons/go';
 
 const Header = () => {
   const pathname = usePathname();
   const [drawerChecked, setDrawerChecked] = useState(false);
-
   const dispatch = useDispatch();
   const sessionStatus = useSelector((state) => state.authReducer);
+  const updateTrigger = useSelector((state) => state.updateTriggerReducer);
+  const [dropdownVisible, setDropdownVisible] = useState(false);
 
+  let hiddenTill = null;
+  if (sessionStatus && sessionStatus.hiddenTill) {
+    hiddenTill =
+      sessionStatus && moment(sessionStatus.hiddenTill).format('DD.MM.YYYY');
+  }
   useEffect(() => {
     const authenticate = async () => {
       try {
@@ -40,7 +47,7 @@ const Header = () => {
       }
     };
     authenticate();
-  }, [dispatch]);
+  }, [dispatch, updateTrigger]);
 
   const logout = () => {
     axios.get('/api/logout');
@@ -49,7 +56,10 @@ const Header = () => {
   };
   const closeDrawer = () => {
     setDrawerChecked(false);
+    setDropdownVisible(false);
   };
+
+  const handleInfo = () => {};
 
   const profileLink = '/profile';
   const cvLink = '/profile/cv';
@@ -128,11 +138,14 @@ const Header = () => {
             <div className='w-full  bg-sky-500 flex justify-center '>
               <div className='container flex justify-between items-center'>
                 <div className='flex-1  pl-1'>
-                  <div className='logo-header flex items-center  w-72'>
-                    <Link href='/'>
+                  <Link className=' flex items-center' href='/'>
+                    <div className='  w-14 my-2 border-r-2 pr-2 '>
                       <Image src={headerlogo} alt='Crewboard' priority={true} />
-                    </Link>
-                  </div>
+                    </div>
+                    <p className='ml-3 text-white text-2xl font-semibold'>
+                      Crewboard
+                    </p>
+                  </Link>
                 </div>
                 <div className='flex-none lg:hidden pr-2'>
                   <label
@@ -156,12 +169,12 @@ const Header = () => {
                   </label>
                 </div>
                 <div className='flex-none hidden lg:block pr-2'>
-                  <ul className='text-white px-2 sm:px-0 flex gap-5 items-center'>
+                  <ul className='text-white px-2 sm:px-0 flex gap-5 items-center text-lg'>
                     <li
                       className={
                         pathname == '/vacancies'
-                          ? 'active text-xl border-b-2 border-white font-semibold '
-                          : 'text-white text-xl font-semibold'
+                          ? 'active  border-b-2 border-white font-semibold '
+                          : 'text-white  font-semibold'
                       }
                     >
                       <Link
@@ -174,15 +187,14 @@ const Header = () => {
                     <li
                       className={
                         pathname == '/seafarers'
-                          ? 'active text-xl border-b-2 border-white font-semibold'
-                          : 'text-white text-xl font-semibold'
+                          ? 'active border-b-2 border-white font-semibold'
+                          : 'text-white  font-semibold'
                       }
                     >
                       <Link
                         href='/seafarers'
                         className='flex items-center gap-2'
                       >
-                        {' '}
                         <FaPeopleGroup />
                         Seafarers
                       </Link>
@@ -190,8 +202,8 @@ const Header = () => {
                     <li
                       className={
                         pathname == '/employers'
-                          ? 'active text-xl border-b-2 border-white font-semibold'
-                          : 'text-white text-xl font-semibold'
+                          ? 'activeborder-b-2 border-white font-semibold'
+                          : 'text-white font-semibold'
                       }
                     >
                       <Link
@@ -204,7 +216,45 @@ const Header = () => {
                     </li>
 
                     {sessionStatus ? (
-                      <ul className='flex items-center gap-5 border-l border-white pl-4 h-14'>
+                      <ul className='flex items-center gap-5 border-l-2 pl-4'>
+                        {hiddenTill && (
+                          <Dropdown
+                            placement='bottom'
+                            dropdownRender={() => (
+                              <div className='bg-white w-64  flex flex-col rounded-lg mt-1.5 shadow-lg'>
+                                <div className='bg-sky-400 p-2 rounded-t-lg'>
+                                  <p className='text-white font-semibold flex items-center'>
+                                    <GoInfo className='text-xl mr-2' />{' '}
+                                    Visibility info
+                                  </p>
+                                </div>
+                                <p className='p-2'>{`Your Account is set to 'hidden' until the ${moment(
+                                  sessionStatus.hiddenTill
+                                ).format('DD.MM.YYYY')}.
+                                   To make your profile visible again, remove this option on your account settings page.`}</p>
+                                <div className='bg-gray-600 p-2 text-white flex justify-center rounded-b-lg font-semibold'>
+                                  <Link
+                                    className='hover:text-white'
+                                    href='/profile/settings'
+                                  >
+                                    To account visibility settings
+                                  </Link>
+                                </div>
+                              </div>
+                            )}
+                          >
+                            <div
+                              onClick={handleInfo}
+                              className='select-none text-sm flex  flex-col items-center '
+                            >
+                              <p>Visible from:</p>
+                              <p className='bg-orange-400 rounded-md px-2'>
+                                {hiddenTill}
+                              </p>
+                            </div>
+                          </Dropdown>
+                        )}
+
                         <li className='flex items-center'>
                           <Dropdown menu={{ items }} trigger={['click']}>
                             <div className='flex items-center gap-3 cursor-pointer select-none'>
@@ -212,17 +262,19 @@ const Header = () => {
                                 className={
                                   pathname == '/account'
                                     ? 'active text-xl border-b-2 border-white font-semibold'
-                                    : 'text-white text-xl font-semibold'
+                                    : 'text-white text-lg font-semibold'
                                 }
                               >
                                 {sessionStatus.name}
                               </p>
-                              <Badge count={5}>
+
+                              <Badge count={1}>
                                 <Avatar shape='square' size='large' />
                               </Badge>
                             </div>
                           </Dropdown>
                         </li>
+
                         <li className='text-white text-xl font-semibold '></li>
                       </ul>
                     ) : (
@@ -282,12 +334,57 @@ const Header = () => {
 
               {sessionStatus && (
                 <>
-                  <div className='flex  justify-start items-center gap-3 p-4'>
-                    <Badge count={5}>
-                      <Avatar shape='square' size='large' className='' />
-                    </Badge>
-                    <p className='text-black text-base'>{sessionStatus.name}</p>
-                  </div>{' '}
+                  <div className='flex  justify-between items-center gap-3 p-4'>
+                    <div className='flex items-center gap-3'>
+                      <Badge count={5}>
+                        <Avatar shape='square' size='large' className='' />
+                      </Badge>
+
+                      <p className='text-black text-base'>
+                        {sessionStatus.name}
+                      </p>
+                    </div>
+                    {hiddenTill && (
+                      <Dropdown
+                        onOpenChange={(visible) => setDropdownVisible(visible)}
+                        open={dropdownVisible}
+                        placement='bottom'
+                        dropdownRender={() => (
+                          <div className='bg-white w-64  flex flex-col rounded-lg mt-1.5 shadow-lg'>
+                            <div className='bg-sky-400 p-2 rounded-t-lg'>
+                              <p className='text-white font-semibold flex items-center'>
+                                <GoInfo className='text-xl mr-2' /> Visibility
+                                info
+                              </p>
+                            </div>
+                            <p className='p-2'>{`Your Account is set to 'hidden' until the ${moment(
+                              sessionStatus.hiddenTill
+                            ).format('DD.MM.YYYY')}.
+                                   To make your profile visible again, remove this option on your account settings page.`}</p>
+                            <div className='bg-gray-600 p-2 text-white flex justify-center rounded-b-lg font-semibold'>
+                              <Link
+                                onClick={closeDrawer}
+                                className='hover:text-white'
+                                href='/profile/settings'
+                              >
+                                To account visibility settings
+                              </Link>
+                            </div>
+                          </div>
+                        )}
+                      >
+                        <div
+                          onClick={handleInfo}
+                          className='select-none text-sm flex  flex-col items-center '
+                        >
+                          <p>Visible from:</p>
+                          <p className='bg-orange-400 rounded-md px-2'>
+                            {hiddenTill}
+                          </p>
+                        </div>
+                      </Dropdown>
+                    )}
+                  </div>
                 </>
               )}
 

@@ -36,7 +36,7 @@ const ChangePassword = () => {
   };
   return (
     <>
-      <div className='flex rounded-lg justify-center items-center w-full sm:w-min lg:w-fit bg-white p-6 sm:p-8 mt-2 mb-2 sm:mt-8 sm:mb-8 shadow-xl flex-wrap-reverse'>
+      <div className='flex rounded-lg justify-center items-center w-full sm:w-min lg:w-fit bg-white p-6 sm:p-8 mt-2 mb-2 sm:my-5 shadow-xl flex-wrap-reverse'>
         <Form
           form={form}
           name='password-change'

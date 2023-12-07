@@ -1,14 +1,42 @@
 'use client';
 import { Button, Form, Input } from 'antd';
+import { useSelector } from 'react-redux';
+import { useState } from 'react';
+import { Alert } from 'antd';
+import axios from 'axios';
 
 const ChangeEmail = () => {
   const [form] = Form.useForm();
-  const onFinish = (values) => {
-    console.log('Success:', values);
+  const sessionStatus = useSelector((state) => state.authReducer);
+  const [responseMessage, setResponseMessage] = useState(null);
+
+  const onFinish = async (values) => {
+    const userId = sessionStatus.id;
+    const userRole = sessionStatus.userRole;
+    const email = values.email;
+    const dataToSend = { userId, userRole, email };
+    try {
+      const res = await axios.put(
+        `/api/profile/settings/change-email`,
+        dataToSend
+      );
+      if (res.data.message === 'Email updated') {
+        setResponseMessage(res.data.message);
+        setTimeout(() => {
+          setResponseMessage(null);
+        }, 5000);
+        form.setFieldsValue({ email: '', confirm: '' });
+      } else {
+        setResponseMessage(res.data.message);
+      }
+    } catch (error) {
+      setResponseMessage('Internal server error please contact support');
+    }
   };
+
   return (
     <>
-      <div className='flex rounded-lg justify-center items-center w-full sm:w-min lg:w-fit bg-white p-6 sm:p-8 mt-2 mb-2 sm:mt-8 sm:mb-8 shadow-xl flex-wrap-reverse'>
+      <div className='flex rounded-lg justify-center items-center w-full sm:w-min lg:w-fit bg-white p-6 sm:p-8 mt-2 mb-2 sm:my-5 shadow-xl flex-wrap-reverse'>
         <Form
           form={form}
           name='email-change'
@@ -19,11 +47,21 @@ const ChangeEmail = () => {
           onFinish={onFinish}
           layout='vertical'
         >
-          <h1 className='m-auto w-fit lg:m-0'>Email</h1>
+          <div className='flex flex-wrap flex-col lg:flex-row lg:justify-between'>
+            <h1 className='m-auto w-fit mb-5 lg:m-0 '>Email</h1>
+            {responseMessage && (
+              <Alert
+                className='mb-5 lg:m-0'
+                message={responseMessage}
+                type={responseMessage === 'Email updated' ? 'success' : 'error'}
+                showIcon
+              />
+            )}
+          </div>
           <div className='flex font-semibold   flex-wrap justify-center lg:gap-10 w-64 sm:w-full '>
             <Form.Item
               name='email'
-              label='Email'
+              label='New Email'
               rules={[
                 {
                   type: 'email',
@@ -42,7 +80,6 @@ const ChangeEmail = () => {
               name='confirm'
               label='Confirm Email'
               dependencies={['email']}
-              hasFeedback
               rules={[
                 {
                   required: true,

@@ -44,6 +44,7 @@ export const GET = async () => {
           avatarUrl: userData.avatarUrl,
           registered: userData.registered,
           message: 'Authenticated',
+          hiddenTill: userData.hiddenTill,
         });
       } else {
         return Response.json({ message: 'User not found' });
