@@ -202,7 +202,7 @@ const Header = () => {
                     <li
                       className={
                         pathname == '/employers'
-                          ? 'activeborder-b-2 border-white font-semibold'
+                          ? 'active border-b-2 border-white font-semibold'
                           : 'text-white font-semibold'
                       }
                     >

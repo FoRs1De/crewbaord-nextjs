@@ -1,7 +1,6 @@
 import client from '@/dbConnections/mongoDB';
-import cron from 'node-cron';
-
-cron.schedule('0 0 * * *', async () => {
+import moment from 'moment';
+export const GET = async (req) => {
   try {
     console.log('Script started at:', new Date().toLocaleString());
 
@@ -9,16 +8,16 @@ cron.schedule('0 0 * * *', async () => {
     const db = client.db('admin');
     const seamenCollection = db.collection('seamen');
     const employersCollection = db.collection('employers');
-    const currentDate = new Date();
+    let currentDate = new Date().toISOString();
 
     const seamenResult = await seamenCollection.updateMany(
-      { hideTill: { $lte: currentDate } },
-      { $set: { hideTill: null } }
+      { hiddenTill: { $lte: currentDate } },
+      { $set: { hiddenTill: null } }
     );
 
     const employersResult = await employersCollection.updateMany(
-      { hideTill: { $lte: currentDate } },
-      { $set: { hideTill: null } }
+      { hiddenTill: { $lte: currentDate } },
+      { $set: { hiddenTill: null } }
     );
 
     console.log(
@@ -29,10 +28,11 @@ cron.schedule('0 0 * * *', async () => {
       'Script completed successfully at:',
       new Date().toLocaleString()
     );
+    const result =
+      'Script completed successfully at:' + new Date().toLocaleString();
+    return Response.json({ message: result });
   } catch (error) {
     console.error('Error in script:', error);
-  } finally {
-    // Close the MongoDB connection after the script is executed
-    await client.close();
+    return Response.json({ message: 'Error in script' });
   }
-});
+};
