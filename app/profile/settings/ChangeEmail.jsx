@@ -4,33 +4,53 @@ import { useSelector } from 'react-redux';
 import { useState } from 'react';
 import { Alert } from 'antd';
 import axios from 'axios';
+import Loader from '../../components/Loader';
 
 const ChangeEmail = () => {
   const [form] = Form.useForm();
   const sessionStatus = useSelector((state) => state.authReducer);
   const [responseMessage, setResponseMessage] = useState(null);
+  const [successMessage, setSuccessMessage] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const onFinish = async (values) => {
     const userId = sessionStatus.id;
     const userRole = sessionStatus.userRole;
     const email = values.email;
-    const dataToSend = { userId, userRole, email };
+    const currentURL = window.location.href;
+    const url = new URL(currentURL);
+    const originUrl = url.origin;
+    const dataToSend = { userId, userRole, email, url: originUrl };
+    setLoading(true);
     try {
       const res = await axios.put(
         `/api/profile/settings/change-email`,
         dataToSend
       );
-      if (res.data.message === 'Email updated') {
+      setLoading(false);
+      if (res.data.message === 'Email sent') {
+        setSuccessMessage(true);
+        setResponseMessage(
+          `Email has been sent to ${email}. Please check your inbox.`
+        );
+        form.setFieldsValue({ email: '', confirm: '' });
+        setTimeout(() => {
+          setResponseMessage(null);
+        }, 10000);
+      } else {
+        setSuccessMessage(false);
         setResponseMessage(res.data.message);
         setTimeout(() => {
           setResponseMessage(null);
-        }, 5000);
-        form.setFieldsValue({ email: '', confirm: '' });
-      } else {
-        setResponseMessage(res.data.message);
+        }, 10000);
       }
     } catch (error) {
+      setLoading(false);
+      setSuccessMessage(false);
       setResponseMessage('Internal server error please contact support');
+      setTimeout(() => {
+        setResponseMessage(null);
+      }, 10000);
     }
   };
 
@@ -53,7 +73,7 @@ const ChangeEmail = () => {
               <Alert
                 className='mb-5 lg:m-0'
                 message={responseMessage}
-                type={responseMessage === 'Email updated' ? 'success' : 'error'}
+                type={successMessage ? 'info' : 'error'}
                 showIcon
               />
             )}
@@ -99,13 +119,19 @@ const ChangeEmail = () => {
             </Form.Item>
 
             <Form.Item>
-              <Button
-                type='primary'
-                className='bg-blue-500 mt-7 w-28'
-                htmlType='submit'
-              >
-                Submit
-              </Button>
+              {loading ? (
+                <div className='flex justify-center mt-7 w-28'>
+                  <Loader />
+                </div>
+              ) : (
+                <Button
+                  type='primary'
+                  className='bg-blue-500 mt-7 w-28'
+                  htmlType='submit'
+                >
+                  Submit
+                </Button>
+              )}
             </Form.Item>
           </div>
         </Form>
