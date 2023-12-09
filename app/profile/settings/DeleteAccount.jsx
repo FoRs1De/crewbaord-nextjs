@@ -55,7 +55,7 @@ const DeleteAccount = () => {
   };
   return (
     <>
-      <div className='w-full rounded-lg sm:w-fit lg:w-fit bg-white p-6 sm:p-8 mt-2 sm:mt-5 mb-4 sm:mb-10 shadow-xl'>
+      <div className='w-full rounded-lg sm:w-fit lg:w-fit bg-white p-6 sm:p-8 mt-2 sm:mt-5   shadow-xl'>
         <center>
           <h3 className='mb-3'>Delete Account</h3>
           <p>Push the button to Delete your Crewboard account forever.</p>

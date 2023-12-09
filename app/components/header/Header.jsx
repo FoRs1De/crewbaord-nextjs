@@ -28,6 +28,7 @@ const Header = () => {
   const sessionStatus = useSelector((state) => state.authReducer);
   const updateTrigger = useSelector((state) => state.updateTriggerReducer);
   const [dropdownVisible, setDropdownVisible] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   let hiddenTill = null;
   if (sessionStatus && sessionStatus.hiddenTill) {
@@ -41,9 +42,12 @@ const Header = () => {
         console.log(res.data);
         if (res.data.message === 'Authenticated') {
           dispatch(setAuth(res.data));
+          setLoading(false);
         }
+        setLoading(false);
       } catch (error) {
         console.log(error.message);
+        setLoading(false);
       }
     };
     authenticate();
@@ -214,101 +218,105 @@ const Header = () => {
                         Employers
                       </Link>
                     </li>
-
-                    {sessionStatus ? (
-                      <ul className='flex items-center gap-5 border-l-2 pl-4'>
-                        {hiddenTill && (
-                          <Dropdown
-                            placement='bottom'
-                            dropdownRender={() => (
-                              <div className='bg-white w-64  flex flex-col rounded-lg mt-1.5 shadow-lg'>
-                                <div className='bg-sky-400 p-2 rounded-t-lg'>
-                                  <p className='text-white font-semibold flex items-center'>
-                                    <GoInfo className='text-xl mr-2' />{' '}
-                                    Visibility info
+                    {!loading && (
+                      <>
+                        {' '}
+                        {sessionStatus ? (
+                          <ul className='flex items-center gap-5 border-l-2 pl-4'>
+                            {hiddenTill && (
+                              <Dropdown
+                                placement='bottom'
+                                dropdownRender={() => (
+                                  <div className='bg-white w-64  flex flex-col rounded-lg mt-1.5 shadow-lg'>
+                                    <div className='bg-sky-400 p-2 rounded-t-lg'>
+                                      <p className='text-white font-semibold flex items-center'>
+                                        <GoInfo className='text-xl mr-2' />{' '}
+                                        Visibility info
+                                      </p>
+                                    </div>
+                                    <p className='p-2'>{`Your Account is set to 'hidden' until the ${moment(
+                                      sessionStatus.hiddenTill
+                                    ).format('DD.MM.YYYY')}.
+                                   To make your profile visible again, remove this option on your account settings page.`}</p>
+                                    <div className='bg-gray-600 p-2 text-white flex justify-center rounded-b-lg font-semibold'>
+                                      <Link
+                                        className='hover:text-white'
+                                        href='/profile/settings'
+                                      >
+                                        To account visibility settings
+                                      </Link>
+                                    </div>
+                                  </div>
+                                )}
+                              >
+                                <div
+                                  onClick={handleInfo}
+                                  className='select-none text-sm flex  flex-col items-center '
+                                >
+                                  <p>Visible from:</p>
+                                  <p className='bg-orange-400 rounded-md px-2'>
+                                    {hiddenTill}
                                   </p>
                                 </div>
-                                <p className='p-2'>{`Your Account is set to 'hidden' until the ${moment(
-                                  sessionStatus.hiddenTill
-                                ).format('DD.MM.YYYY')}.
-                                   To make your profile visible again, remove this option on your account settings page.`}</p>
-                                <div className='bg-gray-600 p-2 text-white flex justify-center rounded-b-lg font-semibold'>
-                                  <Link
-                                    className='hover:text-white'
-                                    href='/profile/settings'
-                                  >
-                                    To account visibility settings
-                                  </Link>
-                                </div>
-                              </div>
+                              </Dropdown>
                             )}
-                          >
-                            <div
-                              onClick={handleInfo}
-                              className='select-none text-sm flex  flex-col items-center '
+
+                            <li className='flex items-center'>
+                              <Dropdown menu={{ items }} trigger={['click']}>
+                                <div className='flex items-center gap-3 cursor-pointer select-none'>
+                                  <p
+                                    className={
+                                      pathname == '/account'
+                                        ? 'active text-xl border-b-2 border-white font-semibold'
+                                        : 'text-white text-lg font-semibold'
+                                    }
+                                  >
+                                    {sessionStatus.name}
+                                  </p>
+
+                                  <Badge count={1}>
+                                    <Avatar shape='square' size='large' />
+                                  </Badge>
+                                </div>
+                              </Dropdown>
+                            </li>
+
+                            <li className='text-white text-xl font-semibold '></li>
+                          </ul>
+                        ) : (
+                          <div className='flex items-center gap-5 border-l-2 pl-4 h-10'>
+                            <li
+                              className={
+                                pathname == '/registration'
+                                  ? 'active text-xl border-b-2 border-white font-semibold'
+                                  : 'text-white text-xl font-semibold'
+                              }
                             >
-                              <p>Visible from:</p>
-                              <p className='bg-orange-400 rounded-md px-2'>
-                                {hiddenTill}
-                              </p>
-                            </div>
-                          </Dropdown>
-                        )}
-
-                        <li className='flex items-center'>
-                          <Dropdown menu={{ items }} trigger={['click']}>
-                            <div className='flex items-center gap-3 cursor-pointer select-none'>
-                              <p
-                                className={
-                                  pathname == '/account'
-                                    ? 'active text-xl border-b-2 border-white font-semibold'
-                                    : 'text-white text-lg font-semibold'
-                                }
+                              <Link
+                                href='/registration'
+                                className='flex items-center gap-2'
                               >
-                                {sessionStatus.name}
-                              </p>
-
-                              <Badge count={1}>
-                                <Avatar shape='square' size='large' />
-                              </Badge>
-                            </div>
-                          </Dropdown>
-                        </li>
-
-                        <li className='text-white text-xl font-semibold '></li>
-                      </ul>
-                    ) : (
-                      <>
-                        <li
-                          className={
-                            pathname == '/registration'
-                              ? 'active text-xl border-b-2 border-white font-semibold'
-                              : 'text-white text-xl font-semibold'
-                          }
-                        >
-                          <Link
-                            href='/registration'
-                            className='flex items-center gap-2'
-                          >
-                            <BsPersonFillAdd />
-                            Registration
-                          </Link>
-                        </li>
-                        <li
-                          className={
-                            pathname == '/login'
-                              ? 'active text-xl border-b-2 border-white font-semibold'
-                              : 'text-white text-xl font-semibold'
-                          }
-                        >
-                          <Link
-                            href='/login'
-                            className='flex items-center gap-2'
-                          >
-                            <TbLogin2 />
-                            Login
-                          </Link>
-                        </li>
+                                <BsPersonFillAdd />
+                                Registration
+                              </Link>
+                            </li>
+                            <li
+                              className={
+                                pathname == '/login'
+                                  ? 'active text-xl border-b-2 border-white font-semibold'
+                                  : 'text-white text-xl font-semibold'
+                              }
+                            >
+                              <Link
+                                href='/login'
+                                className='flex items-center gap-2'
+                              >
+                                <TbLogin2 />
+                                Login
+                              </Link>
+                            </li>
+                          </div>
+                        )}
                       </>
                     )}
                   </ul>

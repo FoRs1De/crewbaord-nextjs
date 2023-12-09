@@ -42,7 +42,7 @@ export const GET = async () => {
           id: userData._id.toString(),
           userRole: userData.userRole,
           name: userData.name,
-          avatarUrl: userData.avatarUrl,
+          avatar: userData.avatar,
           registered: userData.registered,
           message: 'Authenticated',
           hiddenTill: userData.hiddenTill,

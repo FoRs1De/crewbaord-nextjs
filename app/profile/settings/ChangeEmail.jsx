@@ -67,7 +67,7 @@ const ChangeEmail = () => {
           onFinish={onFinish}
           layout='vertical'
         >
-          <div className='flex flex-wrap flex-col lg:flex-row lg:justify-between'>
+          <div className='flex flex-wrap flex-col lg:flex-row lg:justify-between mb-2'>
             <h1 className='m-auto w-fit mb-5 lg:m-0 '>Email</h1>
             {responseMessage && (
               <Alert

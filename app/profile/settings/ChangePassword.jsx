@@ -25,13 +25,19 @@ const ChangePassword = () => {
         setResponseMessage(res.data.message);
         setTimeout(() => {
           setResponseMessage(null);
-        }, 5000);
+        }, 10000);
         form.setFieldsValue({ password: '', confirm: '' });
       } else {
         setResponseMessage(res.data.message);
+        setTimeout(() => {
+          setResponseMessage(null);
+        }, 10000);
       }
     } catch (error) {
       setResponseMessage('Internal server error please contact support');
+      setTimeout(() => {
+        setResponseMessage(null);
+      }, 10000);
     }
   };
   return (
@@ -47,7 +53,7 @@ const ChangePassword = () => {
           onFinish={onFinish}
           layout='vertical'
         >
-          <div className='flex flex-wrap flex-col lg:flex-row lg:justify-between'>
+          <div className='flex flex-wrap flex-col lg:flex-row lg:justify-between mb-2'>
             <h1 className='m-auto w-fit mb-5 lg:m-0 '>Password</h1>
             {responseMessage && (
               <Alert

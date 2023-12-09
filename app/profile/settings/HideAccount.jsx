@@ -53,17 +53,25 @@ const HideAccount = () => {
         dispatch(
           setAuth({ ...sessionStatus, hiddenTill: res.data.hiddenTill })
         );
+        setTimeout(() => {
+          setResponseMessage(null);
+        }, 10000);
       }
 
       if (!res.data.hiddenTill && res.data.message === 'Status updated') {
         setInfoStatus(true);
         setResponseMessage('Account is visible');
         dispatch(setAuth({ ...sessionStatus, hiddenTill: null }));
+        setTimeout(() => {
+          setResponseMessage(null);
+        }, 10000);
       }
     } catch (error) {
       setInfoStatus(false);
-
       setResponseMessage('Internal server error please contact support');
+      setTimeout(() => {
+        setResponseMessage(null);
+      }, 10000);
     }
   };
   const handleChecked = () => {
@@ -78,15 +86,15 @@ const HideAccount = () => {
   };
   return (
     <>
-      <div className='flex rounded-lg justify-center items-center w-full sm:w-min lg:w-fit bg-white  pt-5  pb-8 sm:py-7 sm:px-10 lg:py-8 lg:px-14  mt-4 sm:mt-10  mb-2 sm:mb-5 shadow-xl flex-wrap-reverse'>
+      <div className='flex rounded-lg justify-center items-center w-full sm:w-min lg:w-fit bg-white  pt-5  pb-8 sm:py-7 sm:px-10 lg:py-8 lg:px-14    mb-2 sm:mb-5 shadow-xl flex-wrap-reverse'>
         <Form
           form={form}
           name='account-hide'
           onFinish={onFinish}
           layout='vertical'
         >
-          <div className='flex flex-wrap flex-col lg:flex-row lg:justify-between'>
-            <h1 className='m-auto w-fit mb-5 lg:m-0 '>Visibility</h1>
+          <div className='flex flex-wrap flex-col lg:flex-row lg:justify-between mb-2'>
+            <h1 className='m-auto w-fit mb-5 lg:m-0 '>Account visibility</h1>
             {responseMessage && (
               <Alert
                 className='mb-5 lg:m-0'
@@ -132,10 +140,17 @@ const HideAccount = () => {
               </Form.Item>
             </div>
             <div className='flex items-center'>
-              <p className='w-80 lg:w-64'>
-                When your account is hidden you will not be displayed on the
-                website and companies cannot contact you.
-              </p>
+              {sessionStatus && sessionStatus.userRole === 'seaman' ? (
+                <p className='w-80 lg:w-64'>
+                  When your account is hidden you will not be displayed on the
+                  website and companies cannot contact you.
+                </p>
+              ) : (
+                <p className='w-80 lg:w-64'>
+                  When your account is hidden your company will not be displayed
+                  on the website and seamen cannot contact you.
+                </p>
+              )}
             </div>
           </div>
         </Form>

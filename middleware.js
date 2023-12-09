@@ -6,7 +6,6 @@ const visitorsProtectedRoutes = [
   '/profile',
   '/profile/settings',
   '/profile/cv',
-  '/email-change-confirmation/:*',
 ];
 const loggedInProtectedRoutes = ['/login', '/registration'];
 const seamanProtectedRoutes = [];

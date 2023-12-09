@@ -8,7 +8,7 @@ const Login = () => {
   return (
     <>
       <SeamanHeader />
-      <main className='flex flex-col  mx-auto justify-center items-center container flex-1 p-2 sm:px-0 '>
+      <main className='flex flex-col  mx-auto justify-center items-center container flex-1 pt-5 pb-10 px-2 sm:px-0 '>
         <HideAccount />
         <ChangeEmail />
         <ChangePassword />

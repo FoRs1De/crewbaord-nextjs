@@ -1,12 +1,12 @@
 import SeamanHeader from './SeamanHeader';
-import SeamanProfile from './SeamanProfile';
+import SeamanSideBar from './SeamanSideBar';
 
 const Profile = () => {
   return (
     <>
       <SeamanHeader />
-      <main className='flex-col mx-auto container flex-1 p-2 '>
-        <SeamanProfile />
+      <main className='flex-col mx-auto container flex-1 px-2 pt-5  pb-10 '>
+        <SeamanSideBar />
       </main>
     </>
   );
