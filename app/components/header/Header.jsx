@@ -20,6 +20,7 @@ import { IoDocumentTextOutline } from 'react-icons/io5';
 import { RxGear } from 'react-icons/rx';
 import moment from 'moment';
 import { GoInfo } from 'react-icons/go';
+import headerLogo from '../../../public/images/HeaderLogo.png';
 
 const Header = () => {
   const pathname = usePathname();
@@ -220,7 +221,6 @@ const Header = () => {
                     </li>
                     {!loading && (
                       <>
-                        {' '}
                         {sessionStatus ? (
                           <ul className='flex items-center gap-5 border-l-2 pl-4'>
                             {hiddenTill && (
@@ -275,7 +275,29 @@ const Header = () => {
                                   </p>
 
                                   <Badge count={1}>
-                                    <Avatar shape='square' size='large' />
+                                    <Avatar
+                                      className='flex justify-center items-center'
+                                      shape='square'
+                                      size='large'
+                                      icon={
+                                        <div className='relative w-full h-full flex justify-center items-center'>
+                                          <Image
+                                            fill
+                                            sizes='(min-width: 808px) 50vw, 100vw'
+                                            style={{
+                                              objectFit: 'cover', // cover, contain, none
+                                            }}
+                                            src={
+                                              sessionStatus &&
+                                              sessionStatus.avatar.url
+                                                ? sessionStatus.avatar.url
+                                                : headerLogo
+                                            }
+                                            alt='avatar'
+                                          />
+                                        </div>
+                                      }
+                                    />
                                   </Badge>
                                 </div>
                               </Dropdown>
@@ -344,8 +366,29 @@ const Header = () => {
                 <>
                   <div className='flex  justify-between items-center gap-3 p-4'>
                     <div className='flex items-center gap-3'>
-                      <Badge count={5}>
-                        <Avatar shape='square' size='large' className='' />
+                      <Badge count={1}>
+                        <Avatar
+                          className='flex justify-center items-center'
+                          shape='square'
+                          size='large'
+                          icon={
+                            <div className='relative w-full h-full flex justify-center items-center'>
+                              <Image
+                                fill
+                                sizes='(min-width: 808px) 50vw, 100vw'
+                                style={{
+                                  objectFit: 'cover', // cover, contain, none
+                                }}
+                                src={
+                                  sessionStatus && sessionStatus.avatar.url
+                                    ? sessionStatus.avatar.url
+                                    : headerLogo
+                                }
+                                alt='avatar'
+                              />
+                            </div>
+                          }
+                        />
                       </Badge>
 
                       <p className='text-black text-base'>

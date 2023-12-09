@@ -1,4 +1,4 @@
-import { writeFile } from 'fs/promises';
+import { writeFile, unlink } from 'fs/promises';
 import { extname } from 'path';
 import { v4 as uuid } from 'uuid';
 import client from '@/dbConnections/mongoDB';
@@ -19,6 +19,24 @@ export const POST = async (req) => {
   const db = client.db('admin');
   const seamenCollection = db.collection('seamen');
   const employersCollection = db.collection('employers');
+
+  const existingSeamanAvatar = await seamenCollection.findOne({
+    _id: new ObjectId(userId),
+  });
+  if (existingSeamanAvatar && existingSeamanAvatar.avatar.fileName) {
+    await unlink(
+      `public/upload/seamen-avatars/${existingSeamanAvatar.avatar.fileName}`
+    );
+  }
+
+  const existingEmployerAvatar = await employersCollection.findOne({
+    _id: new ObjectId(userId),
+  });
+  if (existingEmployerAvatar && existingEmployerAvatar.avatar.fileName) {
+    await unlink(
+      `public/upload/seamen-avatars/${existingEmployerAvatar.avatar.fileName}`
+    );
+  }
 
   const existingSeaman = await seamenCollection.findOneAndUpdate(
     { _id: new ObjectId(userId) },

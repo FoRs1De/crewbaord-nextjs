@@ -1,5 +1,5 @@
 'use client';
-import { message, Badge, Avatar, Upload, Progress } from 'antd';
+import { message, Badge, Avatar, Upload, Progress, Modal } from 'antd';
 import headerLogo from '../../public/images/HeaderLogo.png';
 import Image from 'next/image';
 import { MdUpload } from 'react-icons/md';
@@ -12,6 +12,12 @@ const SeamanSideBar = () => {
   const sessionStatus = useSelector((state) => state.authReducer);
   const updateTrigger = useSelector((state) => state.updateTriggerReducer);
   const [uploadProgress, setUploadProgress] = useState(0);
+  const [open, setOpen] = useState(false);
+
+  const handleCancel = () => {
+    setOpen(false);
+  };
+
   let userId;
   if (sessionStatus) {
     userId = sessionStatus.id;
@@ -54,13 +60,33 @@ const SeamanSideBar = () => {
 
   return (
     <div className='w-64 bg-white flex rounded-lg justify-center shadow-lg'>
+      <Modal
+        centered
+        className='relative'
+        title={null}
+        open={open}
+        footer={null}
+        onCancel={handleCancel}
+      >
+        <Image
+          className='p-5 '
+          width={5000}
+          height={5000}
+          src={
+            sessionStatus && sessionStatus.avatar.url
+              ? sessionStatus.avatar.url
+              : headerLogo
+          }
+          alt='avatar'
+        />
+      </Modal>
       <Badge.Ribbon text='Status' color='volcano'>
         <div className='my-5 relative '>
           <Avatar
             shape='square'
             size={100}
             icon={
-              <div className='flex justify-center items-center w-full h-full'>
+              <div className='flex justify-center items-center w-full h-full relative overflow-hidden'>
                 {uploadProgress > 0 ? (
                   <Progress
                     type='circle'
@@ -69,16 +95,23 @@ const SeamanSideBar = () => {
                     status={uploadProgress === 100 ? 'success' : 'active'}
                   />
                 ) : (
-                  <Image
-                    width={100}
-                    height={100}
-                    src={
-                      sessionStatus && sessionStatus.avatar.url
-                        ? sessionStatus.avatar.url
-                        : headerLogo
-                    }
-                    alt='avatar'
-                  />
+                  <div className='relative h-full w-full'>
+                    <Image
+                      fill
+                      sizes='(min-width: 808px) 50vw, 100vw'
+                      style={{
+                        objectFit: 'cover', // cover, contain, none
+                      }}
+                      className='cursor-pointer'
+                      onClick={() => setOpen(true)}
+                      src={
+                        sessionStatus && sessionStatus.avatar.url
+                          ? sessionStatus.avatar.url
+                          : headerLogo
+                      }
+                      alt='avatar'
+                    />
+                  </div>
                 )}
               </div>
             }
