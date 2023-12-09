@@ -1,5 +1,6 @@
 import client from '@/dbConnections/mongoDB';
 import { cookies } from 'next/headers';
+import { ObjectId } from 'mongodb';
 
 export const POST = async (req) => {
   const receivedData = await req.json();
@@ -8,14 +9,13 @@ export const POST = async (req) => {
   const db = client.db('admin');
   const seamenCollection = db.collection('seamen');
   const employersCollection = db.collection('employers');
-  console.log(receivedData);
 
   const deletedSeaman = await seamenCollection.findOneAndDelete({
-    id: receivedData.userId,
+    _id: new ObjectId(receivedData.userId),
   });
 
   const deletedEmployer = await employersCollection.findOneAndDelete({
-    id: receivedData.userId,
+    _id: new ObjectId(receivedData.userId),
   });
 
   if (deletedSeaman || deletedEmployer) {

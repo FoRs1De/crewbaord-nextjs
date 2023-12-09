@@ -43,9 +43,13 @@ export const POST = async (req) => {
 
     const generateTimeLimitedLink = () => {
       const expiresInMinutes = 20;
-      const token = jwt.sign({ userId: userData.id }, process.env.JWT_SECRET, {
-        expiresIn: expiresInMinutes * 60,
-      });
+      const token = jwt.sign(
+        { userId: userData._id.toString() },
+        process.env.JWT_SECRET,
+        {
+          expiresIn: expiresInMinutes * 60,
+        }
+      );
       const linkEncoded = base64url.encode(token);
       return linkEncoded;
     };

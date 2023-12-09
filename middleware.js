@@ -6,6 +6,7 @@ const visitorsProtectedRoutes = [
   '/profile',
   '/profile/settings',
   '/profile/cv',
+  '/email-change-confirmation/:*',
 ];
 const loggedInProtectedRoutes = ['/login', '/registration'];
 const seamanProtectedRoutes = [];
@@ -26,7 +27,7 @@ export default function middleware(req) {
   //rules for visitors
   if (
     !sessionStatus &&
-    visitorsProtectedRoutes.includes(req.nextUrl.pathname)
+    visitorsProtectedRoutes.some((route) => req.nextUrl.pathname.match(route))
   ) {
     const absoluteURL = new URL('/login', req.nextUrl.origin);
     return NextResponse.redirect(absoluteURL.toString());

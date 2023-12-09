@@ -34,7 +34,7 @@ export const POST = async (req) => {
     const generateTimeLimitedLink = () => {
       const expiresInMinutes = 60;
       const token = jwt.sign(
-        { userId: existingSeaman.id },
+        { userId: existingSeaman._id.toString() },
         process.env.JWT_SECRET,
         {
           expiresIn: expiresInMinutes * 60,
@@ -69,7 +69,7 @@ export const POST = async (req) => {
     const generateTimeLimitedLink = () => {
       const expiresInMinutes = 60;
       const token = jwt.sign(
-        { userId: existingEmployer.id },
+        { userId: existingEmployer._id.toString() },
         process.env.JWT_SECRET,
         {
           expiresIn: expiresInMinutes * 60,

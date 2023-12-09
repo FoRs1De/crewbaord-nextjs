@@ -1,5 +1,6 @@
 import client from '@/dbConnections/mongoDB';
 import bcrypt from 'bcrypt';
+import { ObjectId } from 'mongodb';
 
 export const PUT = async (req) => {
   const receivedData = await req.json();
@@ -14,11 +15,11 @@ export const PUT = async (req) => {
   const existingUser =
     receivedData.userRole === 'seaman'
       ? await seamenCollection.findOneAndUpdate(
-          { id: receivedData.userId },
+          { _id: new ObjectId(receivedData.userId) },
           { $set: { password: hashedPassword } }
         )
       : await employersCollection.findOneAndUpdate(
-          { id: receivedData.userId },
+          { _id: new ObjectId(receivedData.userId) },
           { $set: { password: hashedPassword } }
         );
 

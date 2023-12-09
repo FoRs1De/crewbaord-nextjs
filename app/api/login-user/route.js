@@ -46,13 +46,21 @@ export const POST = async (req, res) => {
 
         let token;
         if (remember) {
-          token = sign({ id: existingSeaman.id, userRole: 'seaman' }, secret, {
-            expiresIn: maxAgeRemember,
-          });
+          token = sign(
+            { id: existingSeaman._id.toString(), userRole: 'seaman' },
+            secret,
+            {
+              expiresIn: maxAgeRemember,
+            }
+          );
         } else {
-          token = sign({ id: existingSeaman.id, userRole: 'seaman' }, secret, {
-            expiresIn: maxAge,
-          });
+          token = sign(
+            { id: existingSeaman._id.toString(), userRole: 'seaman' },
+            secret,
+            {
+              expiresIn: maxAge,
+            }
+          );
         }
         cookies().set('JWT', token, {
           httpOnly: true,
@@ -62,7 +70,7 @@ export const POST = async (req, res) => {
           path: '/',
         });
         return Response.json({
-          id: existingSeaman.id,
+          id: existingSeaman._id.toString(),
           userRole: existingSeaman.userRole,
           name: existingSeaman.name,
           avatarUrl: existingSeaman.avatarUrl,
@@ -87,7 +95,7 @@ export const POST = async (req, res) => {
         let token;
         if (remember) {
           token = sign(
-            { id: existingEmployer.id, userRole: 'employer' },
+            { id: existingEmployer._id.toString(), userRole: 'employer' },
             secret,
             {
               expiresIn: maxAgeRemember,
@@ -95,7 +103,7 @@ export const POST = async (req, res) => {
           );
         } else {
           token = sign(
-            { id: existingEmployer.id, userRole: 'employer' },
+            { id: existingEmployer._id.toString(), userRole: 'employer' },
             secret,
             {
               expiresIn: maxAge,
@@ -110,7 +118,7 @@ export const POST = async (req, res) => {
           path: '/',
         });
         return Response.json({
-          id: existingEmployer.id,
+          id: existingEmployer._id.toString(),
           userRole: existingEmployer.userRole,
           name: existingEmployer.name,
           avatarUrl: existingEmployer.avatarUrl,

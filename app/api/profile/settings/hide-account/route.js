@@ -1,4 +1,5 @@
 import client from '@/dbConnections/mongoDB';
+import { ObjectId } from 'mongodb';
 
 export const PUT = async (req) => {
   const receivedData = await req.json();
@@ -10,7 +11,7 @@ export const PUT = async (req) => {
 
   receivedData.userRole === 'seaman'
     ? await seamenCollection.updateOne(
-        { id: receivedData.userId },
+        { _id: new ObjectId(receivedData.userId) },
         {
           $set: {
             hiddenTill: receivedData.hiddenTill,
@@ -18,7 +19,7 @@ export const PUT = async (req) => {
         }
       )
     : await employersCollection.updateOne(
-        { id: receivedData.userId },
+        { _id: new ObjectId(receivedData.userId) },
         {
           $set: {
             hiddenTill: receivedData.hiddenTill,
@@ -28,8 +29,12 @@ export const PUT = async (req) => {
 
   const existingUser =
     receivedData.userRole === 'seaman'
-      ? await seamenCollection.findOne({ id: receivedData.userId })
-      : await employersCollection.findOne({ id: receivedData.userId });
+      ? await seamenCollection.findOne({
+          _id: new ObjectId(receivedData.userId),
+        })
+      : await employersCollection.findOne({
+          _id: new ObjectId(receivedData.userId),
+        });
 
   if (existingUser) {
     return Response.json({

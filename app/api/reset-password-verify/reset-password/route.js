@@ -2,6 +2,7 @@ import client from '@/dbConnections/mongoDB';
 import jwt from 'jsonwebtoken';
 import base64url from 'base64url';
 import bcrypt from 'bcrypt';
+import { ObjectId } from 'mongodb';
 
 export const PUT = async (req) => {
   const receivedData = await req.json();
@@ -13,20 +14,20 @@ export const PUT = async (req) => {
   try {
     const tokenData = jwt.verify(token, process.env.JWT_SECRET);
     if (tokenData) {
-      const userId = tokenData.userId;
+      const userId = new ObjectId(tokenData.userId);
       await client.connect();
       const db = client.db('admin');
       const seamenCollection = db.collection('seamen');
       const employersCollection = db.collection('employers');
 
       let userData = await seamenCollection.updateOne(
-        { id: userId },
+        { _id: userId },
         { $set: { password: hashedPassword } }
       );
 
       if (!userData) {
         userData = await employersCollection.updateOne(
-          { id: userId },
+          { _id: userId },
           { $set: { password: hashedPassword } }
         );
       }

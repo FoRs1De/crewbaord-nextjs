@@ -2,6 +2,7 @@ import { verify } from 'jsonwebtoken';
 import { cookies } from 'next/headers';
 import { decode } from 'jsonwebtoken';
 import client from '@/dbConnections/mongoDB';
+import { ObjectId } from 'mongodb';
 
 export const GET = async () => {
   const cookiesList = cookies();
@@ -21,7 +22,7 @@ export const GET = async () => {
     }
 
     const decodedToken = decode(token.value, { complete: true });
-    const userId = decodedToken.payload.id;
+    const userId = new ObjectId(decodedToken.payload.id);
     if (verification) {
       await client.connect();
       const db = client.db('admin');
@@ -29,16 +30,16 @@ export const GET = async () => {
       const employersCollection = db.collection('employers');
       let userData;
       userData = await seamenCollection.findOne({
-        id: userId,
+        _id: userId,
       });
       if (!userData) {
         userData = await employersCollection.findOne({
-          id: userId,
+          _id: userId,
         });
       }
       if (userData) {
         return Response.json({
-          id: userData.id,
+          id: userData._id.toString(),
           userRole: userData.userRole,
           name: userData.name,
           avatarUrl: userData.avatarUrl,

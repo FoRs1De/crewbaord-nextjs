@@ -1,6 +1,7 @@
 import client from '@/dbConnections/mongoDB';
 import jwt from 'jsonwebtoken';
 import base64url from 'base64url';
+import { ObjectId } from 'mongodb';
 
 export const PUT = async (req) => {
   const receivedData = await req.json();
@@ -10,20 +11,20 @@ export const PUT = async (req) => {
     const tokenData = jwt.verify(token, process.env.JWT_SECRET);
     console.log(tokenData);
     if (tokenData) {
-      const userId = tokenData.userId;
+      const userId = new ObjectId(tokenData.userId);
       await client.connect();
       const db = client.db('admin');
       const seamenCollection = db.collection('seamen');
       const employersCollection = db.collection('employers');
 
       let userData = await seamenCollection.findOneAndUpdate(
-        { id: userId },
+        { _id: userId },
         { $set: { verified: true } }
       );
 
       if (!userData) {
         userData = await employersCollection.findOneAndUpdate(
-          { id: userId },
+          { _id: userId },
           { $set: { verified: true } }
         );
       }

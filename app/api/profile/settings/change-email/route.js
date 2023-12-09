@@ -2,6 +2,7 @@ import client from '@/dbConnections/mongoDB';
 import nodemailer from 'nodemailer';
 import jwt from 'jsonwebtoken';
 import base64url from 'base64url';
+import { ObjectId } from 'mongodb';
 
 const smtpHost = process.env.SMTP_HOST;
 const smtpUser = process.env.SMTP_USER;
@@ -37,9 +38,11 @@ export const PUT = async (req) => {
 
   const existingUser =
     receivedData.userRole === 'seaman'
-      ? await seamenCollection.findOne({ id: receivedData.userId })
+      ? await seamenCollection.findOne({
+          _id: new ObjectId(receivedData.userId),
+        })
       : await employersCollection.findOne({
-          id: receivedData.userId,
+          _id: new ObjectId(receivedData.userId),
         });
 
   if (existingUser) {
@@ -47,7 +50,7 @@ export const PUT = async (req) => {
       const expiresInMinutes = 60;
       const token = jwt.sign(
         {
-          userId: existingUser.id,
+          userId: existingUser._id.toString(),
           email: receivedData.email,
           userRole: receivedData.userRole,
         },

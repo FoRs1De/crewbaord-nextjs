@@ -1,6 +1,7 @@
 import client from '@/dbConnections/mongoDB';
 import jwt from 'jsonwebtoken';
 import base64url from 'base64url';
+import { ObjectId } from 'mongodb';
 
 export const PUT = async (req) => {
   const receivedData = await req.json();
@@ -28,11 +29,11 @@ export const PUT = async (req) => {
       const existingUser =
         tokenData.userRole === 'seaman'
           ? await seamenCollection.findOneAndUpdate(
-              { id: tokenData.userId },
+              { _id: new ObjectId(tokenData.userId) },
               { $set: { email: tokenData.email } }
             )
           : await employersCollection.findOneAndUpdate(
-              { id: tokenData.userId },
+              { _id: new ObjectId(tokenData.userId) },
               { $set: { email: tokenData.email } }
             );
       console.log(existingUser);

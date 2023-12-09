@@ -34,7 +34,7 @@ export const POST = async (req, res) => {
 
     if (existingSeaman) {
       const token = sign(
-        { id: existingSeaman.id, userRole: 'seaman' },
+        { id: existingSeaman._id.toString(), userRole: 'seaman' },
         secret,
         {
           expiresIn: maxAgeRemember,
@@ -49,7 +49,7 @@ export const POST = async (req, res) => {
         path: '/',
       });
       return Response.json({
-        id: existingSeaman.id,
+        id: existingSeaman._id.toString(),
         userRole: existingSeaman.userRole,
         name: existingSeaman.name,
         avatarUrl: existingSeaman.avatarUrl,
@@ -60,7 +60,7 @@ export const POST = async (req, res) => {
 
     if (existingEmployer) {
       const token = sign(
-        { id: existingEmployer.id, userRole: 'seaman' },
+        { id: existingEmployer._id.toString(), userRole: 'seaman' },
         secret,
         {
           expiresIn: maxAgeRemember,
@@ -74,7 +74,7 @@ export const POST = async (req, res) => {
         path: '/',
       });
       return Response.json({
-        id: existingEmployer.id,
+        id: existingEmployer._id.toString(),
         userRole: existingEmployer.userRole,
         name: existingEmployer.name,
         avatarUrl: existingEmployer.avatarUrl,

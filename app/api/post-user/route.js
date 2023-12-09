@@ -1,6 +1,5 @@
 import client from '@/dbConnections/mongoDB';
 import bcrypt from 'bcrypt';
-import { v4 as uuid } from 'uuid';
 import moment from 'moment';
 import nodemailer from 'nodemailer';
 import jwt from 'jsonwebtoken';
@@ -54,9 +53,8 @@ export const POST = async (req) => {
 
     if (receivedData.userRole === 'seaman') {
       const currentDateTime = moment().format('DD.MM.YYYY');
-      const userId = uuid();
+
       const seaman = {
-        id: userId,
         userRole: receivedData.userRole,
         email: receivedData.email,
         name: receivedData.name,
@@ -113,8 +111,9 @@ export const POST = async (req) => {
         registered: currentDateTime,
         hiddenTill: null,
       };
-      await seamenCollection.insertOne(seaman);
 
+      const result = await seamenCollection.insertOne(seaman);
+      const userId = result.insertedId.toString();
       const generateTimeLimitedLink = () => {
         const expiresInMinutes = 60;
         const token = jwt.sign({ userId }, process.env.JWT_SECRET, {
@@ -154,9 +153,8 @@ export const POST = async (req) => {
       }
     } else {
       const currentDateTime = moment().format('DD.MM.YYYY');
-      const userId = uuid();
+
       const employer = {
-        id: userId,
         userRole: receivedData.userRole,
         email: receivedData.email,
         name: receivedData.name,
@@ -175,11 +173,12 @@ export const POST = async (req) => {
         avatarUrl: null,
         phone: null,
         dataUpdated: null,
+        hiddenTill: null,
         registered: currentDateTime,
       };
 
-      await employersCollection.insertOne(employer);
-
+      const result = await employersCollection.insertOne(employer);
+      const userId = result.insertedId.toString();
       const generateTimeLimitedLink = () => {
         const expiresInMinutes = 60;
         const token = jwt.sign({ userId }, process.env.JWT_SECRET, {
