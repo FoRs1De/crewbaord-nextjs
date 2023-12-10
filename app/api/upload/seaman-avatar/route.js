@@ -37,7 +37,7 @@ export const POST = async (req) => {
       `public/upload/seamen-avatars/${existingEmployerAvatar.avatar.fileName}`
     );
   }
-
+  console.log(url);
   const existingSeaman = await seamenCollection.findOneAndUpdate(
     { _id: new ObjectId(userId) },
     {

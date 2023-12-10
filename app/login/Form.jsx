@@ -10,7 +10,6 @@ import axios from 'axios';
 import { useState } from 'react';
 import { Divider } from 'antd';
 import { useDispatch, useSelector } from 'react-redux';
-import { setAuth } from '../redux/actions/auth';
 import { setUpdateTrigger } from '../redux/actions/updateTrigger';
 
 const LoginForm = () => {
@@ -34,7 +33,6 @@ const LoginForm = () => {
       if (res.data.message === 'Authenticated') {
         form.setFieldsValue({ password: '', email: '' });
         setResponseError(null);
-        dispatch(setAuth(res.data));
 
         dispatch(setUpdateTrigger(!updateTrigger));
         router.push('/');

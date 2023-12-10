@@ -66,9 +66,9 @@ export const POST = async (req) => {
         agreement: receivedData.agreement,
         verified: false,
         avatar: {
-          url: null,
+          url: `${receivedData.url}/images/placeholder.jpeg`,
           fileName: null,
-          urlCropped: null,
+          urlCropped: `${receivedData.url}/images/placeholder.jpeg`,
           fileNameCropped: null,
         },
         personalDetails: {
@@ -176,9 +176,9 @@ export const POST = async (req) => {
         licenceNumber: null,
         licenseUrl: null,
         avatar: {
-          url: null,
+          url: `${receivedData.url}/images/placeholder.jpeg`,
           fileName: null,
-          urlCropped: null,
+          urlCropped: `${receivedData.url}/images/placeholder.jpeg`,
           fileNameCropped: null,
         },
         phone: null,

@@ -6,7 +6,7 @@ import { ObjectId } from 'mongodb';
 
 export const POST = async (req) => {
   const data = await req.formData();
-  console.log(data);
+
   const headers = await req.headers;
   const url = headers.get('origin');
   const userId = data.get('userId');
@@ -25,18 +25,26 @@ export const POST = async (req) => {
     _id: new ObjectId(userId),
   });
   if (existingSeamanAvatar && existingSeamanAvatar.avatar.fileNameCropped) {
-    await unlink(
-      `public/upload/seamen-avatars/${existingSeamanAvatar.avatar.fileNameCropped}`
-    );
+    try {
+      await unlink(
+        `public/upload/seamen-avatars/${existingSeamanAvatar.avatar.fileNameCropped}`
+      );
+    } catch (err) {
+      console.log(err);
+    }
   }
 
   const existingEmployerAvatar = await employersCollection.findOne({
     _id: new ObjectId(userId),
   });
   if (existingEmployerAvatar && existingEmployerAvatar.avatar.fileNameCropped) {
-    await unlink(
-      `public/upload/seamen-avatars/${existingEmployerAvatar.avatar.fileNameCropped}`
-    );
+    try {
+      await unlink(
+        `public/upload/seamen-avatars/${existingEmployerAvatar.avatar.fileNameCropped}`
+      );
+    } catch (err) {
+      console.log(err);
+    }
   }
 
   const existingSeaman = await seamenCollection.findOneAndUpdate(

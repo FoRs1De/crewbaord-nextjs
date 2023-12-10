@@ -1,17 +1,11 @@
 'use client';
-import {
-  message,
-  Badge,
-  Avatar,
-  Upload,
-  Progress,
-  Modal,
-  Image as AntImage,
-} from 'antd';
-import headerLogo from '../../public/images/HeaderLogo.png';
+import { message, Badge, Avatar, Upload, Progress, Modal } from 'antd';
 import NextImage from 'next/image';
+import { RiDeleteBinLine } from 'react-icons/ri';
+import headerLogo from '../../public/images/HeaderLogo.png';
+import { TbResize } from 'react-icons/tb';
 import { MdUpload } from 'react-icons/md';
-import { useState, useRef, useEffect } from 'react';
+import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { setUpdateTrigger } from '../redux/actions/updateTrigger';
 import ReactCrop from 'react-image-crop';
@@ -24,6 +18,8 @@ const SeamanSideBar = () => {
   const updateTrigger = useSelector((state) => state.updateTriggerReducer);
   const [uploadProgress, setUploadProgress] = useState(0);
   const [imageDimensions, setImageDimensions] = useState({});
+
+  const [error, setError] = useState(null);
 
   const [open, setOpen] = useState(false);
   const [crop, setCrop] = useState({
@@ -56,7 +52,9 @@ const SeamanSideBar = () => {
       if (info.file.status === 'done') {
         console.log(`${info.file.name} file uploaded successfully`);
         dispatch(setUpdateTrigger(!updateTrigger));
-        setOpen(true);
+        setTimeout(() => {
+          setOpen(true);
+        }, 500);
       } else if (info.file.status === 'error') {
         message.error(`${info.file.name} file upload failed.`);
       }
@@ -80,24 +78,32 @@ const SeamanSideBar = () => {
   };
 
   const handleOk = async () => {
-    const croppedImage = await cropImage();
-    const formData = new FormData();
-    formData.append('croppedImage', croppedImage);
-    formData.append('userId', sessionStatus.id);
-    await axios.post('/api/upload/seaman-avatar/cropped-avatar', formData);
-    dispatch(setUpdateTrigger(!updateTrigger));
-    setOpen(false);
-  };
+    try {
+      const croppedImage = await cropImage();
 
+      const formData = new FormData();
+
+      formData.append('croppedImage', croppedImage);
+      formData.append('userId', sessionStatus.id);
+
+      await axios.post('/api/upload/seaman-avatar/cropped-avatar', formData);
+      dispatch(setUpdateTrigger(!updateTrigger));
+      setOpen(false);
+    } catch (error) {
+      console.log(error.message);
+    }
+  };
   const cropImage = () => {
-    return new Promise((resolve) => {
+    return new Promise((resolve, reject) => {
       const img = new Image();
       img.src = sessionStatus.avatar.url;
 
-      console.log(img);
       img.onload = () => {
+        setError(sessionStatus.avatar.url);
         const canvas = document.createElement('canvas');
+
         const ctx = canvas.getContext('2d');
+
         const scaleX = img.naturalWidth / imageDimensions.width;
         const scaleY = img.naturalHeight / imageDimensions.height;
 
@@ -120,19 +126,30 @@ const SeamanSideBar = () => {
         );
 
         // Convert the canvas content to a blob
-        if (img.src.toLowerCase().endsWith('.jpg')) {
-          canvas.toBlob((blob) => {
-            resolve(
-              new File([blob], 'croppedImage.jpg', { type: 'image/jpeg' })
-            );
-          }, 'image/jpeg');
+        if (
+          img.src.toLowerCase().endsWith('.jpg') ||
+          img.src.toLowerCase().endsWith('.jpeg')
+        ) {
+          canvas.toBlob(
+            (blob) =>
+              resolve(
+                new File([blob], 'croppedImage.jpg', { type: 'image/jpeg' })
+              ),
+            'image/jpeg'
+          );
         } else {
-          canvas.toBlob((blob) => {
-            resolve(
-              new File([blob], 'croppedImage.png', { type: 'image/png' })
-            );
-          }, 'image/png');
+          canvas.toBlob(
+            (blob) =>
+              resolve(
+                new File([blob], 'croppedImage.png', { type: 'image/png' })
+              ),
+            'image/png'
+          );
         }
+      };
+
+      img.onerror = () => {
+        reject(new Error('Image failed to load.'));
       };
     });
   };
@@ -147,7 +164,7 @@ const SeamanSideBar = () => {
     <div className='w-64 bg-white flex rounded-lg justify-center shadow-lg'>
       <Modal
         centered
-        title='Center your avatar'
+        title='Adjust Image Size'
         open={open}
         onCancel={handleCancel}
         onOk={handleOk}
@@ -160,9 +177,14 @@ const SeamanSideBar = () => {
             onChange={(c) => setCrop(c)}
             aspect={1 / 1}
           >
-            <AntImage
-              preview={false}
-              src={sessionStatus && sessionStatus.avatar.url}
+            <NextImage
+              width={500}
+              height={500}
+              src={
+                sessionStatus && sessionStatus.avatar.url
+                  ? sessionStatus.avatar.url
+                  : headerLogo
+              }
               alt='avatar'
               onLoad={handleImageLoad}
             />
@@ -173,7 +195,7 @@ const SeamanSideBar = () => {
         <div className='my-5 relative '>
           <Avatar
             shape='square'
-            size={100}
+            size={150}
             icon={
               <div className='flex justify-center items-center w-full h-full relative overflow-hidden'>
                 {uploadProgress > 0 ? (
@@ -185,12 +207,10 @@ const SeamanSideBar = () => {
                   />
                 ) : (
                   <div className='relative h-full w-full'>
-                    <AntImage
-                      preview={false}
+                    <NextImage
+                      width={500}
+                      height={500}
                       className='cursor-pointer'
-                      onClick={() => {
-                        setOpen(true);
-                      }}
                       src={
                         sessionStatus && sessionStatus.avatar.urlCropped
                           ? sessionStatus.avatar.urlCropped
@@ -203,18 +223,31 @@ const SeamanSideBar = () => {
               </div>
             }
           />
+          <div
+            onClick={() => setOpen(true)}
+            className=' cursor-pointer bg-gray-700 rounded-full w-8 h-8 flex items-center justify-center text-white text-xl absolute right-32 bottom-32 mt-2 ml-2'
+          >
+            <RiDeleteBinLine />
+          </div>
+          <div
+            onClick={() => setOpen(true)}
+            className=' cursor-pointer bg-gray-700 rounded-full w-8 h-8 flex items-center justify-center text-white text-xl absolute left-32 top-20 mt-2 ml-2'
+          >
+            <TbResize />
+          </div>
           <Upload
             {...props}
             name='avatar'
             showUploadList={false}
             beforeUpload={beforeUpload}
           >
-            <div className='bg-gray-700 rounded-full w-8 h-8 flex items-center justify-center text-white text-xl absolute left-20 top-16 mt-3 ml-1'>
+            <div className='bg-gray-700 rounded-full w-8 h-8 flex items-center justify-center text-white text-xl absolute left-32 top-32 ml-2'>
               <MdUpload />
             </div>
           </Upload>
         </div>
       </Badge.Ribbon>
+      {error}
     </div>
   );
 };

@@ -278,20 +278,27 @@ const Header = () => {
                                     <Avatar
                                       className='flex justify-center items-center'
                                       shape='square'
-                                      size='large'
+                                      size={45}
                                       icon={
                                         <div className='relative w-full h-full flex justify-center items-center'>
-                                          <AntImage
-                                            preview={false}
-                                            src={
-                                              sessionStatus &&
-                                              sessionStatus.avatar.urlCropped
-                                                ? sessionStatus.avatar
+                                          {sessionStatus &&
+                                            sessionStatus.avatar && (
+                                              <Image
+                                                fill
+                                                sizes='(min-width: 808px) 50vw, 100vw'
+                                                style={{
+                                                  objectFit: 'cover', // cover, contain, none
+                                                }}
+                                                src={
+                                                  sessionStatus.avatar
                                                     .urlCropped
-                                                : headerLogo
-                                            }
-                                            alt='avatar'
-                                          />
+                                                    ? sessionStatus.avatar
+                                                        .urlCropped
+                                                    : headerLogo
+                                                }
+                                                alt='avatar'
+                                              />
+                                            )}
                                         </div>
                                       }
                                     />
@@ -367,23 +374,24 @@ const Header = () => {
                         <Avatar
                           className='flex justify-center items-center'
                           shape='square'
-                          size='large'
+                          size={60}
                           icon={
                             <div className='relative w-full h-full flex justify-center items-center'>
-                              <Image
-                                fill
-                                sizes='(min-width: 808px) 50vw, 100vw'
-                                style={{
-                                  objectFit: 'cover', // cover, contain, none
-                                }}
-                                src={
-                                  sessionStatus &&
-                                  sessionStatus.avatar.urlCropped
-                                    ? sessionStatus.avatar.urlCropped
-                                    : headerLogo
-                                }
-                                alt='avatar'
-                              />
+                              {sessionStatus && sessionStatus.avatar && (
+                                <Image
+                                  fill
+                                  sizes='(min-width: 808px) 50vw, 100vw'
+                                  style={{
+                                    objectFit: 'cover', // cover, contain, none
+                                  }}
+                                  src={
+                                    sessionStatus.avatar.urlCropped
+                                      ? sessionStatus.avatar.urlCropped
+                                      : headerLogo
+                                  }
+                                  alt='avatar'
+                                />
+                              )}
                             </div>
                           }
                         />
