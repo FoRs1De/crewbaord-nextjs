@@ -6,13 +6,14 @@ import { ObjectId } from 'mongodb';
 
 export const POST = async (req) => {
   const data = await req.formData();
+  console.log(data);
   const headers = await req.headers;
   const url = headers.get('origin');
-  const userId = headers.get('authorization');
-  const file = data.get('avatar');
+  const userId = data.get('userId');
+  const file = data.get('croppedImage');
   const bytes = await file.arrayBuffer();
   const buffer = Buffer.from(bytes);
-  const newFileName = `${uuid()}${extname(file.name)}`;
+  const newFileName = `ava-${uuid()}${extname(file.name)}`;
   const path = `public/upload/seamen-avatars/${newFileName}`;
   await writeFile(path, buffer);
 
@@ -23,18 +24,18 @@ export const POST = async (req) => {
   const existingSeamanAvatar = await seamenCollection.findOne({
     _id: new ObjectId(userId),
   });
-  if (existingSeamanAvatar && existingSeamanAvatar.avatar.fileName) {
+  if (existingSeamanAvatar && existingSeamanAvatar.avatar.fileNameCropped) {
     await unlink(
-      `public/upload/seamen-avatars/${existingSeamanAvatar.avatar.fileName}`
+      `public/upload/seamen-avatars/${existingSeamanAvatar.avatar.fileNameCropped}`
     );
   }
 
   const existingEmployerAvatar = await employersCollection.findOne({
     _id: new ObjectId(userId),
   });
-  if (existingEmployerAvatar && existingEmployerAvatar.avatar.fileName) {
+  if (existingEmployerAvatar && existingEmployerAvatar.avatar.fileNameCropped) {
     await unlink(
-      `public/upload/seamen-avatars/${existingEmployerAvatar.avatar.fileName}`
+      `public/upload/seamen-avatars/${existingEmployerAvatar.avatar.fileNameCropped}`
     );
   }
 
@@ -42,8 +43,8 @@ export const POST = async (req) => {
     { _id: new ObjectId(userId) },
     {
       $set: {
-        'avatar.url': `${url}/upload/seamen-avatars/${newFileName}`,
-        'avatar.fileName': newFileName,
+        'avatar.urlCropped': `${url}/upload/seamen-avatars/${newFileName}`,
+        'avatar.fileNameCropped': newFileName,
       },
     }
   );
@@ -52,10 +53,8 @@ export const POST = async (req) => {
       { _id: new ObjectId(userId) },
       {
         $set: {
-          $set: {
-            'avatar.url': `${url}/upload/seamen-avatars/${newFileName}`,
-            'avatar.fileName': newFileName,
-          },
+          'avatar.urlCropped': `${url}/upload/seamen-avatars/${newFileName}`,
+          'avatar.fileNameCropped': newFileName,
         },
       }
     );

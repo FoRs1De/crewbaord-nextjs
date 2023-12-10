@@ -65,7 +65,12 @@ export const POST = async (req) => {
         password: hashedPassword,
         agreement: receivedData.agreement,
         verified: false,
-        avatar: { url: null, fileName: null },
+        avatar: {
+          url: null,
+          fileName: null,
+          urlCropped: null,
+          fileNameCropped: null,
+        },
         personalDetails: {
           firstName: null,
           lastName: null,
@@ -170,7 +175,12 @@ export const POST = async (req) => {
         description: null,
         licenceNumber: null,
         licenseUrl: null,
-        avatar: { url: null, fileName: null },
+        avatar: {
+          url: null,
+          fileName: null,
+          urlCropped: null,
+          fileNameCropped: null,
+        },
         phone: null,
         dataUpdated: null,
         hiddenTill: null,

@@ -1,22 +1,38 @@
 'use client';
-import { message, Badge, Avatar, Upload, Progress, Modal } from 'antd';
+import {
+  message,
+  Badge,
+  Avatar,
+  Upload,
+  Progress,
+  Modal,
+  Image as AntImage,
+} from 'antd';
 import headerLogo from '../../public/images/HeaderLogo.png';
-import Image from 'next/image';
+import NextImage from 'next/image';
 import { MdUpload } from 'react-icons/md';
-import { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { setUpdateTrigger } from '../redux/actions/updateTrigger';
+import ReactCrop from 'react-image-crop';
+import 'react-image-crop/dist/ReactCrop.css';
+import axios from 'axios';
 
 const SeamanSideBar = () => {
   const dispatch = useDispatch();
   const sessionStatus = useSelector((state) => state.authReducer);
   const updateTrigger = useSelector((state) => state.updateTriggerReducer);
   const [uploadProgress, setUploadProgress] = useState(0);
-  const [open, setOpen] = useState(false);
+  const [imageDimensions, setImageDimensions] = useState({});
 
-  const handleCancel = () => {
-    setOpen(false);
-  };
+  const [open, setOpen] = useState(false);
+  const [crop, setCrop] = useState({
+    unit: 'px',
+    x: 130,
+    y: 50,
+    width: 200,
+    height: 200,
+  });
 
   let userId;
   if (sessionStatus) {
@@ -40,6 +56,7 @@ const SeamanSideBar = () => {
       if (info.file.status === 'done') {
         console.log(`${info.file.name} file uploaded successfully`);
         dispatch(setUpdateTrigger(!updateTrigger));
+        setOpen(true);
       } else if (info.file.status === 'error') {
         message.error(`${info.file.name} file upload failed.`);
       }
@@ -58,27 +75,99 @@ const SeamanSideBar = () => {
     return isJpgOrPng && isLt5M;
   };
 
+  const handleCancel = () => {
+    setOpen(false);
+  };
+
+  const handleOk = async () => {
+    const croppedImage = await cropImage();
+    const formData = new FormData();
+    formData.append('croppedImage', croppedImage);
+    formData.append('userId', sessionStatus.id);
+    await axios.post('/api/upload/seaman-avatar/cropped-avatar', formData);
+    dispatch(setUpdateTrigger(!updateTrigger));
+    setOpen(false);
+  };
+
+  const cropImage = () => {
+    return new Promise((resolve) => {
+      const img = new Image();
+      img.src = sessionStatus.avatar.url;
+
+      console.log(img);
+      img.onload = () => {
+        const canvas = document.createElement('canvas');
+        const ctx = canvas.getContext('2d');
+        const scaleX = img.naturalWidth / imageDimensions.width;
+        const scaleY = img.naturalHeight / imageDimensions.height;
+
+        const cropWidth = crop.width * scaleX;
+        const cropHeight = crop.height * scaleY;
+
+        canvas.width = cropWidth;
+        canvas.height = cropHeight;
+
+        ctx.drawImage(
+          img,
+          crop.x * scaleX,
+          crop.y * scaleY,
+          crop.width * scaleX,
+          crop.height * scaleY,
+          0,
+          0,
+          cropWidth,
+          cropHeight
+        );
+
+        // Convert the canvas content to a blob
+        if (img.src.toLowerCase().endsWith('.jpg')) {
+          canvas.toBlob((blob) => {
+            resolve(
+              new File([blob], 'croppedImage.jpg', { type: 'image/jpeg' })
+            );
+          }, 'image/jpeg');
+        } else {
+          canvas.toBlob((blob) => {
+            resolve(
+              new File([blob], 'croppedImage.png', { type: 'image/png' })
+            );
+          }, 'image/png');
+        }
+      };
+    });
+  };
+
+  const handleImageLoad = (e) => {
+    setImageDimensions({
+      width: e.target.width,
+      height: e.target.height,
+    });
+  };
   return (
     <div className='w-64 bg-white flex rounded-lg justify-center shadow-lg'>
       <Modal
         centered
-        className='relative'
-        title={null}
+        title='Center your avatar'
         open={open}
-        footer={null}
         onCancel={handleCancel}
+        onOk={handleOk}
+        maskClosable={false}
       >
-        <Image
-          className='p-5 '
-          width={5000}
-          height={5000}
-          src={
-            sessionStatus && sessionStatus.avatar.url
-              ? sessionStatus.avatar.url
-              : headerLogo
-          }
-          alt='avatar'
-        />
+        <div className='m-0 p-0'>
+          <ReactCrop
+            className='relative '
+            crop={crop}
+            onChange={(c) => setCrop(c)}
+            aspect={1 / 1}
+          >
+            <AntImage
+              preview={false}
+              src={sessionStatus && sessionStatus.avatar.url}
+              alt='avatar'
+              onLoad={handleImageLoad}
+            />
+          </ReactCrop>
+        </div>
       </Modal>
       <Badge.Ribbon text='Status' color='volcano'>
         <div className='my-5 relative '>
@@ -96,17 +185,15 @@ const SeamanSideBar = () => {
                   />
                 ) : (
                   <div className='relative h-full w-full'>
-                    <Image
-                      fill
-                      sizes='(min-width: 808px) 50vw, 100vw'
-                      style={{
-                        objectFit: 'cover', // cover, contain, none
-                      }}
+                    <AntImage
+                      preview={false}
                       className='cursor-pointer'
-                      onClick={() => setOpen(true)}
+                      onClick={() => {
+                        setOpen(true);
+                      }}
                       src={
-                        sessionStatus && sessionStatus.avatar.url
-                          ? sessionStatus.avatar.url
+                        sessionStatus && sessionStatus.avatar.urlCropped
+                          ? sessionStatus.avatar.urlCropped
                           : headerLogo
                       }
                       alt='avatar'

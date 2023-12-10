@@ -13,7 +13,7 @@ import Image from 'next/image';
 import axios from 'axios';
 import { useDispatch, useSelector } from 'react-redux';
 import { setAuth } from '../../redux/actions/auth';
-import { Avatar, Badge, Dropdown } from 'antd';
+import { Avatar, Badge, Dropdown, Image as AntImage } from 'antd';
 import { TbLogout } from 'react-icons/tb';
 import { VscAccount } from 'react-icons/vsc';
 import { IoDocumentTextOutline } from 'react-icons/io5';
@@ -281,16 +281,13 @@ const Header = () => {
                                       size='large'
                                       icon={
                                         <div className='relative w-full h-full flex justify-center items-center'>
-                                          <Image
-                                            fill
-                                            sizes='(min-width: 808px) 50vw, 100vw'
-                                            style={{
-                                              objectFit: 'cover', // cover, contain, none
-                                            }}
+                                          <AntImage
+                                            preview={false}
                                             src={
                                               sessionStatus &&
-                                              sessionStatus.avatar.url
-                                                ? sessionStatus.avatar.url
+                                              sessionStatus.avatar.urlCropped
+                                                ? sessionStatus.avatar
+                                                    .urlCropped
                                                 : headerLogo
                                             }
                                             alt='avatar'
@@ -380,8 +377,9 @@ const Header = () => {
                                   objectFit: 'cover', // cover, contain, none
                                 }}
                                 src={
-                                  sessionStatus && sessionStatus.avatar.url
-                                    ? sessionStatus.avatar.url
+                                  sessionStatus &&
+                                  sessionStatus.avatar.urlCropped
+                                    ? sessionStatus.avatar.urlCropped
                                     : headerLogo
                                 }
                                 alt='avatar'
