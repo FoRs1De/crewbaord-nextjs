@@ -7,13 +7,13 @@ import { ObjectId } from 'mongodb';
 export const POST = async (req) => {
   const data = await req.formData();
   const headers = await req.headers;
-  const url = headers.get('origin');
+  const url = process.env.DOMAIN_URL;
   const userId = headers.get('authorization');
   const file = data.get('avatar');
   const bytes = await file.arrayBuffer();
   const buffer = Buffer.from(bytes);
   const newFileName = `${uuid()}${extname(file.name)}`;
-  const path = `public/upload/seamen-avatars/${newFileName}`;
+  const path = `public/upload/avatars/${newFileName}`;
   await writeFile(path, buffer);
 
   const db = client.db('admin');
@@ -24,25 +24,33 @@ export const POST = async (req) => {
     _id: new ObjectId(userId),
   });
   if (existingSeamanAvatar && existingSeamanAvatar.avatar.fileName) {
-    await unlink(
-      `public/upload/seamen-avatars/${existingSeamanAvatar.avatar.fileName}`
-    );
+    try {
+      await unlink(
+        `public/upload/avatars/${existingSeamanAvatar.avatar.fileName}`
+      );
+    } catch (err) {
+      console.log(err);
+    }
   }
 
   const existingEmployerAvatar = await employersCollection.findOne({
     _id: new ObjectId(userId),
   });
   if (existingEmployerAvatar && existingEmployerAvatar.avatar.fileName) {
-    await unlink(
-      `public/upload/seamen-avatars/${existingEmployerAvatar.avatar.fileName}`
-    );
+    try {
+      await unlink(
+        `public/upload/avatars/${existingEmployerAvatar.avatar.fileName}`
+      );
+    } catch (err) {
+      console.log(err);
+    }
   }
   console.log(url);
   const existingSeaman = await seamenCollection.findOneAndUpdate(
     { _id: new ObjectId(userId) },
     {
       $set: {
-        'avatar.url': `${url}/upload/seamen-avatars/${newFileName}`,
+        'avatar.url': `${url}/upload/avatars/${newFileName}`,
         'avatar.fileName': newFileName,
       },
     }
@@ -52,10 +60,8 @@ export const POST = async (req) => {
       { _id: new ObjectId(userId) },
       {
         $set: {
-          $set: {
-            'avatar.url': `${url}/upload/seamen-avatars/${newFileName}`,
-            'avatar.fileName': newFileName,
-          },
+          'avatar.url': `${url}/upload/avatars/${newFileName}`,
+          'avatar.fileName': newFileName,
         },
       }
     );

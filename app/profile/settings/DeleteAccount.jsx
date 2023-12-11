@@ -20,12 +20,14 @@ const DeleteAccount = () => {
         <div>
           <div className='mt-0 flex items-center'>
             <ExclamationCircleOutlined className='text-2xl  text-red-500 mr-3' />
-            <h2 className='mb-2 mt-2'>Confirmation required</h2>
+            <h4 className='mb-2 mt-2 text-lg font-semibold'>
+              Confirmation required
+            </h4>
           </div>
           <p className='mb-3 ml-9'>
             Please confirm if you want to delete your account. Your account will
             be deleted with all your personal data and you can not restore
-            anything
+            anything!
           </p>
         </div>
       ),

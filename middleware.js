@@ -7,7 +7,7 @@ const visitorsProtectedRoutes = [
   '/profile/settings',
   '/profile/cv',
 ];
-const loggedInProtectedRoutes = ['/login', '/registration'];
+const loggedInProtectedRoutes = [];
 const seamanProtectedRoutes = [];
 const employerProtectedRoutes = [];
 

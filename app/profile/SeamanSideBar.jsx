@@ -1,9 +1,9 @@
 'use client';
 import { message, Badge, Avatar, Upload, Progress, Modal } from 'antd';
 import NextImage from 'next/image';
-import { RiDeleteBinLine } from 'react-icons/ri';
+import { IoCloseSharp } from 'react-icons/io5';
 import headerLogo from '../../public/images/HeaderLogo.png';
-import { TbResize } from 'react-icons/tb';
+import { GrEdit } from 'react-icons/gr';
 import { MdUpload } from 'react-icons/md';
 import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
@@ -11,6 +11,8 @@ import { setUpdateTrigger } from '../redux/actions/updateTrigger';
 import ReactCrop from 'react-image-crop';
 import 'react-image-crop/dist/ReactCrop.css';
 import axios from 'axios';
+import { TbPhotoEdit } from 'react-icons/tb';
+import { RiDeleteBinLine } from 'react-icons/ri';
 
 const SeamanSideBar = () => {
   const dispatch = useDispatch();
@@ -18,10 +20,9 @@ const SeamanSideBar = () => {
   const updateTrigger = useSelector((state) => state.updateTriggerReducer);
   const [uploadProgress, setUploadProgress] = useState(0);
   const [imageDimensions, setImageDimensions] = useState({});
-
-  const [error, setError] = useState(null);
-
   const [open, setOpen] = useState(false);
+  const [openButtons, setOpenButtons] = useState(false);
+  const [deleteModal, setDeleteModal] = useState(false);
   const [crop, setCrop] = useState({
     unit: 'px',
     x: 130,
@@ -36,7 +37,7 @@ const SeamanSideBar = () => {
   }
   const props = {
     name: 'file',
-    action: '/api/upload/seaman-avatar',
+    action: '/api/upload/avatar',
     headers: {
       authorization: userId,
     },
@@ -79,79 +80,32 @@ const SeamanSideBar = () => {
 
   const handleOk = async () => {
     try {
-      const croppedImage = await cropImage();
+      const currentUrl = window.location.href;
+      const url = new URL(currentUrl);
+      const originUrl = url.origin;
 
       const formData = new FormData();
-
-      formData.append('croppedImage', croppedImage);
+      formData.append('cropData', JSON.stringify(crop));
       formData.append('userId', sessionStatus.id);
+      formData.append('fileName', sessionStatus.avatar.fileName);
+      formData.append('imageData', JSON.stringify(imageDimensions));
+      formData.append('url', originUrl);
 
-      await axios.post('/api/upload/seaman-avatar/cropped-avatar', formData);
+      const res = await axios.post(
+        '/api/upload/avatar/cropped-avatar',
+        formData
+      );
+      if (res.data.message === 'No File') {
+        setOpen(false);
+        dispatch(setUpdateTrigger(!updateTrigger));
+        return;
+      }
       dispatch(setUpdateTrigger(!updateTrigger));
       setOpen(false);
+      setOpenButtons(false);
     } catch (error) {
       console.log(error.message);
     }
-  };
-  const cropImage = () => {
-    return new Promise((resolve, reject) => {
-      const img = new Image();
-      img.src = sessionStatus.avatar.url;
-
-      img.onload = () => {
-        setError(sessionStatus.avatar.url);
-        const canvas = document.createElement('canvas');
-
-        const ctx = canvas.getContext('2d');
-
-        const scaleX = img.naturalWidth / imageDimensions.width;
-        const scaleY = img.naturalHeight / imageDimensions.height;
-
-        const cropWidth = crop.width * scaleX;
-        const cropHeight = crop.height * scaleY;
-
-        canvas.width = cropWidth;
-        canvas.height = cropHeight;
-
-        ctx.drawImage(
-          img,
-          crop.x * scaleX,
-          crop.y * scaleY,
-          crop.width * scaleX,
-          crop.height * scaleY,
-          0,
-          0,
-          cropWidth,
-          cropHeight
-        );
-
-        // Convert the canvas content to a blob
-        if (
-          img.src.toLowerCase().endsWith('.jpg') ||
-          img.src.toLowerCase().endsWith('.jpeg')
-        ) {
-          canvas.toBlob(
-            (blob) =>
-              resolve(
-                new File([blob], 'croppedImage.jpg', { type: 'image/jpeg' })
-              ),
-            'image/jpeg'
-          );
-        } else {
-          canvas.toBlob(
-            (blob) =>
-              resolve(
-                new File([blob], 'croppedImage.png', { type: 'image/png' })
-              ),
-            'image/png'
-          );
-        }
-      };
-
-      img.onerror = () => {
-        reject(new Error('Image failed to load.'));
-      };
-    });
   };
 
   const handleImageLoad = (e) => {
@@ -160,8 +114,25 @@ const SeamanSideBar = () => {
       height: e.target.height,
     });
   };
+
+  const handleDeletion = async () => {
+    const userId = sessionStatus.id;
+    const currentUrl = window.location.href;
+    const url = new URL(currentUrl);
+    const originUrl = url.origin;
+    await axios.post(`/api/upload/avatar/delete-avatar`, {
+      userId,
+      url: originUrl,
+    });
+    dispatch(setUpdateTrigger(!updateTrigger));
+    setDeleteModal(false);
+  };
+  const handleCancelDeletion = async () => {
+    setDeleteModal(false);
+  };
   return (
     <div className='w-64 bg-white flex rounded-lg justify-center shadow-lg'>
+      {/* Edit Modal */}
       <Modal
         centered
         title='Adjust Image Size'
@@ -191,7 +162,24 @@ const SeamanSideBar = () => {
           </ReactCrop>
         </div>
       </Modal>
-      <Badge.Ribbon text='Status' color='volcano'>
+      {/* Delete Modal */}
+      <Modal
+        centered
+        title={
+          <div>
+            <p className='text-lg font-semibold'>Confirmation required</p>
+          </div>
+        }
+        open={deleteModal}
+        onOk={handleDeletion}
+        onCancel={handleCancelDeletion}
+      >
+        <p>
+          After removing your avatar, a standard placeholder image will replace
+          it.
+        </p>
+      </Modal>
+      <Badge.Ribbon className='select-none' text='Status' color='volcano'>
         <div className='my-5 relative '>
           <Avatar
             shape='square'
@@ -207,47 +195,70 @@ const SeamanSideBar = () => {
                   />
                 ) : (
                   <div className='relative h-full w-full'>
-                    <NextImage
-                      width={500}
-                      height={500}
-                      className='cursor-pointer'
-                      src={
-                        sessionStatus && sessionStatus.avatar.urlCropped
-                          ? sessionStatus.avatar.urlCropped
-                          : headerLogo
-                      }
-                      alt='avatar'
-                    />
+                    {sessionStatus && sessionStatus.avatar.urlCropped && (
+                      <NextImage
+                        width={1024}
+                        height={1024}
+                        className='cursor-pointer'
+                        src={sessionStatus && sessionStatus.avatar.urlCropped}
+                        alt='avatar'
+                      />
+                    )}
                   </div>
                 )}
               </div>
             }
           />
-          <div
-            onClick={() => setOpen(true)}
-            className=' cursor-pointer bg-gray-700 rounded-full w-8 h-8 flex items-center justify-center text-white text-xl absolute right-32 bottom-32 mt-2 ml-2'
-          >
-            <RiDeleteBinLine />
-          </div>
-          <div
-            onClick={() => setOpen(true)}
-            className=' cursor-pointer bg-gray-700 rounded-full w-8 h-8 flex items-center justify-center text-white text-xl absolute left-32 top-20 mt-2 ml-2'
-          >
-            <TbResize />
-          </div>
-          <Upload
-            {...props}
-            name='avatar'
-            showUploadList={false}
-            beforeUpload={beforeUpload}
-          >
-            <div className='bg-gray-700 rounded-full w-8 h-8 flex items-center justify-center text-white text-xl absolute left-32 top-32 ml-2'>
-              <MdUpload />
-            </div>
-          </Upload>
+
+          {sessionStatus && sessionStatus.avatar.fileName ? (
+            <>
+              <div
+                className=' select-none absolute left-32 top-32 ml-2 cursor-pointer bg-gray-700 rounded-full w-8 h-8 flex items-center justify-center text-white text-xl'
+                onClick={() => setOpenButtons((prev) => !prev)}
+              >
+                {openButtons ? <IoCloseSharp /> : <GrEdit />}
+              </div>
+              {openButtons && (
+                <>
+                  <div
+                    onClick={() => setDeleteModal(true)}
+                    className=' cursor-pointer bg-gray-700 rounded-full w-8 h-8 flex items-center justify-center text-white text-xl absolute left-24 top-32  '
+                  >
+                    <RiDeleteBinLine />
+                  </div>
+                  <div
+                    onClick={() => setOpen(true)}
+                    className=' cursor-pointer bg-gray-700 rounded-full w-8 h-8 flex items-center justify-center text-white text-xl absolute left-32 top-20 mt-2 ml-2'
+                  >
+                    <TbPhotoEdit />
+                  </div>
+                  <Upload
+                    {...props}
+                    name='avatar'
+                    showUploadList={false}
+                    beforeUpload={beforeUpload}
+                  >
+                    <div className='bg-gray-700 rounded-full w-8 h-8 flex items-center justify-center text-white text-xl absolute left-32 top-12 ml-2'>
+                      <MdUpload />
+                    </div>
+                  </Upload>
+                </>
+              )}
+            </>
+          ) : (
+            <Upload
+              {...props}
+              name='avatar'
+              showUploadList={false}
+              beforeUpload={beforeUpload}
+            >
+              <div className='bg-gray-700 rounded-full w-8 h-8 flex items-center justify-center text-white text-xl absolute left-32 top-32 ml-2'>
+                <MdUpload />
+              </div>
+            </Upload>
+          )}
         </div>
       </Badge.Ribbon>
-      {error}
     </div>
   );
 };

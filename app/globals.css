@@ -25,6 +25,9 @@ h3 {
   background-color: #3c82f6;
 }
 
+.ant-float-btn {
+  background-color: white;
+}
 /* for Windows */
 @media screen and (-webkit-min-device-pixel-ratio: 0) {
   body {

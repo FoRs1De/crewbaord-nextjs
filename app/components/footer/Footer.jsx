@@ -6,13 +6,13 @@ const Footer = () => {
     <footer className='flex justify-center sm:px-0 pl-3 pr-3 pt-10 pb-10 bg-neutral text-neutral-content  sm:p-10'>
       <div className='container footer flex flex-wrap-reverse '>
         <aside className='w-full sm:w-fit flex flex-col items-center m-auto'>
-          <div className='w-72'>
+          <div className='w-72 select-none'>
             <Link href='/'>
               <Image src={drawerLogo} alt='Crewboard' priority={true} />
             </Link>
           </div>
 
-          <p className='pt-3'>
+          <p className='pt-3 select-none'>
             From seaman for seamen and employers
             <br />
             Find your perfect job © Crewboard 2023
