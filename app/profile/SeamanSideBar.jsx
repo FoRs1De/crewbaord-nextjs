@@ -2,10 +2,10 @@
 import { message, Badge, Avatar, Upload, Progress, Modal } from 'antd';
 import NextImage from 'next/image';
 import { IoCloseSharp } from 'react-icons/io5';
-import headerLogo from '../../public/images/HeaderLogo.png';
+
 import { GrEdit } from 'react-icons/gr';
 import { MdUpload } from 'react-icons/md';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { setUpdateTrigger } from '../redux/actions/updateTrigger';
 import ReactCrop from 'react-image-crop';
@@ -21,15 +21,16 @@ const SeamanSideBar = () => {
   const [uploadProgress, setUploadProgress] = useState(0);
   const [imageDimensions, setImageDimensions] = useState({});
   const [open, setOpen] = useState(false);
+  const [editImage, setEditImage] = useState(false);
   const [openButtons, setOpenButtons] = useState(false);
   const [deleteModal, setDeleteModal] = useState(false);
-  const [crop, setCrop] = useState({
-    unit: 'px',
-    x: 130,
-    y: 50,
-    width: 200,
-    height: 200,
-  });
+  const [crop, setCrop] = useState(null);
+
+  useEffect(() => {
+    if (sessionStatus && sessionStatus.avatar.fileNameCropped) {
+      setEditImage(true);
+    }
+  }, [sessionStatus]);
 
   let userId;
   if (sessionStatus) {
@@ -53,6 +54,7 @@ const SeamanSideBar = () => {
       if (info.file.status === 'done') {
         console.log(`${info.file.name} file uploaded successfully`);
         dispatch(setUpdateTrigger(!updateTrigger));
+        setEditImage(true);
         setTimeout(() => {
           setOpen(true);
         }, 500);
@@ -76,6 +78,9 @@ const SeamanSideBar = () => {
 
   const handleCancel = () => {
     setOpen(false);
+    dispatch(setUpdateTrigger(!updateTrigger));
+    setEditImage(false);
+    setOpenButtons(false);
   };
 
   const handleOk = async () => {
@@ -109,10 +114,49 @@ const SeamanSideBar = () => {
   };
 
   const handleImageLoad = (e) => {
+    const width = e.target.width;
+    const height = e.target.height;
+    console.log(width, height);
     setImageDimensions({
-      width: e.target.width,
-      height: e.target.height,
+      width,
+      height,
     });
+
+    if (width < 100 || height < 100) {
+      setCrop({
+        unit: 'px',
+        x: 0,
+        y: 0,
+        width: 50,
+        height: 50,
+      });
+      return;
+    }
+    const middleWidth = width / 2;
+    const middleHeight = height / 2;
+    const x = middleWidth - 50;
+    const y = middleHeight - 50;
+    if (width > 100 && height > 100) {
+      setCrop({
+        unit: 'px',
+        x: x,
+        y: y,
+        width: 100,
+        height: 100,
+      });
+    }
+    if (width > 400 && height > 400) {
+      const x = middleWidth - 100;
+      const y = middleHeight - 100;
+      setCrop({
+        unit: 'px',
+        x: x,
+        y: y,
+        width: 200,
+        height: 200,
+      });
+      return;
+    }
   };
 
   const handleDeletion = async () => {
@@ -127,9 +171,11 @@ const SeamanSideBar = () => {
     dispatch(setUpdateTrigger(!updateTrigger));
     setDeleteModal(false);
   };
+
   const handleCancelDeletion = async () => {
     setDeleteModal(false);
   };
+
   return (
     <div className='w-64 bg-white flex rounded-lg justify-center shadow-lg'>
       {/* Edit Modal */}
@@ -143,7 +189,7 @@ const SeamanSideBar = () => {
       >
         <div className='m-0 p-0'>
           <ReactCrop
-            className='relative '
+            className='relative'
             crop={crop}
             onChange={(c) => setCrop(c)}
             aspect={1 / 1}
@@ -151,11 +197,7 @@ const SeamanSideBar = () => {
             <NextImage
               width={500}
               height={500}
-              src={
-                sessionStatus && sessionStatus.avatar.url
-                  ? sessionStatus.avatar.url
-                  : headerLogo
-              }
+              src={sessionStatus && sessionStatus.avatar.url}
               alt='avatar'
               onLoad={handleImageLoad}
             />
@@ -210,7 +252,7 @@ const SeamanSideBar = () => {
             }
           />
 
-          {sessionStatus && sessionStatus.avatar.fileName ? (
+          {sessionStatus && sessionStatus.avatar.fileName && editImage ? (
             <>
               <div
                 className=' select-none absolute left-32 top-32 ml-2 cursor-pointer bg-gray-700 rounded-full w-8 h-8 flex items-center justify-center text-white text-xl'

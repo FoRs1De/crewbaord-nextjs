@@ -6,6 +6,7 @@ import axios from 'axios';
 import { Alert } from 'antd';
 import { useSelector, useDispatch } from 'react-redux';
 import { setAuth } from '@/app/redux/actions/auth';
+import dayjs from 'dayjs';
 
 const HideAccount = () => {
   const [disabled, setDisabled] = useState(true);
@@ -20,9 +21,12 @@ const HideAccount = () => {
       try {
         if (sessionStatus) {
           if (sessionStatus.hiddenTill) {
+            const data = dayjs(sessionStatus.hiddenTill);
             setChecked(true);
             setDisabled(false);
-            form.setFieldsValue({ hideTill: moment(sessionStatus.hiddenTill) });
+            form.setFieldsValue({
+              hideTill: data,
+            });
           }
         }
       } catch (error) {
