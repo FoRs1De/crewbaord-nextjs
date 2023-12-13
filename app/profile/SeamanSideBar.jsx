@@ -13,6 +13,7 @@ import 'react-image-crop/dist/ReactCrop.css';
 import axios from 'axios';
 import { TbPhotoEdit } from 'react-icons/tb';
 import { RiDeleteBinLine } from 'react-icons/ri';
+import moment from 'moment';
 
 const SeamanSideBar = () => {
   const dispatch = useDispatch();
@@ -188,136 +189,153 @@ const SeamanSideBar = () => {
   };
 
   return (
-    <div className='w-64 bg-white flex rounded-lg justify-center shadow-lg'>
-      {/* Edit Modal */}
-      <Modal
-        centered
-        title='Adjust Image Size'
-        open={open}
-        onCancel={handleCancel}
-        onOk={handleOk}
-        maskClosable={false}
-      >
-        <div className='m-0 p-0'>
-          <ReactCrop
-            className='relative'
-            crop={crop}
-            onChange={(c) => setCrop(c)}
-            aspect={1 / 1}
+    <div className=' w-full md:w-64 p-4 bg-white flex rounded-lg justify-center shadow-lg'>
+      {sessionStatus && (
+        <div className='w-full flex flex-col items-center'>
+          {/* Edit Modal */}
+          <Modal
+            centered
+            title='Adjust Image Size'
+            open={open}
+            onCancel={handleCancel}
+            onOk={handleOk}
+            maskClosable={false}
           >
-            {sessionStatus && sessionStatus.avatar && (
-              <NextImage
-                width={500}
-                height={500}
-                src={
-                  sessionStatus.avatar.fileName
-                    ? sessionStatus.avatar.url
-                    : sessionStatus.avatar.urlPreload
-                }
-                alt='avatar'
-                onLoad={handleImageLoad}
-              />
-            )}
-          </ReactCrop>
-        </div>
-      </Modal>
-      {/* Delete Modal */}
-      <Modal
-        centered
-        title={
-          <div>
-            <p className='text-lg font-semibold'>Confirmation required</p>
-          </div>
-        }
-        open={deleteModal}
-        onOk={handleDeletion}
-        onCancel={handleCancelDeletion}
-      >
-        <p>
-          After removing your avatar, a standard placeholder image will replace
-          it.
-        </p>
-      </Modal>
-      <Badge.Ribbon className='select-none' text='Status' color='volcano'>
-        <div className='my-5 relative '>
-          <Avatar
-            shape='square'
-            size={150}
-            icon={
-              <div className='flex justify-center items-center w-full h-full relative overflow-hidden'>
-                {uploadProgress > 0 ? (
-                  <Progress
-                    type='circle'
-                    size={50}
-                    percent={uploadProgress}
-                    status={uploadProgress === 100 ? 'success' : 'active'}
+            <div className='m-0 p-0'>
+              <ReactCrop
+                className='relative'
+                crop={crop}
+                onChange={(c) => setCrop(c)}
+                aspect={1 / 1}
+              >
+                {sessionStatus.avatar && (
+                  <NextImage
+                    width={500}
+                    height={500}
+                    src={
+                      sessionStatus.avatar.fileName
+                        ? sessionStatus.avatar.url
+                        : sessionStatus.avatar.urlPreload
+                    }
+                    alt='avatar'
+                    onLoad={handleImageLoad}
                   />
-                ) : (
-                  <div className='relative h-full w-full'>
-                    {sessionStatus && sessionStatus.avatar.urlCropped && (
-                      <NextImage
-                        width={1024}
-                        height={1024}
-                        className='cursor-pointer'
-                        src={sessionStatus && sessionStatus.avatar.urlCropped}
-                        alt='avatar'
-                      />
-                    )}
-                  </div>
                 )}
+              </ReactCrop>
+            </div>
+          </Modal>
+          {/* Delete Modal */}
+          <Modal
+            centered
+            title={
+              <div>
+                <p className='text-lg font-semibold'>Confirmation required</p>
               </div>
             }
-          />
+            open={deleteModal}
+            onOk={handleDeletion}
+            onCancel={handleCancelDeletion}
+          >
+            <p>
+              After removing your avatar, a standard placeholder image will
+              replace it.
+            </p>
+          </Modal>
 
-          {sessionStatus && sessionStatus.avatar.fileName && editImage ? (
-            <>
-              <div
-                className=' select-none absolute left-32 top-32 ml-2 cursor-pointer bg-gray-700 rounded-full w-8 h-8 flex items-center justify-center text-white text-xl'
-                onClick={() => setOpenButtons((prev) => !prev)}
-              >
-                {openButtons ? <IoCloseSharp /> : <GrEdit />}
-              </div>
-              {openButtons && (
-                <>
-                  <div
-                    onClick={() => setDeleteModal(true)}
-                    className=' cursor-pointer bg-gray-700 rounded-full w-8 h-8 flex items-center justify-center text-white text-xl absolute left-24 top-32  '
-                  >
-                    <RiDeleteBinLine />
-                  </div>
-                  <div
-                    onClick={() => setOpen(true)}
-                    className=' cursor-pointer bg-gray-700 rounded-full w-8 h-8 flex items-center justify-center text-white text-xl absolute left-32 top-20 mt-2 ml-2'
-                  >
-                    <TbPhotoEdit />
-                  </div>
-                  <Upload
-                    {...props}
-                    name='avatar'
-                    showUploadList={false}
-                    beforeUpload={beforeUpload}
-                  >
-                    <div className='bg-gray-700 rounded-full w-8 h-8 flex items-center justify-center text-white text-xl absolute left-32 top-12 ml-2'>
-                      <MdUpload />
+          <div className='mb-4 relative '>
+            <Avatar
+              shape='square'
+              size={150}
+              icon={
+                <div className='flex justify-center items-center w-full h-full relative overflow-hidden'>
+                  {uploadProgress > 0 ? (
+                    <Progress
+                      type='circle'
+                      size={50}
+                      percent={uploadProgress}
+                      status={uploadProgress === 100 ? 'success' : 'active'}
+                    />
+                  ) : (
+                    <div className='relative h-full w-full'>
+                      {sessionStatus && sessionStatus.avatar.urlCropped && (
+                        <NextImage
+                          width={1024}
+                          height={1024}
+                          className='cursor-pointer'
+                          src={sessionStatus && sessionStatus.avatar.urlCropped}
+                          alt='avatar'
+                        />
+                      )}
                     </div>
-                  </Upload>
-                </>
-              )}
-            </>
-          ) : (
-            <Upload
-              {...props}
-              name='avatar'
-              showUploadList={false}
-              beforeUpload={beforeUpload}
-            >
-              <div className='bg-gray-700 rounded-full w-8 h-8 flex items-center justify-center text-white text-xl absolute left-32 top-32 ml-2'>
-                <MdUpload />
-              </div>
-            </Upload>
+                  )}
+                </div>
+              }
+            />
+
+            {sessionStatus.avatar.fileName && editImage ? (
+              <>
+                <div
+                  className=' select-none absolute left-32 top-32 ml-2 cursor-pointer bg-gray-700 rounded-full w-8 h-8 flex items-center justify-center text-white text-xl'
+                  onClick={() => setOpenButtons((prev) => !prev)}
+                >
+                  {openButtons ? <IoCloseSharp /> : <GrEdit />}
+                </div>
+                {openButtons && (
+                  <>
+                    <div
+                      onClick={() => setDeleteModal(true)}
+                      className=' cursor-pointer bg-gray-700 rounded-full w-8 h-8 flex items-center justify-center text-white text-xl absolute left-24 top-32  '
+                    >
+                      <RiDeleteBinLine />
+                    </div>
+                    <div
+                      onClick={() => setOpen(true)}
+                      className=' cursor-pointer bg-gray-700 rounded-full w-8 h-8 flex items-center justify-center text-white text-xl absolute left-32 top-20 mt-2 ml-2'
+                    >
+                      <TbPhotoEdit />
+                    </div>
+                    <Upload
+                      {...props}
+                      name='avatar'
+                      showUploadList={false}
+                      beforeUpload={beforeUpload}
+                    >
+                      <div className='bg-gray-700 rounded-full w-8 h-8 flex items-center justify-center text-white text-xl absolute left-32 top-12 ml-2'>
+                        <MdUpload />
+                      </div>
+                    </Upload>
+                  </>
+                )}
+              </>
+            ) : (
+              <Upload
+                {...props}
+                name='avatar'
+                showUploadList={false}
+                beforeUpload={beforeUpload}
+              >
+                <div className='bg-gray-700 rounded-full w-8 h-8 flex items-center justify-center text-white text-xl absolute left-32 top-32 ml-2'>
+                  <MdUpload />
+                </div>
+              </Upload>
+            )}
+          </div>
+          {sessionStatus.hiddenTill && (
+            <div className='  flex justify-center text-center bg-orange-400 rounded-lg px-2 text-sm text-white'>
+              Account hidden till:{' '}
+              {moment(sessionStatus.hiddenTill).format('DD.MM.YYYY')}
+            </div>
           )}
+          <div className='flex justify-center text-center text-lg font-semibold'>
+            {sessionStatus.name} {sessionStatus.lastName}
+          </div>
+          <div className='text-gray-400 font-semibold text-sm'>
+            {sessionStatus.rank}
+          </div>
+
+          <hr className='w-full my-4 border-gray-500' />
         </div>
-      </Badge.Ribbon>
+      )}
     </div>
   );
 };

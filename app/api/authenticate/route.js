@@ -38,15 +38,28 @@ export const GET = async () => {
         });
       }
       if (userData) {
-        return Response.json({
-          id: userData._id.toString(),
-          userRole: userData.userRole,
-          name: userData.name,
-          avatar: userData.avatar,
-          registered: userData.registered,
-          message: 'Authenticated',
-          hiddenTill: userData.hiddenTill,
-        });
+        if (userData.userRole === 'seaman') {
+          return Response.json({
+            id: userData._id.toString(),
+            userRole: userData.userRole,
+            name: userData.name,
+            lastName: userData.lastName,
+            rank: userData.rank,
+            avatar: userData.avatar,
+            registered: userData.registered,
+            message: 'Authenticated',
+            hiddenTill: userData.hiddenTill,
+          });
+        } else {
+          return Response.json({
+            id: userData._id.toString(),
+            userRole: userData.userRole,
+            name: userData.name,
+            avatar: userData.avatar,
+            registered: userData.registered,
+            message: 'Authenticated',
+          });
+        }
       } else {
         return Response.json({ message: 'User not found' });
       }
