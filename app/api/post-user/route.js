@@ -70,6 +70,8 @@ export const POST = async (req) => {
           fileName: null,
           urlCropped: `${receivedData.url}/images/seaman-placeholder.jpeg`,
           fileNameCropped: null,
+          urlPreload: null,
+          filenamePreload: null,
         },
         personalDetails: {
           firstName: null,
@@ -180,6 +182,8 @@ export const POST = async (req) => {
           fileName: null,
           urlCropped: `${receivedData.url}/images/employer-placeholder.jpeg`,
           fileNameCropped: null,
+          urlPreload: null,
+          filenamePreload: null,
         },
         phone: null,
         dataUpdated: null,

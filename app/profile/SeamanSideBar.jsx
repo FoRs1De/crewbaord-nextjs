@@ -76,11 +76,18 @@ const SeamanSideBar = () => {
     return isJpgOrPng && isLt5M;
   };
 
-  const handleCancel = () => {
+  const handleCancel = async () => {
     setOpen(false);
-    dispatch(setUpdateTrigger(!updateTrigger));
-    setEditImage(false);
+
     setOpenButtons(false);
+
+    await axios.post(`/api/upload/avatar/on-cancel`, {
+      userId: sessionStatus.id,
+    });
+    dispatch(setUpdateTrigger(!updateTrigger));
+    if (sessionStatus && !sessionStatus.avatar.fileName) {
+      setEditImage(false);
+    }
   };
 
   const handleOk = async () => {
@@ -92,7 +99,11 @@ const SeamanSideBar = () => {
       const formData = new FormData();
       formData.append('cropData', JSON.stringify(crop));
       formData.append('userId', sessionStatus.id);
-      formData.append('fileName', sessionStatus.avatar.fileName);
+      if (sessionStatus && sessionStatus.avatar.fileNamePreload) {
+        formData.append('fileName', sessionStatus.avatar.fileNamePreload);
+      } else {
+        formData.append('fileName', sessionStatus.avatar.fileName);
+      }
       formData.append('imageData', JSON.stringify(imageDimensions));
       formData.append('url', originUrl);
 
@@ -194,13 +205,19 @@ const SeamanSideBar = () => {
             onChange={(c) => setCrop(c)}
             aspect={1 / 1}
           >
-            <NextImage
-              width={500}
-              height={500}
-              src={sessionStatus && sessionStatus.avatar.url}
-              alt='avatar'
-              onLoad={handleImageLoad}
-            />
+            {sessionStatus && sessionStatus.avatar && (
+              <NextImage
+                width={500}
+                height={500}
+                src={
+                  sessionStatus.avatar.fileName
+                    ? sessionStatus.avatar.url
+                    : sessionStatus.avatar.urlPreload
+                }
+                alt='avatar'
+                onLoad={handleImageLoad}
+              />
+            )}
           </ReactCrop>
         </div>
       </Modal>

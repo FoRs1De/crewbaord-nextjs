@@ -23,6 +23,15 @@ export const POST = async (req) => {
   const existingSeamanAvatar = await seamenCollection.findOne({
     _id: new ObjectId(userId),
   });
+  if (existingSeamanAvatar && existingSeamanAvatar.avatar.fileNamePreload) {
+    try {
+      await unlink(
+        `public/upload/avatars/${existingSeamanAvatar.avatar.fileNamePreload}`
+      );
+    } catch (err) {
+      console.log(err);
+    }
+  }
   if (existingSeamanAvatar && existingSeamanAvatar.avatar.fileName) {
     try {
       await unlink(
@@ -36,6 +45,15 @@ export const POST = async (req) => {
   const existingEmployerAvatar = await employersCollection.findOne({
     _id: new ObjectId(userId),
   });
+  if (existingEmployerAvatar && existingEmployerAvatar.avatar.fileNamePreload) {
+    try {
+      await unlink(
+        `public/upload/avatars/${existingEmployerAvatar.avatar.fileNamePreload}`
+      );
+    } catch (err) {
+      console.log(err);
+    }
+  }
   if (existingEmployerAvatar && existingEmployerAvatar.avatar.fileName) {
     try {
       await unlink(
@@ -45,13 +63,14 @@ export const POST = async (req) => {
       console.log(err);
     }
   }
-  console.log(url);
+
   const existingSeaman = await seamenCollection.findOneAndUpdate(
     { _id: new ObjectId(userId) },
     {
       $set: {
-        'avatar.url': `${url}/upload/avatars/${newFileName}`,
-        'avatar.fileName': newFileName,
+        'avatar.urlPreload': `${url}/upload/avatars/${newFileName}`,
+        'avatar.fileNamePreload': newFileName,
+        'avatar.fileName': null,
       },
     }
   );
@@ -60,8 +79,9 @@ export const POST = async (req) => {
       { _id: new ObjectId(userId) },
       {
         $set: {
-          'avatar.url': `${url}/upload/avatars/${newFileName}`,
-          'avatar.fileName': newFileName,
+          'avatar.urlPreload': `${url}/upload/avatars/${newFileName}`,
+          'avatar.fileNamePreload': newFileName,
+          'avatar.fileName': null,
         },
       }
     );

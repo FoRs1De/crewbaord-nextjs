@@ -58,6 +58,8 @@ export const POST = async (req) => {
             'avatar.fileName': null,
             'avatar.urlCropped': `${url}/images/seaman-placeholder.jpeg`,
             'avatar.fileNameCropped': null,
+            'avatar.urlPreload': null,
+            'avatar.fileNamePreload': null,
           },
         }
       );
@@ -70,6 +72,8 @@ export const POST = async (req) => {
               'avatar.fileName': null,
               'avatar.urlCropped': `${url}/images/employer-placeholder.jpeg`,
               'avatar.fileNameCropped': null,
+              'avatar.urlPreload': null,
+              'avatar.fileNamePreload': null,
             },
           }
         );
@@ -112,6 +116,10 @@ export const POST = async (req) => {
       $set: {
         'avatar.urlCropped': `${url}/upload/avatars/${newFileName}`,
         'avatar.fileNameCropped': newFileName,
+        'avatar.url': `${url}/upload/avatars/${fileName}`,
+        'avatar.fileName': fileName,
+        'avatar.urlPreload': null,
+        'avatar.fileNamePreload': null,
       },
     }
   );
@@ -122,6 +130,10 @@ export const POST = async (req) => {
         $set: {
           'avatar.urlCropped': `${url}/upload/avatars/${newFileName}`,
           'avatar.fileNameCropped': newFileName,
+          'avatar.url': `${url}/upload/avatars/${fileName}`,
+          'avatar.fileName': fileName,
+          'avatar.urlPreload': null,
+          'avatar.fileNamePreload': null,
         },
       }
     );
