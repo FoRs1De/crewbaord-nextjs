@@ -1,0 +1,13 @@
+version: '3'
+
+services:
+  next:
+    build:
+      context: .
+    volumes:
+      - /app/node_modules
+      - /app/.next
+      - ./:/app
+    restart: always
+    ports:
+      - 3000:3000

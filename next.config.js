@@ -11,6 +11,13 @@ const nextConfig = {
       },
     ],
   },
+  webpackDevMiddleware: (config) => {
+    config.watchOptions = {
+      poll: 200,
+      aggregateTimeout: 100,
+    };
+    return config;
+  },
 };
 
 module.exports = nextConfig;
