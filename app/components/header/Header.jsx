@@ -13,7 +13,7 @@ import Image from 'next/image';
 import axios from 'axios';
 import { useDispatch, useSelector } from 'react-redux';
 import { setAuth } from '../../redux/actions/auth';
-import { Avatar, Badge, Dropdown, Image as AntImage } from 'antd';
+import { Avatar, Badge, Dropdown } from 'antd';
 import { TbLogout } from 'react-icons/tb';
 import { VscAccount } from 'react-icons/vsc';
 import { IoDocumentTextOutline } from 'react-icons/io5';
@@ -143,7 +143,7 @@ const Header = () => {
             <div className='w-full  bg-sky-500 flex justify-center '>
               <div className='container flex justify-between items-center'>
                 <div className='flex-1  pl-1'>
-                  <Link className=' flex items-center' href='/'>
+                  <Link className=' flex items-center w-fit' href='/'>
                     <div className='  w-14 my-2 border-r-2 pr-2 '>
                       <Image src={headerlogo} alt='Crewboard' priority={true} />
                     </div>

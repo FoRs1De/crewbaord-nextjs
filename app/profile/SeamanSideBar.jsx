@@ -189,7 +189,7 @@ const SeamanSideBar = () => {
   };
 
   return (
-    <div className=' w-full md:w-64 p-4 bg-white flex rounded-lg justify-center shadow-lg'>
+    <div className=' w-full md:w-64 lg:w-80 p-4  bg-white flex rounded-lg justify-center shadow-lg'>
       {sessionStatus && (
         <div className='w-full flex flex-col items-center'>
           {/* Edit Modal */}

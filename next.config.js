@@ -11,13 +11,14 @@ const nextConfig = {
       },
     ],
   },
-  webpackDevMiddleware: (config) => {
-    config.watchOptions = {
-      poll: 200,
-      aggregateTimeout: 100,
-    };
-    return config;
-  },
+  // uncomment this to enable polling in docker
+  // webpackDevMiddleware: (config) => {
+  //   config.watchOptions = {
+  //     poll: 200,
+  //     aggregateTimeout: 100,
+  //   };
+  //   return config;
+  // },
 };
 
 module.exports = nextConfig;

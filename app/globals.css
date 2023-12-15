@@ -28,6 +28,11 @@ h3 {
 .ant-float-btn {
   background-color: white;
 }
+
+.ant-badge-status-dot {
+  width: 0.85em !important;
+  height: 0.85em !important;
+}
 /* for Windows */
 @media screen and (-webkit-min-device-pixel-ratio: 0) {
   body {

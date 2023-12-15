@@ -47,8 +47,9 @@ export const GET = async () => {
             rank: userData.rank,
             avatar: userData.avatar,
             registered: userData.registered,
-            message: 'Authenticated',
+            employmentStatus: userData.employmentStatus,
             hiddenTill: userData.hiddenTill,
+            message: 'Authenticated',
           });
         } else {
           return Response.json({
