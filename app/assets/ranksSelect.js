@@ -302,8 +302,6 @@ const ranksSelect = [
       'Radio Officer',
       'Personal Assistant (secretary)',
       'Administration support',
-      'Personal Assistant (secretary)',
-      'Administration support',
       'Injection Molding machine operator',
       'Junior mechanical engineer',
       'Spring machine operator',

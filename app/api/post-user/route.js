@@ -61,6 +61,7 @@ export const POST = async (req) => {
         lastName: receivedData.lastName,
         rank: null,
         employmentStatus: 'empty',
+        employmentStatusUntil: null,
         availableFrom: null,
         password: hashedPassword,
         agreement: receivedData.agreement,

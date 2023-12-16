@@ -7,15 +7,29 @@ export const POST = async (req) => {
   const seamenCollection = db.collection('seamen');
 
   try {
-    await seamenCollection.updateOne(
-      { _id: new ObjectId(receivedData.userId) },
-      {
-        $set: {
-          employmentStatus: receivedData.employmentStatus,
-        },
-      }
-    );
-
+    if (
+      receivedData.employmentStatus === 'On board' ||
+      receivedData.employmentStatus === 'On vacation'
+    ) {
+      await seamenCollection.updateOne(
+        { _id: new ObjectId(receivedData.userId) },
+        {
+          $set: {
+            employmentStatus: receivedData.employmentStatus,
+          },
+        }
+      );
+    } else {
+      await seamenCollection.updateOne(
+        { _id: new ObjectId(receivedData.userId) },
+        {
+          $set: {
+            employmentStatus: receivedData.employmentStatus,
+            employmentStatusUntil: null,
+          },
+        }
+      );
+    }
     return Response.json({ message: 'Status updated' });
   } catch (e) {
     console.log(e.message);

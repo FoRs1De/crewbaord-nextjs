@@ -48,6 +48,8 @@ export const GET = async () => {
             avatar: userData.avatar,
             registered: userData.registered,
             employmentStatus: userData.employmentStatus,
+            employmentStatusUntil: userData.employmentStatusUntil,
+            desiredWage: userData.desiredWage,
             hiddenTill: userData.hiddenTill,
             message: 'Authenticated',
           });

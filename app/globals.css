@@ -20,6 +20,18 @@ h3 {
   font-size: 1.6em;
   font-weight: 600;
 }
+h4 {
+  font-size: 1.4em;
+  font-weight: 600;
+}
+h5 {
+  font-size: 1.2em;
+  font-weight: 600;
+}
+h6 {
+  font-size: 1em;
+  font-weight: 600;
+}
 
 .ant-btn-primary {
   background-color: #3c82f6;
@@ -32,6 +44,23 @@ h3 {
 .ant-badge-status-dot {
   width: 0.85em !important;
   height: 0.85em !important;
+}
+
+.update-status .ant-badge-status-dot {
+  width: 0.5em !important;
+  height: 0.5em !important;
+}
+
+.currency-select > .ant-select-selector {
+  border-radius: 0 !important;
+  background-color: #fafafa !important;
+  border-left: 0 !important;
+}
+
+.period-select > .ant-select-selector {
+  background-color: #fafafa !important;
+  border-radius: 0 6px 6px 0 !important;
+  border-left: 0 !important;
 }
 /* for Windows */
 @media screen and (-webkit-min-device-pixel-ratio: 0) {
