@@ -222,7 +222,7 @@ const Header = () => {
                     {!loading && (
                       <>
                         {sessionStatus ? (
-                          <ul className='flex items-center gap-5 border-l-2 pl-4'>
+                          <ul className='flex items-center  border-l-2 pl-4 '>
                             {hiddenTill && (
                               <Dropdown
                                 placement='bottom'
@@ -263,7 +263,7 @@ const Header = () => {
 
                             <li className='flex items-center'>
                               <Dropdown menu={{ items }} trigger={['click']}>
-                                <div className='flex items-center gap-3 cursor-pointer select-none'>
+                                <div className='flex items-center gap-3 cursor-pointer select-none pl-5'>
                                   <p
                                     className={
                                       pathname == '/account'
