@@ -58,7 +58,7 @@ const SemanContent = () => {
   const handleAmountChange = (value) => debounced(value);
   const debounced = useDebouncedCallback(async (value) => {
     setAmountValue(value);
-    const dataToSend = { userId: sessionStatus.id, desiredWage: value };
+    const dataToSend = { userId: sessionStatus.id, desiredWageAmount: value };
     await axios.post('/api/profile/main/desired-wage/amount', dataToSend);
 
     setShowUpdateStatus(true);
@@ -67,6 +67,18 @@ const SemanContent = () => {
     }, 1000);
   }, 1000);
   //---------------------------------------------
+
+  const handleCurrencyChange = async (value) => {
+    const dataToSend = { userId: sessionStatus.id, desiredWageCurrency: value };
+    await axios.post('/api/profile/main/desired-wage/currency', dataToSend);
+    dispatch(setUpdateTrigger(!updateTrigger));
+  };
+
+  const handlePeriodChange = async (value) => {
+    const dataToSend = { userId: sessionStatus.id, desiredWagePeriod: value };
+    await axios.post('/api/profile/main/desired-wage/period', dataToSend);
+    dispatch(setUpdateTrigger(!updateTrigger));
+  };
 
   const disabledDate = (current) => {
     return current && current <= moment();
@@ -86,108 +98,124 @@ const SemanContent = () => {
     <>
       {sessionStatus && (
         <div className='  w-full md:w-fit md:flex-grow flex flex-col '>
-          <div className='flex gap-5 bg-white shadow-lg rounded-lg p-4'>
-            <div className='flex flex-col gap-3'>
-              <h4>Status</h4>
-              <Select
-                className='w-48'
-                onChange={handleStatusChange}
-                defaultValue={sessionStatus.employmentStatus}
-                options={[
-                  {
-                    value: 'empty',
-                    label: (
-                      <div className='flex items-center gap-2'>
-                        <input type='radio' checked={false} readOnly />
-                        <p>Empty status</p>
-                      </div>
-                    ),
-                  },
-                  {
-                    value: 'Looking for a job',
-                    label: <Badge color='green' text='Looking for a job' />,
-                  },
-                  {
-                    value: 'On board',
-                    label: <Badge color='#38BDF9' text='On board' />,
-                  },
-                  {
-                    value: 'On vacation',
-                    label: <Badge color='orange' text='On vacation' />,
-                  },
-                  {
-                    value: 'No longer working',
-                    label: <Badge color='lightGray' text='No longer working' />,
-                  },
-                ]}
-              />
-            </div>
-            {sessionStatus.employmentStatus === 'On board' ||
-            sessionStatus.employmentStatus === 'On vacation' ? (
-              <div className='flex flex-col gap-3'>
-                <h4>Until</h4>
-                <DatePicker
-                  onChange={handleUntil}
-                  defaultValue={
-                    sessionStatus.employmentStatusUntil
-                      ? dayjs(sessionStatus.employmentStatusUntil)
-                      : undefined
-                  }
-                  disabledDate={disabledDate}
-                  format='DD.MM.YYYY'
+          <div className='flex gap-5 flex-col lg:flex-row flex-wrap  bg-white shadow-lg rounded-lg p-4'>
+            <div className='flex gap-5 flex-row'>
+              <div className='flex flex-grow flex-col gap-3'>
+                <h4>Status</h4>
+                <Select
+                  className='w-full lg:w-48'
+                  onChange={handleStatusChange}
+                  defaultValue={sessionStatus.employmentStatus}
+                  options={[
+                    {
+                      value: 'empty',
+                      label: (
+                        <div className='flex items-center gap-2'>
+                          <input type='radio' checked={false} readOnly />
+                          <p>Empty status</p>
+                        </div>
+                      ),
+                    },
+                    {
+                      value: 'Looking for a job',
+                      label: <Badge color='green' text='Looking for a job' />,
+                    },
+                    {
+                      value: 'On board',
+                      label: <Badge color='#38BDF9' text='On board' />,
+                    },
+                    {
+                      value: 'On vacation',
+                      label: <Badge color='orange' text='On vacation' />,
+                    },
+                    {
+                      value: 'No longer working',
+                      label: (
+                        <Badge color='lightGray' text='No longer working' />
+                      ),
+                    },
+                  ]}
                 />
               </div>
-            ) : null}
-            <div className='flex flex-col gap-3'>
-              <h4 className='flex gap-1'>
-                Position{' '}
-                <div
-                  className='tooltip'
-                  data-tip='Your current or desired position'
-                >
-                  <BsInfoCircle className='text-lg' />
+              {sessionStatus.employmentStatus === 'On board' ||
+              sessionStatus.employmentStatus === 'On vacation' ? (
+                <div className='flex flex-col gap-3 '>
+                  <h4>Until</h4>
+                  <DatePicker
+                    className='w-26 lg:w-48'
+                    placeholder='dd.mm.yyyy'
+                    onChange={handleUntil}
+                    defaultValue={
+                      sessionStatus.employmentStatusUntil
+                        ? dayjs(sessionStatus.employmentStatusUntil)
+                        : undefined
+                    }
+                    disabledDate={disabledDate}
+                    format='DD.MM.YYYY'
+                  />
                 </div>
-              </h4>
-              <Select
-                placeholder='Select rank'
-                className='w-52'
-                options={transformedRanksArray}
-                defaultValue={sessionStatus.rank}
-                onChange={handleRankChange}
-                showSearch
-              ></Select>
+              ) : null}
             </div>
-            <div className='flex flex-col gap-3'>
-              <h4 className='flex gap-1'>
-                Desired Wage
-                <div
-                  className='tooltip'
-                  data-tip='Expected wage for your next job'
-                >
-                  <BsInfoCircle className='text-lg' />
+            <div className='flex flex-col gap-5 lg:flex-row flex-wrap'>
+              <div className='flex flex-col gap-3'>
+                <h4 className='flex gap-1'>
+                  Position{' '}
+                  <div
+                    className='tooltip'
+                    data-tip='Your current or desired position'
+                  >
+                    <BsInfoCircle className='text-lg' />
+                  </div>
+                </h4>
+                <Select
+                  placeholder='Select rank'
+                  className='w-full lg:w-52'
+                  options={transformedRanksArray}
+                  defaultValue={sessionStatus.rank}
+                  onChange={handleRankChange}
+                  showSearch
+                ></Select>
+              </div>
+              <div className='flex flex-col gap-3'>
+                <h4 className='flex gap-1'>
+                  Desired Wage
+                  <div
+                    className='tooltip'
+                    data-tip='Expected wage for your next job'
+                  >
+                    <BsInfoCircle className='text-lg' />
+                  </div>
+                </h4>
+                <div className='flex items-center'>
+                  <InputNumber
+                    onChange={handleAmountChange}
+                    className='rounded-r-none w-full lg:w-24'
+                    value={amountValue}
+                    suffix={
+                      showUpdateStatus && (
+                        <Badge className='update-status' color='green' />
+                      )
+                    }
+                    controls={false}
+                  />
+                  <Select
+                    onChange={handleCurrencyChange}
+                    className='currency-select '
+                    defaultValue={sessionStatus.desiredWage.currency}
+                  >
+                    <Option value='$'>$</Option>
+                    <Option value='€'>€</Option>
+                  </Select>
+                  <Select
+                    onChange={handlePeriodChange}
+                    className='period-select w-24'
+                    defaultValue={sessionStatus.desiredWage.period}
+                  >
+                    <Option value='month'>month</Option>
+                    <Option value='day'>day</Option>
+                    <Option value='year'>year</Option>
+                  </Select>
                 </div>
-              </h4>
-              <div className='flex items-center'>
-                <InputNumber
-                  onChange={handleAmountChange}
-                  className='rounded-r-none w-28'
-                  value={amountValue}
-                  suffix={
-                    showUpdateStatus && (
-                      <Badge className='update-status' color='green' />
-                    )
-                  }
-                  controls={false}
-                />
-                <Select className='currency-select' defaultValue='USD'>
-                  <Option value='USD'>$</Option>
-                  <Option value='EUR'>€</Option>
-                </Select>
-                <Select className='period-select w-24' defaultValue='month'>
-                  <Option value='month'>month</Option>
-                  <Option value='day'>day</Option>
-                  <Option value='year'>year</Option>
-                </Select>
               </div>
             </div>
           </div>

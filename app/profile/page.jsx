@@ -6,7 +6,7 @@ const Profile = () => {
   return (
     <>
       <SeamanHeader />
-      <main className='flex flex-wrap mx-auto container flex-1 px-2 pt-5 gap-4 pb-10 '>
+      <main className='flex flex-col md:flex-row mx-auto container flex-1 px-2 pt-5 gap-4 pb-10 '>
         <SeamanSideBar />
         <SeamanCotent />
       </main>

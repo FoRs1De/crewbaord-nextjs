@@ -5,13 +5,13 @@ export const POST = async (req) => {
   const receivedData = await req.json();
   const db = client.db('admin');
   const seamenCollection = db.collection('seamen');
-  console.log(receivedData);
+
   try {
     await seamenCollection.updateOne(
       { _id: new ObjectId(receivedData.userId) },
       {
         $set: {
-          'desiredWage.amount': receivedData.desiredWageAmount,
+          'desiredWage.period': receivedData.desiredWagePeriod,
         },
       }
     );

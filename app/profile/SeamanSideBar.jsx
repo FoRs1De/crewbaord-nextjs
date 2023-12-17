@@ -14,6 +14,7 @@ import axios from 'axios';
 import { TbPhotoEdit } from 'react-icons/tb';
 import { RiDeleteBinLine } from 'react-icons/ri';
 import moment from 'moment';
+import { set } from 'lodash';
 
 const SeamanSideBar = () => {
   const dispatch = useDispatch();
@@ -26,6 +27,7 @@ const SeamanSideBar = () => {
   const [openButtons, setOpenButtons] = useState(false);
   const [deleteModal, setDeleteModal] = useState(false);
   const [crop, setCrop] = useState(null);
+  const [isPreviewModalOpen, setIsPreviewModalOpen] = useState(false);
 
   useEffect(() => {
     if (sessionStatus && sessionStatus.avatar.fileNameCropped) {
@@ -188,6 +190,14 @@ const SeamanSideBar = () => {
     setDeleteModal(false);
   };
 
+  const openPreviewModal = () => {
+    if (!sessionStatus.avatar.fileNameCropped) return;
+    setIsPreviewModalOpen(true);
+  };
+
+  const closePreviewModal = () => {
+    setIsPreviewModalOpen(false);
+  };
   return (
     <div className=' w-full md:w-64 lg:w-80 p-4  bg-white flex rounded-lg justify-center shadow-lg'>
       {sessionStatus && (
@@ -241,37 +251,75 @@ const SeamanSideBar = () => {
               replace it.
             </p>
           </Modal>
-
-          <div className='mb-4 relative '>
-            <Avatar
-              shape='square'
-              size={150}
-              icon={
-                <div className='flex justify-center items-center w-full h-full relative overflow-hidden'>
-                  {uploadProgress > 0 ? (
-                    <Progress
-                      type='circle'
-                      size={50}
-                      percent={uploadProgress}
-                      status={uploadProgress === 100 ? 'success' : 'active'}
-                    />
-                  ) : (
-                    <div className='relative h-full w-full'>
-                      {sessionStatus && sessionStatus.avatar.urlCropped && (
-                        <NextImage
-                          width={1024}
-                          height={1024}
-                          className='cursor-pointer'
-                          src={sessionStatus && sessionStatus.avatar.urlCropped}
-                          alt='avatar'
-                        />
-                      )}
-                    </div>
-                  )}
-                </div>
-              }
+          {/* Preview Modal */}
+          <Modal
+            centered
+            title={sessionStatus.name + ' ' + sessionStatus.lastName}
+            open={isPreviewModalOpen}
+            onCancel={closePreviewModal}
+            footer={null}
+          >
+            <NextImage
+              width={500}
+              height={500}
+              src={sessionStatus.avatar.urlCropped}
+              alt='avatar'
+              onLoad={handleImageLoad}
             />
-
+          </Modal>
+          <div className='mb-4 relative '>
+            <Badge.Ribbon
+              color={
+                sessionStatus.employmentStatus === 'On board'
+                  ? '#38BDF9'
+                  : sessionStatus.employmentStatus === 'On vacation'
+                  ? '#FA8B16'
+                  : sessionStatus.employmentStatus === 'Looking for a job'
+                  ? '#53C31B'
+                  : sessionStatus.employmentStatus === 'No longer working'
+                  ? 'gray'
+                  : null
+              }
+              placement='start'
+              className={
+                sessionStatus.employmentStatus !== 'empty'
+                  ? 'absolute top-0'
+                  : 'hidden'
+              }
+              text={sessionStatus.employmentStatus}
+            >
+              <Avatar
+                onClick={openPreviewModal}
+                shape='square'
+                size={150}
+                icon={
+                  <div className='flex justify-center items-center w-full h-full relative overflow-hidden'>
+                    {uploadProgress > 0 ? (
+                      <Progress
+                        type='circle'
+                        size={50}
+                        percent={uploadProgress}
+                        status={uploadProgress === 100 ? 'success' : 'active'}
+                      />
+                    ) : (
+                      <div className='relative h-full w-full'>
+                        {sessionStatus && sessionStatus.avatar.urlCropped && (
+                          <NextImage
+                            width={1024}
+                            height={1024}
+                            className='cursor-pointer'
+                            src={
+                              sessionStatus && sessionStatus.avatar.urlCropped
+                            }
+                            alt='avatar'
+                          />
+                        )}
+                      </div>
+                    )}
+                  </div>
+                }
+              />
+            </Badge.Ribbon>
             {sessionStatus.avatar.fileName && editImage ? (
               <>
                 <div
