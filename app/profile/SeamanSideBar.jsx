@@ -14,7 +14,6 @@ import axios from 'axios';
 import { TbPhotoEdit } from 'react-icons/tb';
 import { RiDeleteBinLine } from 'react-icons/ri';
 import moment from 'moment';
-import { set } from 'lodash';
 
 const SeamanSideBar = () => {
   const dispatch = useDispatch();

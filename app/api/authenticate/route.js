@@ -3,6 +3,7 @@ import { cookies } from 'next/headers';
 import { decode } from 'jsonwebtoken';
 import client from '@/dbConnections/mongoDB';
 import { ObjectId } from 'mongodb';
+import SeamanSeaService from '@/app/profile/SeamanSeaService';
 
 export const GET = async () => {
   const cookiesList = cookies();
@@ -51,6 +52,8 @@ export const GET = async () => {
             employmentStatusUntil: userData.employmentStatusUntil,
             desiredWage: userData.desiredWage,
             hiddenTill: userData.hiddenTill,
+            seaService: userData.seaService,
+            seaServiceUpdated: userData.seaServiceUpdated,
             message: 'Authenticated',
           });
         } else {

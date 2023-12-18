@@ -30,7 +30,7 @@ const SeamanTopContent = () => {
     if (sessionStatus) {
       const dataToSend = { userId: sessionStatus.id, employmentStatus: value };
       await axios.post(
-        '/api/profile/main/seaman-employment-status',
+        '/api/profile/main/seaman/employment-status',
         dataToSend
       );
       dispatch(setUpdateTrigger(!updateTrigger));
@@ -44,13 +44,13 @@ const SeamanTopContent = () => {
       userId: sessionStatus.id,
     };
     console.log(dataToSend);
-    await axios.post('/api/profile/main/until', dataToSend);
+    await axios.post('/api/profile/main/seaman/until', dataToSend);
     dispatch(setUpdateTrigger(!updateTrigger));
   };
 
   const handleRankChange = async (value) => {
     const dataToSend = { userId: sessionStatus.id, rank: value };
-    await axios.post('/api/profile/main/rank', dataToSend);
+    await axios.post('/api/profile/main/seaman/rank', dataToSend);
     dispatch(setUpdateTrigger(!updateTrigger));
   };
 
@@ -59,7 +59,10 @@ const SeamanTopContent = () => {
   const debounced = useDebouncedCallback(async (value) => {
     setAmountValue(value);
     const dataToSend = { userId: sessionStatus.id, desiredWageAmount: value };
-    await axios.post('/api/profile/main/desired-wage/amount', dataToSend);
+    await axios.post(
+      '/api/profile/main/seaman/desired-wage/amount',
+      dataToSend
+    );
 
     setShowUpdateStatus(true);
     setTimeout(() => {
@@ -70,13 +73,19 @@ const SeamanTopContent = () => {
 
   const handleCurrencyChange = async (value) => {
     const dataToSend = { userId: sessionStatus.id, desiredWageCurrency: value };
-    await axios.post('/api/profile/main/desired-wage/currency', dataToSend);
+    await axios.post(
+      '/api/profile/main/seaman/desired-wage/currency',
+      dataToSend
+    );
     dispatch(setUpdateTrigger(!updateTrigger));
   };
 
   const handlePeriodChange = async (value) => {
     const dataToSend = { userId: sessionStatus.id, desiredWagePeriod: value };
-    await axios.post('/api/profile/main/desired-wage/period', dataToSend);
+    await axios.post(
+      '/api/profile/main/seaman/desired-wage/period',
+      dataToSend
+    );
     dispatch(setUpdateTrigger(!updateTrigger));
   };
 
