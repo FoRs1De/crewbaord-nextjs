@@ -23,12 +23,14 @@ import axios from 'axios';
 import { v4 as uuid } from 'uuid';
 import { RiDeleteBinLine } from 'react-icons/ri';
 import { FiEdit3 } from 'react-icons/fi';
+import dayjs from 'dayjs';
 
 const SeamanSeaService = () => {
   const [form] = Form.useForm();
   const { confirm } = Modal;
   const { Option } = Select;
   const [showForm, setShowForm] = useState(false);
+  const [serviceRecordId, setServiceRecordId] = useState(null);
   const sessionStatus = useSelector((state) => state.authReducer);
   const updateTrigger = useSelector((state) => state.updateTriggerReducer);
   const dispatch = useDispatch();
@@ -38,15 +40,39 @@ const SeamanSeaService = () => {
   };
   const closeForm = () => {
     setShowForm(false);
+
+    form.resetFields();
   };
   const submitData = async (value) => {
     console.log(value);
-    const dataToSend = { ...value, userId: sessionStatus.id, recordId: uuid() };
+
     try {
-      await axios.post('/api/profile/main/seaman/add-sea-service', dataToSend);
+      console.log(serviceRecordId);
+      if (serviceRecordId) {
+        const dataToSend = {
+          ...value,
+          userId: sessionStatus.id,
+          recordId: serviceRecordId,
+        };
+        await axios.put(
+          '/api/profile/main/seaman/edit-service-record',
+          dataToSend
+        );
+      } else {
+        const dataToSend = {
+          ...value,
+          userId: sessionStatus.id,
+          recordId: uuid(),
+        };
+        await axios.post(
+          '/api/profile/main/seaman/add-sea-service',
+          dataToSend
+        );
+      }
       dispatch(setUpdateTrigger(!updateTrigger));
       form.resetFields();
       setShowForm(false);
+      setServiceRecordId(null);
     } catch (err) {
       console.log(err.message);
     }
@@ -94,6 +120,29 @@ const SeamanSeaService = () => {
     });
   };
 
+  const editRecord = async (id) => {
+    const record = sessionStatus.seaService.find(
+      (record) => record.recordId === id
+    );
+
+    form.setFieldsValue({
+      position: record.position,
+      vesselName: record.vesselName,
+      vesselType: record.vesselType,
+      vesselFlag: record.vesselFlag,
+      vesselDWT: record.vesselDWT,
+      vesselYearBuilt: record.vesselYearBuilt,
+      mainEngineType: record.mainEngineType,
+      mainEngineKw: record.mainEngineKw,
+      shipOwner: record.shipOwner,
+      crewing: record.crewing,
+      signOnDate: dayjs(record.signOnDate),
+      signOffDate: dayjs(record.signOffDate),
+    });
+    setServiceRecordId(id);
+    setShowForm(true);
+  };
+
   return (
     <>
       {sessionStatus && (
@@ -104,7 +153,7 @@ const SeamanSeaService = () => {
               <h4>Sea Service</h4>
             </div>
             {sessionStatus.seaServiceUpdated && (
-              <div className='flex flex-col items-center text-sm bg-sky-400 px-2.5 py-0.5 rounded-lg text-white'>
+              <div className='flex flex-col items-center text-sm  border-sky-500 border px-2.5 py-0.5 rounded-lg shadow-sm bg-sky-100'>
                 <p>Last update</p>
                 <p>
                   {moment(sessionStatus.seaServiceUpdated).format('DD.MM.YYYY')}
@@ -125,22 +174,6 @@ const SeamanSeaService = () => {
               className='mt-5'
               scrollToFirstError
               layout='vertical'
-              initialValues={
-                {
-                  //   position: serviceRecordData.position,
-                  //   vesselName: serviceRecordData.vesselName,
-                  //   vesselType: serviceRecordData.vesselType,
-                  //   vesselFlag: serviceRecordData.vesselFlag,
-                  //   vesselDWT: serviceRecordData.vesselDWT,
-                  //   vesselYearBuilt: serviceRecordData.vesselYearBuilt,
-                  //   mainEngineType: serviceRecordData.mainEngineType,
-                  //   mainEngineKw: serviceRecordData.mainEngineKw,
-                  //   shipOwner: serviceRecordData.shipOwner,
-                  //   crewing: serviceRecordData.crewing,
-                  //   signOnDate: jsDateSignOn,
-                  //   signOffDate: jsDateSignOff,
-                }
-              }
               onFinish={submitData}
             >
               <div className='flex flex-col md:flex-row md:gap-5'>
@@ -346,96 +379,106 @@ const SeamanSeaService = () => {
           <div className='flex flex-col gap-5'>
             {sessionStatus.seaService.length > 0 ? (
               <div>
-                {sessionStatus.seaService.map((serviceRecord) => {
-                  return (
-                    <div
-                      key={serviceRecord.recordId}
-                      className='collapse collapse-arrow border-2 border-gray-200 mb-2 '
-                    >
-                      <input type='checkbox' name='my-accordion-4' />
-                      <div className='collapse-title flex justify-between items-center'>
-                        <div>
-                          <h4>{serviceRecord.position}</h4>
-                          <div className='flex items-end gap-1'>
-                            <p>
-                              <strong>{serviceRecord.vesselName}</strong> from{' '}
-                              <strong>
-                                {moment(serviceRecord.signOnDate).format(
-                                  'DD.MM.YYYY'
-                                )}
-                              </strong>{' '}
-                              to{' '}
-                              <strong>
-                                {moment(serviceRecord.signOffDate).format(
-                                  'DD.MM.YYYY'
-                                )}
-                              </strong>
-                            </p>
-                          </div>
-                        </div>
-                      </div>
-                      <div className='collapse-content'>
-                        <hr />
-                        <div className='mt-4'>
-                          <div className='flex flex-wrap '>
-                            <div className='flex flex-col w-64  lg:w-72 xl:w-96'>
-                              <div className='flex pb-2'>
-                                <p className='w-36'> Vessel type:</p>{' '}
-                                <p>{serviceRecord.vesselType}</p>
-                              </div>
-                              <div className='flex pb-2'>
-                                <p className='w-36'>Year built:</p>
-                                <p>{serviceRecord.vesselYearBuilt}</p>
-                              </div>
-                              <div className='flex pb-2'>
-                                <p className='w-36'>ME type:</p>
-                                <p>{serviceRecord.mainEngineType}</p>
-                              </div>
-                              <div className='flex pb-2'>
-                                <p className='w-36'>Ship owner:</p>
-                                <p>{serviceRecord.shipOwner}</p>
-                              </div>
-                            </div>
-                            <div className='flex flex-col md:w-72 lg:w-72 xl:w-96'>
-                              <div className='flex  pb-2'>
-                                <p className='w-36'>Vessel flag:</p>{' '}
-                                <p>{serviceRecord.vesselFlag}</p>
-                              </div>
-                              <div className='flex  pb-2'>
-                                <p className='w-36'>Vessel DWT:</p>{' '}
-                                <p>{serviceRecord.vesselDWT}</p>
-                              </div>
-                              <div className='flex pb-2'>
-                                <p className='w-36'>Main engine, kW:</p>
-                                <p>{serviceRecord.mainEngineKw}</p>
-                              </div>
-                              <div className='flex pb-2'>
-                                <p className='w-36'>Crewing agency:</p>
-                                <p>{serviceRecord.crewing}</p>
-                              </div>
+                {sessionStatus.seaService
+                  .slice()
+                  .sort((a, b) => {
+                    const dateA = new Date(a.signOffDate);
+                    const dateB = new Date(b.signOffDate);
+                    return dateB - dateA;
+                  })
+                  .map((serviceRecord) => {
+                    return (
+                      <div
+                        key={serviceRecord.recordId}
+                        className='collapse collapse-arrow border-2 border-gray-200 mb-2 '
+                      >
+                        <input type='checkbox' name='my-accordion-4' />
+                        <div className='collapse-title flex justify-between items-center'>
+                          <div>
+                            <h5>{serviceRecord.position}</h5>
+                            <div className='flex items-end gap-1'>
+                              <p>
+                                <strong>{serviceRecord.vesselName}</strong> from{' '}
+                                <strong>
+                                  {moment(serviceRecord.signOnDate).format(
+                                    'DD.MM.YYYY'
+                                  )}
+                                </strong>{' '}
+                                to{' '}
+                                <strong>
+                                  {moment(serviceRecord.signOffDate).format(
+                                    'DD.MM.YYYY'
+                                  )}
+                                </strong>
+                              </p>
                             </div>
                           </div>
                         </div>
-                        <div className='flex justify-end gap-5 mt-5'>
-                          <Button className='flex gap-2 items-center'>
-                            <FiEdit3 className='text-lg' />
-                            Edit
-                          </Button>
-                          <Button
-                            onClick={() =>
-                              showDeleteConfirm(serviceRecord.recordId)
-                            }
-                            className='flex gap-2 items-center'
-                            danger
-                          >
-                            <RiDeleteBinLine className='text-lg' />
-                            Delete
-                          </Button>
+                        <div className='collapse-content'>
+                          <hr />
+                          <div className='mt-4'>
+                            <div className='flex flex-wrap '>
+                              <div className='flex flex-col w-64  lg:w-72 xl:w-96'>
+                                <div className='flex pb-2'>
+                                  <p className='w-36'> Vessel type:</p>{' '}
+                                  <p>{serviceRecord.vesselType}</p>
+                                </div>
+                                <div className='flex pb-2'>
+                                  <p className='w-36'>Year built:</p>
+                                  <p>{serviceRecord.vesselYearBuilt}</p>
+                                </div>
+                                <div className='flex pb-2'>
+                                  <p className='w-36'>ME type:</p>
+                                  <p>{serviceRecord.mainEngineType}</p>
+                                </div>
+                                <div className='flex pb-2'>
+                                  <p className='w-36'>Ship owner:</p>
+                                  <p>{serviceRecord.shipOwner}</p>
+                                </div>
+                              </div>
+                              <div className='flex flex-col md:w-72 lg:w-72 xl:w-96'>
+                                <div className='flex  pb-2'>
+                                  <p className='w-36'>Vessel flag:</p>{' '}
+                                  <p>{serviceRecord.vesselFlag}</p>
+                                </div>
+                                <div className='flex  pb-2'>
+                                  <p className='w-36'>Vessel DWT:</p>{' '}
+                                  <p>{serviceRecord.vesselDWT}</p>
+                                </div>
+                                <div className='flex pb-2'>
+                                  <p className='w-36'>Main engine, kW:</p>
+                                  <p>{serviceRecord.mainEngineKw}</p>
+                                </div>
+                                <div className='flex pb-2'>
+                                  <p className='w-36'>Crewing agency:</p>
+                                  <p>{serviceRecord.crewing}</p>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                          <div className='flex justify-end gap-5 mt-5'>
+                            <Button
+                              onClick={() => editRecord(serviceRecord.recordId)}
+                              className='flex gap-2 items-center'
+                            >
+                              <FiEdit3 className='text-lg' />
+                              Edit
+                            </Button>
+                            <Button
+                              onClick={() =>
+                                showDeleteConfirm(serviceRecord.recordId)
+                              }
+                              className='flex gap-2 items-center'
+                              danger
+                            >
+                              <RiDeleteBinLine className='text-lg' />
+                              Delete
+                            </Button>
+                          </div>
                         </div>
                       </div>
-                    </div>
-                  );
-                })}
+                    );
+                  })}
               </div>
             ) : (
               <div className='flex w-full justify-center items-center'>
