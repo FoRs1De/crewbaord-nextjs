@@ -10,6 +10,7 @@ import {
   Modal,
   Empty,
 } from 'antd';
+import { ExclamationCircleFilled } from '@ant-design/icons';
 import { CgPlayListAdd } from 'react-icons/cg';
 import { useState } from 'react';
 import ranksSelect from '../assets/ranksSelect';
@@ -20,9 +21,12 @@ import { useDispatch, useSelector } from 'react-redux';
 import { setUpdateTrigger } from '../redux/actions/updateTrigger';
 import axios from 'axios';
 import { v4 as uuid } from 'uuid';
+import { RiDeleteBinLine } from 'react-icons/ri';
+import { FiEdit3 } from 'react-icons/fi';
 
 const SeamanSeaService = () => {
   const [form] = Form.useForm();
+  const { confirm } = Modal;
   const { Option } = Select;
   const [showForm, setShowForm] = useState(false);
   const sessionStatus = useSelector((state) => state.authReducer);
@@ -61,6 +65,35 @@ const SeamanSeaService = () => {
   const disabledDate = (current) => {
     return current && current > moment().startOf('day');
   };
+
+  const showDeleteConfirm = (id) => {
+    confirm({
+      title: 'Delete confirmation',
+      icon: <ExclamationCircleFilled />,
+      content:
+        'Are you sure you want to delete this record? This action cannot be undone.',
+      okText: 'Yes',
+      okType: 'danger',
+      cancelText: 'Cancel',
+      centered: true,
+      maskClosable: true,
+      onOk() {
+        const dataToSend = { userId: sessionStatus.id, recordId: id };
+        const deleteRecord = async () => {
+          await axios.post(
+            '/api/profile/main/seaman/delete-service-record',
+            dataToSend
+          );
+          dispatch(setUpdateTrigger(!updateTrigger));
+        };
+        deleteRecord();
+      },
+      onCancel() {
+        console.log('Cancel');
+      },
+    });
+  };
+
   return (
     <>
       {sessionStatus && (
@@ -342,10 +375,62 @@ const SeamanSeaService = () => {
                         </div>
                       </div>
                       <div className='collapse-content'>
-                        <p>hello</p>
-                        <div className='flex gap-5'>
-                          <p>Edit</p>
-                          <p>Delete</p>
+                        <hr />
+                        <div className='mt-4'>
+                          <div className='flex flex-wrap '>
+                            <div className='flex flex-col w-64  lg:w-72 xl:w-96'>
+                              <div className='flex pb-2'>
+                                <p className='w-36'> Vessel type:</p>{' '}
+                                <p>{serviceRecord.vesselType}</p>
+                              </div>
+                              <div className='flex pb-2'>
+                                <p className='w-36'>Year built:</p>
+                                <p>{serviceRecord.vesselYearBuilt}</p>
+                              </div>
+                              <div className='flex pb-2'>
+                                <p className='w-36'>ME type:</p>
+                                <p>{serviceRecord.mainEngineType}</p>
+                              </div>
+                              <div className='flex pb-2'>
+                                <p className='w-36'>Ship owner:</p>
+                                <p>{serviceRecord.shipOwner}</p>
+                              </div>
+                            </div>
+                            <div className='flex flex-col md:w-72 lg:w-72 xl:w-96'>
+                              <div className='flex  pb-2'>
+                                <p className='w-36'>Vessel flag:</p>{' '}
+                                <p>{serviceRecord.vesselFlag}</p>
+                              </div>
+                              <div className='flex  pb-2'>
+                                <p className='w-36'>Vessel DWT:</p>{' '}
+                                <p>{serviceRecord.vesselDWT}</p>
+                              </div>
+                              <div className='flex pb-2'>
+                                <p className='w-36'>Main engine, kW:</p>
+                                <p>{serviceRecord.mainEngineKw}</p>
+                              </div>
+                              <div className='flex pb-2'>
+                                <p className='w-36'>Crewing agency:</p>
+                                <p>{serviceRecord.crewing}</p>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <div className='flex justify-end gap-5 mt-5'>
+                          <Button className='flex gap-2 items-center'>
+                            <FiEdit3 className='text-lg' />
+                            Edit
+                          </Button>
+                          <Button
+                            onClick={() =>
+                              showDeleteConfirm(serviceRecord.recordId)
+                            }
+                            className='flex gap-2 items-center'
+                            danger
+                          >
+                            <RiDeleteBinLine className='text-lg' />
+                            Delete
+                          </Button>
                         </div>
                       </div>
                     </div>

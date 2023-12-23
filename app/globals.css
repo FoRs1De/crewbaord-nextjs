@@ -33,6 +33,10 @@ h6 {
   font-weight: 600;
 }
 
+p {
+  font-size: 1em;
+}
+
 .ant-btn-primary {
   background-color: #3c82f6;
 }
