@@ -75,8 +75,6 @@ export const POST = async (req) => {
           filenamePreload: null,
         },
         personalDetails: {
-          firstName: null,
-          lastName: null,
           dateOfBirth: null,
           citizenship: null,
           residence: null,

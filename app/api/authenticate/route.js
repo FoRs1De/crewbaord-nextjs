@@ -3,7 +3,6 @@ import { cookies } from 'next/headers';
 import { decode } from 'jsonwebtoken';
 import client from '@/dbConnections/mongoDB';
 import { ObjectId } from 'mongodb';
-import SeamanSeaService from '@/app/profile/SeamanSeaService';
 
 export const GET = async () => {
   const cookiesList = cookies();

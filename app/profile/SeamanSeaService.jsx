@@ -24,6 +24,7 @@ import { v4 as uuid } from 'uuid';
 import { RiDeleteBinLine } from 'react-icons/ri';
 import { FiEdit3 } from 'react-icons/fi';
 import dayjs from 'dayjs';
+import { BsInfoCircle } from 'react-icons/bs';
 
 const SeamanSeaService = () => {
   const [form] = Form.useForm();
@@ -150,7 +151,15 @@ const SeamanSeaService = () => {
           <div className='flex justify-between w-full items-center'>
             <div className='flex items-center gap-2 '>
               <LuShip className='text-xl' />
-              <h4>Sea Service</h4>
+              <h4>
+                Sea Service{' '}
+                <div
+                  className='tooltip'
+                  data-tip='Enter sea service records for last 5 years'
+                >
+                  <BsInfoCircle className='text-lg mb-1.5' />
+                </div>
+              </h4>{' '}
             </div>
             {sessionStatus.seaServiceUpdated && (
               <div className='flex flex-col items-center text-sm  border-sky-500 border px-2.5 py-0.5 rounded-lg shadow-sm bg-sky-100'>

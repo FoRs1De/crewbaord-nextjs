@@ -1,12 +1,12 @@
 import SeamanHeader from '../SeamanHeader';
-import SeamanCV from './SeamanCV';
+import PersonalDetails from './PersonalDetails';
 
 const CV = () => {
   return (
     <>
       <SeamanHeader />
       <main className='flex-col mx-auto container flex-1 p-2 '>
-        <SeamanCV />
+        <PersonalDetails />
       </main>
     </>
   );
