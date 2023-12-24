@@ -89,6 +89,7 @@ export const POST = async (req) => {
           sizeOverall: null,
           colorHair: null,
           colorEye: null,
+          personalDetailsUpdated: null,
         },
         seaService: [
           /*{

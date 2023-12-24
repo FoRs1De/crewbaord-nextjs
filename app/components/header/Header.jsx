@@ -263,7 +263,7 @@ const Header = () => {
 
                             <li className='flex items-center'>
                               <Dropdown menu={{ items }} trigger={['click']}>
-                                <div className='flex items-center gap-3 cursor-pointer select-none pl-5'>
+                                <div className='flex items-center gap-3 cursor-pointer select-none'>
                                   <p
                                     className={
                                       pathname == '/account'
@@ -271,7 +271,9 @@ const Header = () => {
                                         : 'text-white text-lg font-semibold'
                                     }
                                   >
-                                    {sessionStatus.name}
+                                    {sessionStatus.name}{' '}
+                                    {sessionStatus.lastName &&
+                                      sessionStatus.lastName}
                                   </p>
 
                                   <Badge count={1}>

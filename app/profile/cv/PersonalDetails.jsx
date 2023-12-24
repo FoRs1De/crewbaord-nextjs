@@ -7,6 +7,7 @@ import {
   Select,
   DatePicker,
   InputNumber,
+  Progress,
 } from 'antd';
 import { BsPersonCheck } from 'react-icons/bs';
 import { LuFileEdit } from 'react-icons/lu';
@@ -16,23 +17,43 @@ import axios from 'axios';
 import dayjs from 'dayjs';
 import countryList from '@/app/assets/countries';
 import moment from 'moment';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { setUpdateTrigger } from '../../redux/actions/updateTrigger';
 
 const PersonalDetails = () => {
   const { Option } = Select;
   const [personalDetails, setPersonalDetails] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [submitForm, setSubmitForm] = useState(false);
+  const [personalDetailsArray, setPersonalDetailsArray] = useState([]);
+  const [percentage, setPercentage] = useState(0);
   const [form] = Form.useForm();
   const sessionStatus = useSelector((state) => state.authReducer);
+  const updateTrigger = useSelector((state) => state.updateTriggerReducer);
+  const dispatch = useDispatch();
 
   useEffect(() => {
     const getUserData = async () => {
       const res = await axios.get('/api/profile/my-cv/get-personal-details');
       setPersonalDetails(res.data);
+      setPersonalDetailsArray(
+        Object.values(res.data).filter(
+          (value) => value !== null && value !== ''
+        )
+      );
     };
     getUserData();
   }, [submitForm]);
+
+  useEffect(() => {
+    const calculatePercentage = () => {
+      const maxArrayLength = 16;
+      const arrayLength = personalDetailsArray.length - 1;
+      const percentage = (arrayLength / maxArrayLength) * 100;
+      setPercentage(percentage.toFixed(0));
+    };
+    calculatePercentage();
+  }, [personalDetailsArray]);
 
   const showModal = () => {
     form.setFieldsValue({
@@ -58,12 +79,14 @@ const PersonalDetails = () => {
     setIsModalOpen(true);
   };
 
-  const handleOk = () => {
+  const handleOk = async () => {
     const data = form.getFieldsValue();
     const dataToSend = { userId: sessionStatus.id, ...data };
-    console.log(dataToSend);
+
+    await axios.put('/api/profile/my-cv/edit-personal-details', dataToSend);
     setSubmitForm((prev) => !prev);
     setIsModalOpen(false);
+    dispatch(setUpdateTrigger(!updateTrigger));
   };
 
   const handleCancel = () => {
@@ -71,10 +94,8 @@ const PersonalDetails = () => {
   };
 
   const disabledDate = (current) => {
-    // Calculate the date 16 years ago from the current date
     const seventeenYearsAgo = moment().subtract(17, 'years');
 
-    // Disable dates that are before 16 years ago
     return (
       (current && current > moment().startOf('day')) ||
       current > seventeenYearsAgo
@@ -85,10 +106,13 @@ const PersonalDetails = () => {
     <>
       {personalDetails && (
         <div className='flex gap-5 flex-col   bg-white shadow-lg rounded-lg p-4 mt-4'>
-          <h4 className='flex items-center gap-2'>
-            <BsPersonCheck className='text-2xl' />
-            Personal Details
-          </h4>
+          <div className='flex justify-between items-center'>
+            <h4 className='flex items-center gap-2'>
+              <BsPersonCheck className='text-2xl' />
+              Personal Details
+            </h4>
+            <Progress className='w-24 sm:w-40 pt-1' percent={percentage} />
+          </div>
           <div className='flex gap-2 lg:gap-14  md:justify-center flex-col md:flex-row '>
             <div className='flex flex-wrap gap-2 flex-col md:flex-row justify-center'>
               {/* 1st column*/}
@@ -345,8 +369,24 @@ const PersonalDetails = () => {
               </div>
             </div>
           </div>
-          <div className='w-full flex justify-between'>
-            <div>Last correction</div>
+          <div
+            className={
+              personalDetails.personalDetailsUpdated
+                ? 'w-full flex justify-between items-center'
+                : 'w-full flex justify-end items-center '
+            }
+          >
+            {personalDetails.personalDetailsUpdated && (
+              <div className='flex flex-row items-center text-sm gap-1  border-sky-500 border px-2.5 py-0.5 rounded-lg shadow-sm bg-sky-100'>
+                <p> Updated: </p>
+                <p>
+                  {' '}
+                  {moment(personalDetails.personalDetailsUpdated).format(
+                    'DD.MM.YYYY'
+                  )}
+                </p>
+              </div>
+            )}
             <Button
               onClick={showModal}
               className='flex items-center gap-1'
@@ -362,12 +402,7 @@ const PersonalDetails = () => {
             onOk={handleOk}
             onCancel={handleCancel}
           >
-            <Form
-              className='mt-5'
-              form={form}
-              scrollToFirstError
-              layout='vertical'
-            >
+            <Form className='mt-5' form={form} layout='vertical'>
               <div className='flex gap-5'>
                 <Form.Item className='w-1/2' name='name' label='First Name'>
                   <Input />
@@ -395,7 +430,7 @@ const PersonalDetails = () => {
                   name='cityzenship'
                   label='Cityzenship'
                 >
-                  <Select placeholder='Select country' showSearch>
+                  <Select allowClear placeholder='Select country' showSearch>
                     {countryList.map((country, index) => (
                       <Option key={index} value={country}>
                         {country}
@@ -410,7 +445,7 @@ const PersonalDetails = () => {
                   name='residence'
                   label='Country of residence'
                 >
-                  <Select placeholder='Select country' showSearch>
+                  <Select allowClear placeholder='Select country' showSearch>
                     {countryList.map((country, index) => (
                       <Option key={index} value={country}>
                         {country}
@@ -443,7 +478,7 @@ const PersonalDetails = () => {
                   name='englishLevel'
                   label='Level of English'
                 >
-                  <Select placeholder='Select level'>
+                  <Select allowClear placeholder='Select level'>
                     <Option value='Beginner'>Beginner</Option>
                     <Option value='Elementary'>Elementary</Option>
                     <Option value='Intermediate'>Intermediate</Option>
@@ -464,11 +499,7 @@ const PersonalDetails = () => {
                 </Form.Item>
               </div>
               <div className='flex gap-5'>
-                <Form.Item
-                  className='w-1/2'
-                  name='sizeShoe'
-                  label='Shoe Size, cm'
-                >
+                <Form.Item className='w-1/2' name='sizeShoe' label='Shoe Size'>
                   <InputNumber className='w-full' placeholder='0' />
                 </Form.Item>
                 <Form.Item
@@ -485,7 +516,7 @@ const PersonalDetails = () => {
                   name='colorHair'
                   label='Hair Color'
                 >
-                  <Select placeholder='Select color'>
+                  <Select allowClear placeholder='Select color'>
                     <Option value='Blond'>Blond</Option>
                     <Option value='Black'>Black</Option>
                     <Option value='Brown'>Brown</Option>
@@ -495,7 +526,7 @@ const PersonalDetails = () => {
                   </Select>
                 </Form.Item>
                 <Form.Item className='w-1/2' name='colorEye' label='Eye Color'>
-                  <Select placeholder='Select color'>
+                  <Select allowClear placeholder='Select color'>
                     <Option value='Blue'>Blue</Option>
                     <Option value='Gray'>Gray</Option>
                     <Option value='Brown'>Brown</Option>

@@ -50,6 +50,7 @@ export const GET = async (req) => {
           sizeOverall: userData.personalDetails.sizeOverall,
           colorHair: userData.personalDetails.colorHair,
           colorEye: userData.personalDetails.colorEye,
+          personalDetailsUpdated: userData.personalDetails.updated,
         });
       }
     }
