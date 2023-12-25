@@ -161,14 +161,6 @@ const SeamanSeaService = () => {
                 </div>
               </h4>{' '}
             </div>
-            {sessionStatus.seaServiceUpdated && (
-              <div className='flex flex-col items-center text-sm  border-sky-500 border px-2.5 py-0.5 rounded-lg shadow-sm bg-sky-100'>
-                <p>Last update</p>
-                <p>
-                  {moment(sessionStatus.seaServiceUpdated).format('DD.MM.YYYY')}
-                </p>
-              </div>
-            )}
           </div>
 
           <Modal
@@ -386,7 +378,7 @@ const SeamanSeaService = () => {
           </Modal>
 
           <div className='flex flex-col gap-5'>
-            {sessionStatus.seaService.length > 0 ? (
+            {sessionStatus.seaService && sessionStatus.seaService.length > 0 ? (
               <div>
                 {sessionStatus.seaService
                   .slice()
@@ -497,12 +489,31 @@ const SeamanSeaService = () => {
                 ></Empty>
               </div>
             )}
-            <Button
-              onClick={openForm}
-              type='primary flex items-center gap-2 w-fit'
+            <div
+              className={
+                sessionStatus.seaServiceUpdated
+                  ? 'flex w-full justify-between'
+                  : 'flex w-full justify-end'
+              }
             >
-              <CgPlayListAdd className='text-2xl mt-1' /> Add record
-            </Button>
+              {sessionStatus.seaServiceUpdated && (
+                <div className='flex flex-row items-center text-sm gap-1  border-sky-500 border px-2.5  rounded-lg shadow-sm bg-sky-100'>
+                  <p>Updated:</p>
+                  <p>
+                    {moment(sessionStatus.seaServiceUpdated).format(
+                      'DD.MM.YYYY'
+                    )}
+                  </p>
+                </div>
+              )}
+              <Button
+                className='w-32'
+                onClick={openForm}
+                type='primary flex items-center gap-2 w-fit'
+              >
+                <CgPlayListAdd className='text-2xl mt-1' /> Add record
+              </Button>
+            </div>
           </div>
         </div>
       )}

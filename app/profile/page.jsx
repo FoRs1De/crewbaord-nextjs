@@ -1,7 +1,9 @@
+import SeamanPersonalDetails from './SeamanPersonalDetails';
 import SeamanHeader from './SeamanHeader';
 import SeamanSeaService from './SeamanSeaService';
 import SeamanSideBar from './SeamanSideBar';
 import SeamanTopContent from './SeamanTopContent';
+import SeamanDocuments from './SemanDocuments';
 
 const Profile = () => {
   return (
@@ -12,6 +14,8 @@ const Profile = () => {
         <div className='  w-full md:w-fit md:flex-grow flex flex-col '>
           <SeamanTopContent />
           <SeamanSeaService />
+          <SeamanPersonalDetails />
+          <SeamanDocuments />
         </div>
       </main>
     </>

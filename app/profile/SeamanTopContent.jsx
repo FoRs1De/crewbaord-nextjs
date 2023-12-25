@@ -20,7 +20,7 @@ const SeamanTopContent = () => {
   const updateTrigger = useSelector((state) => state.updateTriggerReducer);
 
   useEffect(() => {
-    if (sessionStatus) {
+    if (sessionStatus && sessionStatus.desiredWage) {
       setAmountValue(sessionStatus.desiredWage.amount);
       console.log(sessionStatus.desiredWage.amount);
     }
@@ -111,19 +111,12 @@ const SeamanTopContent = () => {
             <div className='flex flex-grow flex-col gap-3'>
               <h4 className='flex items-center gap-2'>Status</h4>
               <Select
+                placeholder='Select status'
+                allowClear
                 className='w-full lg:w-48'
                 onChange={handleStatusChange}
                 defaultValue={sessionStatus.employmentStatus}
                 options={[
-                  {
-                    value: 'empty',
-                    label: (
-                      <div className='flex items-center gap-2'>
-                        <input type='radio' checked={false} readOnly />
-                        <p>Empty status</p>
-                      </div>
-                    ),
-                  },
                   {
                     value: 'Looking for a job',
                     label: <Badge color='green' text='Looking for a job' />,
@@ -174,6 +167,7 @@ const SeamanTopContent = () => {
                 </div>
               </h4>
               <Select
+                allowClear
                 placeholder='Select rank'
                 className='w-full lg:w-52'
                 options={transformedRanksArray}
@@ -194,6 +188,7 @@ const SeamanTopContent = () => {
               </h4>
               <div className='flex items-center'>
                 <InputNumber
+                  placeholder='0'
                   onChange={handleAmountChange}
                   className='rounded-r-none w-full lg:w-24'
                   value={amountValue}
@@ -207,7 +202,11 @@ const SeamanTopContent = () => {
                 <Select
                   onChange={handleCurrencyChange}
                   className='currency-select '
-                  defaultValue={sessionStatus.desiredWage.currency}
+                  defaultValue={
+                    sessionStatus.desiredWage.currency
+                      ? sessionStatus.desiredWage.currency
+                      : '$'
+                  }
                 >
                   <Option value='$'>$</Option>
                   <Option value='€'>€</Option>
@@ -215,7 +214,11 @@ const SeamanTopContent = () => {
                 <Select
                   onChange={handlePeriodChange}
                   className='period-select w-24'
-                  defaultValue={sessionStatus.desiredWage.period}
+                  defaultValue={
+                    sessionStatus.desiredWage.period
+                      ? sessionStatus.desiredWage.period
+                      : 'month'
+                  }
                 >
                   <Option value='month'>month</Option>
                   <Option value='day'>day</Option>

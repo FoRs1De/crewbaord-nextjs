@@ -18,9 +18,9 @@ import dayjs from 'dayjs';
 import countryList from '@/app/assets/countries';
 import moment from 'moment';
 import { useDispatch, useSelector } from 'react-redux';
-import { setUpdateTrigger } from '../../redux/actions/updateTrigger';
+import { setUpdateTrigger } from '../redux/actions/updateTrigger';
 
-const PersonalDetails = () => {
+const SeamanPersonalDetails = () => {
   const { Option } = Select;
   const [personalDetails, setPersonalDetails] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -34,7 +34,9 @@ const PersonalDetails = () => {
 
   useEffect(() => {
     const getUserData = async () => {
-      const res = await axios.get('/api/profile/my-cv/get-personal-details');
+      const res = await axios.get(
+        '/api/profile/main/seaman/get-personal-details'
+      );
       setPersonalDetails(res.data);
       setPersonalDetailsArray(
         Object.values(res.data).filter(
@@ -83,7 +85,10 @@ const PersonalDetails = () => {
     const data = form.getFieldsValue();
     const dataToSend = { userId: sessionStatus.id, ...data };
 
-    await axios.put('/api/profile/my-cv/edit-personal-details', dataToSend);
+    await axios.put(
+      '/api/profile/main/seaman/edit-personal-details',
+      dataToSend
+    );
     setSubmitForm((prev) => !prev);
     setIsModalOpen(false);
     dispatch(setUpdateTrigger(!updateTrigger));
@@ -377,7 +382,7 @@ const PersonalDetails = () => {
             }
           >
             {personalDetails.personalDetailsUpdated && (
-              <div className='flex flex-row items-center text-sm gap-1  border-sky-500 border px-2.5 py-0.5 rounded-lg shadow-sm bg-sky-100'>
+              <div className='flex flex-row items-center text-sm gap-1  border-sky-500 border px-2.5 py-1.5 rounded-lg shadow-sm bg-sky-100'>
                 <p> Updated: </p>
                 <p>
                   {' '}
@@ -389,10 +394,10 @@ const PersonalDetails = () => {
             )}
             <Button
               onClick={showModal}
-              className='flex items-center gap-1'
+              className='flex items-center gap-2 w-32'
               type='primary'
             >
-              <LuFileEdit className='text-lg' /> Edit
+              <LuFileEdit className='text-lg' /> Edit details
             </Button>
           </div>
           <Modal
@@ -542,4 +547,4 @@ const PersonalDetails = () => {
   );
 };
 
-export default PersonalDetails;
+export default SeamanPersonalDetails;

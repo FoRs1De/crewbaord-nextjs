@@ -91,22 +91,52 @@ export const POST = async (req) => {
           colorEye: null,
           personalDetailsUpdated: null,
         },
-        seaService: [
-          /*{
-          id: uuid(),
-          position: null,
-          vesselName: null,
-          vesselType: null,
-          vesselFlag: null,
-          vesselDWT: null,
-          vesselYearBuilt: null,
-          mainEngineType: null,
-          shipowner: null,
-          crewing: null,
-          signOnDate: null,
-          signOffDate: null,
-        }*/
-        ],
+        documents: {
+          seamansBook: {
+            country: null,
+            number: null,
+            issueDate: null,
+            expiryDate: null,
+          },
+          travelPassport: {
+            country: null,
+            number: null,
+            issueDate: null,
+            expiryDate: null,
+          },
+          yellowFever: {
+            country: null,
+            number: null,
+            issueDate: null,
+            expiryDate: null,
+          },
+          coc: {
+            qualification: null,
+            country: null,
+            issueDate: null,
+            expiryDate: null,
+            number: null,
+          },
+          education: {
+            institutionType: null,
+            institutionName: null,
+            degree: null,
+            graduationDate: null,
+          },
+          c1d: {
+            number: null,
+            expiryDate: null,
+          },
+          b1osc: {
+            number: null,
+            expiryDate: null,
+          },
+          schengen: {
+            number: null,
+            expiryDate: null,
+          },
+        },
+        seaService: [],
         vacanciesApplied: [],
         desiredWage: {
           amount: null,

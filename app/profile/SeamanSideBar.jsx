@@ -29,7 +29,11 @@ const SeamanSideBar = () => {
   const [isPreviewModalOpen, setIsPreviewModalOpen] = useState(false);
 
   useEffect(() => {
-    if (sessionStatus && sessionStatus.avatar.fileNameCropped) {
+    if (
+      sessionStatus &&
+      sessionStatus.avatar &&
+      sessionStatus.avatar.fileNameCropped
+    ) {
       setEditImage(true);
     }
   }, [sessionStatus]);
@@ -258,13 +262,15 @@ const SeamanSideBar = () => {
             onCancel={closePreviewModal}
             footer={null}
           >
-            <NextImage
-              width={500}
-              height={500}
-              src={sessionStatus.avatar.urlCropped}
-              alt='avatar'
-              onLoad={handleImageLoad}
-            />
+            {sessionStatus.avatar && (
+              <NextImage
+                width={500}
+                height={500}
+                src={sessionStatus.avatar.urlCropped}
+                alt='avatar'
+                onLoad={handleImageLoad}
+              />
+            )}
           </Modal>
           <div className='mb-4 relative '>
             <Badge.Ribbon
@@ -281,7 +287,7 @@ const SeamanSideBar = () => {
               }
               placement='start'
               className={
-                sessionStatus.employmentStatus !== 'empty'
+                sessionStatus.employmentStatus !== null
                   ? 'absolute top-0'
                   : 'hidden'
               }
@@ -302,7 +308,7 @@ const SeamanSideBar = () => {
                       />
                     ) : (
                       <div className='relative h-full w-full'>
-                        {sessionStatus && sessionStatus.avatar.urlCropped && (
+                        {sessionStatus && sessionStatus.avatar && (
                           <NextImage
                             width={1024}
                             height={1024}
@@ -319,7 +325,7 @@ const SeamanSideBar = () => {
                 }
               />
             </Badge.Ribbon>
-            {sessionStatus.avatar.fileName && editImage ? (
+            {sessionStatus.avatar && editImage ? (
               <>
                 <div
                   className=' select-none absolute left-32 top-32 ml-2 cursor-pointer bg-gray-700 rounded-full w-8 h-8 flex items-center justify-center text-white text-xl'
