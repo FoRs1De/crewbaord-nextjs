@@ -1,6 +1,7 @@
 'use client';
 import SeamanDocumentsSeamansBook from './SeamanDocumentsSeamansBook';
 import SeamanDocumentsTravelPassport from './SeamanDocumentsTravelPassport';
+import SeamanDocumentsCoC from './SeamanDocumentsCoC';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { BsPassport } from 'react-icons/bs';
@@ -30,6 +31,10 @@ const SeamanDocuments = () => {
           setSubmitForm={setSubmitForm}
         />
         <SeamanDocumentsTravelPassport
+          documents={documents}
+          setSubmitForm={setSubmitForm}
+        />
+        <SeamanDocumentsCoC
           documents={documents}
           setSubmitForm={setSubmitForm}
         />

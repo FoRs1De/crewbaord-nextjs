@@ -114,8 +114,10 @@ export const POST = async (req) => {
           coc: {
             qualification: null,
             country: null,
-            issueDate: null,
-            expiryDate: null,
+            issueDateCoC: null,
+            expiryDateCoC: null,
+            issueDateCoE: null,
+            expiryDateCoE: null,
             number: null,
           },
           education: {
