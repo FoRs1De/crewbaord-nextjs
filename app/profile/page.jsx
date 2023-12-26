@@ -3,7 +3,7 @@ import SeamanHeader from './SeamanHeader';
 import SeamanSeaService from './SeamanSeaService';
 import SeamanSideBar from './SeamanSideBar';
 import SeamanTopContent from './SeamanTopContent';
-import SeamanDocuments from './SemanDocuments';
+import SeamanDocuments from './SeamanDocuments';
 
 const Profile = () => {
   return (

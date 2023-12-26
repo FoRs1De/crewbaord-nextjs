@@ -4,6 +4,7 @@ import moment from 'moment';
 import nodemailer from 'nodemailer';
 import jwt from 'jsonwebtoken';
 import base64url from 'base64url';
+import { update } from 'lodash';
 
 const smtpHost = process.env.SMTP_HOST;
 const smtpUser = process.env.SMTP_USER;
@@ -135,6 +136,7 @@ export const POST = async (req) => {
             number: null,
             expiryDate: null,
           },
+          updated: null,
         },
         seaService: [],
         vacanciesApplied: [],
