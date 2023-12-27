@@ -8,8 +8,9 @@ import { Modal, Form, Select, Input, Button, DatePicker } from 'antd';
 import { useSelector } from 'react-redux';
 import dayjs from 'dayjs';
 import { RiDeleteBin6Line } from 'react-icons/ri';
+import { BsInfoCircle } from 'react-icons/bs';
 
-const SeamanDocumentsTravelPassport = ({ documents, setSubmitForm }) => {
+const SeamanDocumentsEducation = ({ documents, setSubmitForm }) => {
   const [showForm, setShowForm] = useState(false);
   const { Option } = Select;
   const [form] = Form.useForm();
@@ -22,8 +23,9 @@ const SeamanDocumentsTravelPassport = ({ documents, setSubmitForm }) => {
       userId,
       ...values,
     };
+
     await axios.put(
-      '/api/profile/main/seaman/documents-data/travel-passport',
+      '/api/profile/main/seaman/documents-data/education',
       dataToSend
     );
     setShowForm(false);
@@ -32,12 +34,12 @@ const SeamanDocumentsTravelPassport = ({ documents, setSubmitForm }) => {
 
   const handleForm = () => {
     setShowForm(true);
-    if (documents.travelPassport.number) {
+    if (documents.education.institutionName) {
       form.setFieldsValue({
-        number: documents.travelPassport.number,
-        country: documents.travelPassport.country,
-        issueDate: dayjs(documents.travelPassport.issueDate),
-        expiryDate: dayjs(documents.travelPassport.expiryDate),
+        institutionType: documents.education.institutionType,
+        institutionName: documents.education.institutionName,
+        degree: documents.education.degree,
+        graduationDate: dayjs(documents.education.graduationDate),
       });
     } else {
       form.resetFields();
@@ -45,8 +47,10 @@ const SeamanDocumentsTravelPassport = ({ documents, setSubmitForm }) => {
   };
   const deleteData = async () => {
     await axios.put(
-      '/api/profile/main/seaman/documents-data/travel-passport/delete',
-      { userId: sessionStatus.id }
+      '/api/profile/main/seaman/documents-data/education/delete',
+      {
+        userId: sessionStatus.id,
+      }
     );
     setShowForm(false);
     setSubmitForm((prev) => !prev);
@@ -59,7 +63,7 @@ const SeamanDocumentsTravelPassport = ({ documents, setSubmitForm }) => {
           <Modal
             centered
             footer={false}
-            title={`Travel Passport`}
+            title={`Education`}
             open={showForm}
             maskClosable
             onCancel={() => {
@@ -69,7 +73,7 @@ const SeamanDocumentsTravelPassport = ({ documents, setSubmitForm }) => {
             <Form
               className='mt-5'
               onFinish={submitForm}
-              name='travelPassport'
+              name='Education'
               form={form}
               layout='vertical'
             >
@@ -78,73 +82,70 @@ const SeamanDocumentsTravelPassport = ({ documents, setSubmitForm }) => {
                   rules={[
                     {
                       required: true,
-                      message: 'Please select country!',
+                      message: 'Please select institution type!',
                     },
                   ]}
                   className='w-1/2'
-                  name='country'
-                  label='Issue country'
+                  name='institutionType'
+                  label='Education institution type'
                 >
-                  <Select allowClear placeholder='Select country' showSearch>
-                    {countryList.map((country, index) => (
-                      <Option key={index} value={country}>
-                        {country}
-                      </Option>
-                    ))}
+                  <Select allowClear placeholder='Select' showSearch>
+                    <Option value='Academy'>Academy</Option>
+                    <Option value='High School'>High School</Option>
+                    <Option value='Institute'>Institute</Option>
+                    <Option value='College'>College</Option>
+                    <Option value='University'>University</Option>
+                    <Option value='Other'>Specialized School</Option>
                   </Select>
                 </Form.Item>
                 <Form.Item
                   className='w-1/2'
-                  name='number'
-                  label='Number'
+                  name='graduationDate'
+                  label='Graduation date'
                   rules={[
                     {
                       required: true,
-                      message: `Please input number!`,
+                      message: `Please enter graduation date!`,
+                    },
+                  ]}
+                >
+                  <DatePicker
+                    placeholder='DD.MM.YYYY'
+                    format={'DD.MM.YYYY'}
+                    className='w-full'
+                  />
+                </Form.Item>
+              </div>
+              <div className='flex flex-col '>
+                <Form.Item
+                  className='w-full'
+                  name='institutionName'
+                  label='Name of institution'
+                  rules={[
+                    {
+                      required: true,
+                      message: `Please input name!`,
                     },
                   ]}
                 >
                   <Input className='w-full' />
                 </Form.Item>
-              </div>
-              <div className='flex gap-5'>
                 <Form.Item
-                  className='w-1/2'
-                  name='issueDate'
-                  label='Date of issue'
+                  className='w-full'
+                  name='degree'
+                  label='Degree'
                   rules={[
                     {
                       required: true,
-                      message: `Please enter issue date!`,
+                      message: `Please input degree!`,
                     },
                   ]}
                 >
-                  <DatePicker
-                    placeholder='DD.MM.YYYY'
-                    format={'DD.MM.YYYY'}
-                    className='w-full'
-                  />
-                </Form.Item>
-                <Form.Item
-                  className='w-1/2'
-                  name='expiryDate'
-                  label='Date of expiry'
-                  rules={[
-                    {
-                      required: true,
-                      message: `Please enter expiry date!`,
-                    },
-                  ]}
-                >
-                  <DatePicker
-                    placeholder='DD.MM.YYYY'
-                    format={'DD.MM.YYYY'}
-                    className='w-full'
-                  />
+                  <Input />
                 </Form.Item>
               </div>
 
-              {documents.travelPassport.number ? (
+              {documents.education.institutionName ? (
                 <div className='flex w-full justify-between items-center '>
                   <div>
                     <Button onClick={deleteData} danger>
@@ -185,19 +186,19 @@ const SeamanDocumentsTravelPassport = ({ documents, setSubmitForm }) => {
             onClick={handleForm}
             className='flex items-center gap-1 hover:cursor-pointer select-none'
           >
-            {documents.travelPassport.number ? (
+            {documents.education.institutionName ? (
               <TiInputChecked className='text-2xl text-green-600' />
             ) : (
               <LuFileEdit className='text-gray-400 text-md ml-1 mr-1 ' />
             )}
             <p
               className={
-                !documents.travelPassport.number
+                !documents.education.institutionName
                   ? 'text-gray-400  w-40 hover:text-blue-600'
                   : ' w-40 hover:text-blue-600'
               }
             >
-              {`Travel Passport`}
+              Education
             </p>
           </div>
         </>
@@ -206,4 +207,4 @@ const SeamanDocumentsTravelPassport = ({ documents, setSubmitForm }) => {
   );
 };
 
-export default SeamanDocumentsTravelPassport;
+export default SeamanDocumentsEducation;

@@ -62,7 +62,7 @@ const SeamanDocumentsSeamansBook = ({ documents, setSubmitForm }) => {
           <Modal
             centered
             footer={false}
-            title={`Edit seaman's book data`}
+            title={`Seaman's Book`}
             open={showSeamansBookForm}
             maskClosable
             onCancel={() => {

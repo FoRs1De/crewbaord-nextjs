@@ -4,7 +4,6 @@ import moment from 'moment';
 import nodemailer from 'nodemailer';
 import jwt from 'jsonwebtoken';
 import base64url from 'base64url';
-import { update } from 'lodash';
 
 const smtpHost = process.env.SMTP_HOST;
 const smtpUser = process.env.SMTP_USER;
@@ -106,10 +105,8 @@ export const POST = async (req) => {
             expiryDate: null,
           },
           yellowFever: {
-            country: null,
-            number: null,
+            place: null,
             issueDate: null,
-            expiryDate: null,
           },
           coc: {
             qualification: null,
@@ -130,11 +127,12 @@ export const POST = async (req) => {
             number: null,
             expiryDate: null,
           },
-          b1osc: {
+          b1ocs: {
             number: null,
             expiryDate: null,
           },
           schengen: {
+            type: null,
             number: null,
             expiryDate: null,
           },

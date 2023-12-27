@@ -83,7 +83,7 @@ const SeamanDocumentsCoC = ({ documents, setSubmitForm }) => {
             <Form
               className='mt-5'
               onFinish={submitForm}
-              name='travelPassport'
+              name='CoC'
               form={form}
               layout='vertical'
             >
@@ -262,7 +262,7 @@ const SeamanDocumentsCoC = ({ documents, setSubmitForm }) => {
                   : ' w-40 hover:text-blue-600'
               }
             >
-              Certificate of Competency
+              CoC & Endorsement
             </p>
           </div>
         </>

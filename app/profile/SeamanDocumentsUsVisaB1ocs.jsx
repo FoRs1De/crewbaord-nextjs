@@ -1,17 +1,16 @@
 'use client';
-import countryList from '../assets/countries';
 import { LuFileEdit } from 'react-icons/lu';
 import { TiInputChecked } from 'react-icons/ti';
 import { useState } from 'react';
 import axios from 'axios';
-import { Modal, Form, Select, Input, Button, DatePicker } from 'antd';
+import { Modal, Form, Input, Button, DatePicker } from 'antd';
 import { useSelector } from 'react-redux';
 import dayjs from 'dayjs';
 import { RiDeleteBin6Line } from 'react-icons/ri';
 
-const SeamanDocumentsTravelPassport = ({ documents, setSubmitForm }) => {
+const SeamanDocumentsUsVisaB1ocs = ({ documents, setSubmitForm }) => {
   const [showForm, setShowForm] = useState(false);
-  const { Option } = Select;
+
   const [form] = Form.useForm();
 
   const sessionStatus = useSelector((state) => state.authReducer);
@@ -22,8 +21,9 @@ const SeamanDocumentsTravelPassport = ({ documents, setSubmitForm }) => {
       userId,
       ...values,
     };
+
     await axios.put(
-      '/api/profile/main/seaman/documents-data/travel-passport',
+      '/api/profile/main/seaman/documents-data/us-visa-b1ocs',
       dataToSend
     );
     setShowForm(false);
@@ -32,12 +32,10 @@ const SeamanDocumentsTravelPassport = ({ documents, setSubmitForm }) => {
 
   const handleForm = () => {
     setShowForm(true);
-    if (documents.travelPassport.number) {
+    if (documents.b1ocs.number) {
       form.setFieldsValue({
-        number: documents.travelPassport.number,
-        country: documents.travelPassport.country,
-        issueDate: dayjs(documents.travelPassport.issueDate),
-        expiryDate: dayjs(documents.travelPassport.expiryDate),
+        number: documents.b1ocs.number,
+        expiryDate: dayjs(documents.b1ocs.expiryDate),
       });
     } else {
       form.resetFields();
@@ -45,8 +43,10 @@ const SeamanDocumentsTravelPassport = ({ documents, setSubmitForm }) => {
   };
   const deleteData = async () => {
     await axios.put(
-      '/api/profile/main/seaman/documents-data/travel-passport/delete',
-      { userId: sessionStatus.id }
+      '/api/profile/main/seaman/documents-data/us-visa-b1ocs/delete',
+      {
+        userId: sessionStatus.id,
+      }
     );
     setShowForm(false);
     setSubmitForm((prev) => !prev);
@@ -59,9 +59,9 @@ const SeamanDocumentsTravelPassport = ({ documents, setSubmitForm }) => {
           <Modal
             centered
             footer={false}
-            title={`Travel Passport`}
+            title={`US Visa B1/OCS`}
             open={showForm}
-            maskClosable
+            n
             onCancel={() => {
               setShowForm(false);
             }}
@@ -69,66 +69,28 @@ const SeamanDocumentsTravelPassport = ({ documents, setSubmitForm }) => {
             <Form
               className='mt-5'
               onFinish={submitForm}
-              name='travelPassport'
+              name='US Visa B1/OCS'
               form={form}
               layout='vertical'
             >
-              <div className='flex gap-5'>
+              <div className='flex flex-col '>
                 <Form.Item
-                  rules={[
-                    {
-                      required: true,
-                      message: 'Please select country!',
-                    },
-                  ]}
-                  className='w-1/2'
-                  name='country'
-                  label='Issue country'
-                >
-                  <Select allowClear placeholder='Select country' showSearch>
-                    {countryList.map((country, index) => (
-                      <Option key={index} value={country}>
-                        {country}
-                      </Option>
-                    ))}
-                  </Select>
-                </Form.Item>
-                <Form.Item
-                  className='w-1/2'
+                  className='w-full'
                   name='number'
-                  label='Number'
+                  label='Visa number'
                   rules={[
                     {
                       required: true,
-                      message: `Please input number!`,
+                      message: `Please enter number!`,
                     },
                   ]}
                 >
                   <Input className='w-full' />
                 </Form.Item>
-              </div>
-              <div className='flex gap-5'>
                 <Form.Item
-                  className='w-1/2'
-                  name='issueDate'
-                  label='Date of issue'
-                  rules={[
-                    {
-                      required: true,
-                      message: `Please enter issue date!`,
-                    },
-                  ]}
-                >
-                  <DatePicker
-                    placeholder='DD.MM.YYYY'
-                    format={'DD.MM.YYYY'}
-                    className='w-full'
-                  />
-                </Form.Item>
-                <Form.Item
-                  className='w-1/2'
+                  className='w-full'
                   name='expiryDate'
-                  label='Date of expiry'
+                  label='Expiry date'
                   rules={[
                     {
                       required: true,
@@ -144,7 +106,7 @@ const SeamanDocumentsTravelPassport = ({ documents, setSubmitForm }) => {
                 </Form.Item>
               </div>
 
-              {documents.travelPassport.number ? (
+              {documents.b1ocs.number ? (
                 <div className='flex w-full justify-between items-center '>
                   <div>
                     <Button onClick={deleteData} danger>
@@ -185,19 +147,19 @@ const SeamanDocumentsTravelPassport = ({ documents, setSubmitForm }) => {
             onClick={handleForm}
             className='flex items-center gap-1 hover:cursor-pointer select-none'
           >
-            {documents.travelPassport.number ? (
+            {documents.b1ocs.number ? (
               <TiInputChecked className='text-2xl text-green-600' />
             ) : (
               <LuFileEdit className='text-gray-400 text-md ml-1 mr-1 ' />
             )}
             <p
               className={
-                !documents.travelPassport.number
+                !documents.b1ocs.number
                   ? 'text-gray-400  w-40 hover:text-blue-600'
                   : ' w-40 hover:text-blue-600'
               }
             >
-              {`Travel Passport`}
+              US Visa B1/OCS
             </p>
           </div>
         </>
@@ -206,4 +168,4 @@ const SeamanDocumentsTravelPassport = ({ documents, setSubmitForm }) => {
   );
 };
 
-export default SeamanDocumentsTravelPassport;
+export default SeamanDocumentsUsVisaB1ocs;
