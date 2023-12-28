@@ -187,6 +187,7 @@ const SeamanSideBar = () => {
     });
     dispatch(setUpdateTrigger(!updateTrigger));
     setDeleteModal(false);
+    setEditImage(false);
   };
 
   const handleCancelDeletion = async () => {
@@ -272,7 +273,8 @@ const SeamanSideBar = () => {
               />
             )}
           </Modal>
-          <div className='mb-4 relative '>
+
+          <div className=' h-44 relative '>
             <Badge.Ribbon
               color={
                 sessionStatus.employmentStatus === 'On board'
