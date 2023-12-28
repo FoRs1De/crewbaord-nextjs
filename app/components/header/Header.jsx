@@ -222,7 +222,7 @@ const Header = () => {
                     {!loading && (
                       <>
                         {sessionStatus ? (
-                          <ul className='flex items-center  border-l-2 pl-4 '>
+                          <ul className='flex items-center   border-l-2 pl-4 '>
                             {hiddenTill && (
                               <Dropdown
                                 placement='bottom'
@@ -251,7 +251,7 @@ const Header = () => {
                               >
                                 <div
                                   onClick={handleInfo}
-                                  className='select-none text-sm flex  flex-col items-center '
+                                  className='select-none text-sm flex  flex-col items-center pr-4'
                                 >
                                   <p>Visible from:</p>
                                   <p className='bg-orange-400 rounded-md px-2'>
@@ -400,7 +400,8 @@ const Header = () => {
                       </Badge>
 
                       <p className='text-black text-base'>
-                        {sessionStatus.name}
+                        {sessionStatus.name}{' '}
+                        {sessionStatus.lastName && sessionStatus.lastName}
                       </p>
                     </div>
                     {hiddenTill && (

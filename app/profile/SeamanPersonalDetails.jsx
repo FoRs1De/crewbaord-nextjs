@@ -118,8 +118,8 @@ const SeamanPersonalDetails = () => {
             </h4>
             <Progress className='w-24 sm:w-40 pt-1' percent={percentage} />
           </div>
-          <div className='flex gap-2 lg:gap-14  md:justify-center flex-col md:flex-row '>
-            <div className='flex flex-wrap gap-2 flex-col md:flex-row justify-center'>
+          <div className='flex flex-col gap-2 sm:justify-center sm:flex-row flex-wrap'>
+            <div className='flex flex-col gap-2 md:flex-row'>
               {/* 1st column*/}
               <div className='flex flex-col gap-2'>
                 <div className='flex items-center gap-1 '>
@@ -186,7 +186,7 @@ const SeamanPersonalDetails = () => {
                 </div>
               </div>
               {/* 2nd column*/}
-              <div className='flex flex-col gap-2 '>
+              <div className='flex flex-col gap-2'>
                 <div className='flex items-center gap-1'>
                   {personalDetails.residence ? (
                     <TiInputChecked className='text-2xl text-green-600' />
@@ -249,7 +249,7 @@ const SeamanPersonalDetails = () => {
                 </div>
               </div>
             </div>
-            <div className='flex flex-wrap gap-2 lg:gap-8 flex-col md:flex-row justify-center'>
+            <div className='flex flex-col gap-2 md:flex-row'>
               {/* 3rd column*/}
               <div className='flex flex-col gap-2'>
                 <div className='flex items-center gap-1'>
