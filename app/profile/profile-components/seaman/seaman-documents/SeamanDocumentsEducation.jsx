@@ -29,7 +29,9 @@ const SeamanDocumentsEducation = ({ documents, setSubmitForm }) => {
       dataToSend
     );
     setShowForm(false);
-    setSubmitForm((prev) => !prev);
+    setTimeout(() => {
+      setSubmitForm((prev) => !prev);
+    }, 500);
   };
 
   const handleForm = () => {
@@ -53,7 +55,9 @@ const SeamanDocumentsEducation = ({ documents, setSubmitForm }) => {
       }
     );
     setShowForm(false);
-    setSubmitForm((prev) => !prev);
+    setTimeout(() => {
+      setSubmitForm((prev) => !prev);
+    }, 500);
   };
 
   return (

@@ -12,13 +12,13 @@ import {
 } from 'antd';
 import { ExclamationCircleFilled } from '@ant-design/icons';
 import { CgPlayListAdd } from 'react-icons/cg';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import ranksSelect from '../../../assets/ranksSelect';
 import shipTypes from '../../../assets/shipTypes';
 import flagStates from '../../../assets/flagStates';
 import moment from 'moment';
-import { useDispatch, useSelector } from 'react-redux';
-import { setUpdateTrigger } from '../../../redux/actions/updateTrigger';
+import { useSelector } from 'react-redux';
+
 import axios from 'axios';
 import { v4 as uuid } from 'uuid';
 import { RiDeleteBinLine } from 'react-icons/ri';
@@ -26,15 +26,14 @@ import { FiEdit3 } from 'react-icons/fi';
 import dayjs from 'dayjs';
 import { BsInfoCircle } from 'react-icons/bs';
 
-const SeamanSeaService = () => {
+const SeamanSeaService = ({ setSubmitForm, seaServiceUpdated, seaService }) => {
   const [form] = Form.useForm();
   const { confirm } = Modal;
   const { Option } = Select;
+
   const [showForm, setShowForm] = useState(false);
   const [serviceRecordId, setServiceRecordId] = useState(null);
   const sessionStatus = useSelector((state) => state.authReducer);
-  const updateTrigger = useSelector((state) => state.updateTriggerReducer);
-  const dispatch = useDispatch();
 
   const openForm = () => {
     setShowForm(true);
@@ -45,8 +44,6 @@ const SeamanSeaService = () => {
     form.resetFields();
   };
   const submitData = async (value) => {
-    console.log(value);
-
     try {
       console.log(serviceRecordId);
       if (serviceRecordId) {
@@ -70,7 +67,7 @@ const SeamanSeaService = () => {
           dataToSend
         );
       }
-      dispatch(setUpdateTrigger(!updateTrigger));
+      setSubmitForm((prev) => !prev);
       form.resetFields();
       setShowForm(false);
       setServiceRecordId(null);
@@ -111,7 +108,7 @@ const SeamanSeaService = () => {
             '/api/profile/main/seaman/delete-service-record',
             dataToSend
           );
-          dispatch(setUpdateTrigger(!updateTrigger));
+          setSubmitForm((prev) => !prev);
         };
         deleteRecord();
       },
@@ -122,9 +119,7 @@ const SeamanSeaService = () => {
   };
 
   const editRecord = async (id) => {
-    const record = sessionStatus.seaService.find(
-      (record) => record.recordId === id
-    );
+    const record = seaService.find((record) => record.recordId === id);
 
     form.setFieldsValue({
       position: record.position,
@@ -146,7 +141,7 @@ const SeamanSeaService = () => {
 
   return (
     <>
-      {sessionStatus && (
+      {seaService && (
         <div className='flex gap-5 flex-col   bg-white shadow-lg rounded-lg p-4 mt-4'>
           <div className='flex justify-between w-full items-center'>
             <div className='flex items-center gap-2 '>
@@ -378,9 +373,9 @@ const SeamanSeaService = () => {
           </Modal>
 
           <div className='flex flex-col gap-5'>
-            {sessionStatus.seaService && sessionStatus.seaService.length > 0 ? (
+            {seaService.length > 0 ? (
               <div>
-                {sessionStatus.seaService
+                {seaService
                   .slice()
                   .sort((a, b) => {
                     const dateA = new Date(a.signOffDate);
@@ -491,19 +486,15 @@ const SeamanSeaService = () => {
             )}
             <div
               className={
-                sessionStatus.seaServiceUpdated
+                seaServiceUpdated
                   ? 'flex w-full justify-between'
                   : 'flex w-full justify-end'
               }
             >
-              {sessionStatus.seaServiceUpdated && (
+              {seaServiceUpdated && (
                 <div className='flex flex-row items-center text-sm gap-1  border-sky-500 border px-2.5  rounded-lg shadow-sm bg-sky-100'>
                   <p>Updated:</p>
-                  <p>
-                    {moment(sessionStatus.seaServiceUpdated).format(
-                      'DD.MM.YYYY'
-                    )}
-                  </p>
+                  <p>{moment(seaServiceUpdated).format('DD.MM.YYYY')}</p>
                 </div>
               )}
               <Button

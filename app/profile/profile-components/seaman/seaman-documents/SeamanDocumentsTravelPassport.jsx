@@ -27,7 +27,9 @@ const SeamanDocumentsTravelPassport = ({ documents, setSubmitForm }) => {
       dataToSend
     );
     setShowForm(false);
-    setSubmitForm((prev) => !prev);
+    setTimeout(() => {
+      setSubmitForm((prev) => !prev);
+    }, 500);
   };
 
   const handleForm = () => {
@@ -49,7 +51,9 @@ const SeamanDocumentsTravelPassport = ({ documents, setSubmitForm }) => {
       { userId: sessionStatus.id }
     );
     setShowForm(false);
-    setSubmitForm((prev) => !prev);
+    setTimeout(() => {
+      setSubmitForm((prev) => !prev);
+    }, 500);
   };
 
   return (

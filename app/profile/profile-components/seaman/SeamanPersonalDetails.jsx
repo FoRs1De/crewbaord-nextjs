@@ -20,11 +20,11 @@ import moment from 'moment';
 import { useDispatch, useSelector } from 'react-redux';
 import { setUpdateTrigger } from '../../../redux/actions/updateTrigger';
 
-const SeamanPersonalDetails = () => {
+const SeamanPersonalDetails = ({ personalDetails, setSubmitForm }) => {
   const { Option } = Select;
-  const [personalDetails, setPersonalDetails] = useState(null);
+
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [submitForm, setSubmitForm] = useState(false);
+
   const [personalDetailsArray, setPersonalDetailsArray] = useState([]);
   const [percentage, setPercentage] = useState(0);
   const [form] = Form.useForm();
@@ -34,18 +34,14 @@ const SeamanPersonalDetails = () => {
 
   useEffect(() => {
     const getUserData = async () => {
-      const res = await axios.get(
-        '/api/profile/main/seaman/get-personal-details'
-      );
-      setPersonalDetails(res.data);
       setPersonalDetailsArray(
-        Object.values(res.data).filter(
+        Object.values(personalDetails).filter(
           (value) => value !== null && value !== ''
         )
       );
     };
     getUserData();
-  }, [submitForm]);
+  }, [personalDetails]);
 
   useEffect(() => {
     const calculatePercentage = () => {

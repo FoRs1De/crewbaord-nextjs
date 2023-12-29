@@ -27,7 +27,9 @@ const SeamanDocumentsUsVisaB1ocs = ({ documents, setSubmitForm }) => {
       dataToSend
     );
     setShowForm(false);
-    setSubmitForm((prev) => !prev);
+    setTimeout(() => {
+      setSubmitForm((prev) => !prev);
+    }, 500);
   };
 
   const handleForm = () => {
@@ -49,7 +51,9 @@ const SeamanDocumentsUsVisaB1ocs = ({ documents, setSubmitForm }) => {
       }
     );
     setShowForm(false);
-    setSubmitForm((prev) => !prev);
+    setTimeout(() => {
+      setSubmitForm((prev) => !prev);
+    }, 500);
   };
 
   return (

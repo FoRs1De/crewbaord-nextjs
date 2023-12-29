@@ -29,7 +29,9 @@ const SeamanDocumentsSeamansBook = ({ documents, setSubmitForm }) => {
       dataToSend
     );
     setShowSeamansBookForm(false);
-    setSubmitForm((prev) => !prev);
+    setTimeout(() => {
+      setSubmitForm((prev) => !prev);
+    }, 500);
   };
 
   const handleSeamansBookForm = () => {
@@ -51,7 +53,9 @@ const SeamanDocumentsSeamansBook = ({ documents, setSubmitForm }) => {
       { userId: sessionStatus.id }
     );
     setShowSeamansBookForm(false);
-    setSubmitForm((prev) => !prev);
+    setTimeout(() => {
+      setSubmitForm((prev) => !prev);
+    }, 500);
   };
 
   return (

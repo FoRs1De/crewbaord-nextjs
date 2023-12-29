@@ -51,8 +51,6 @@ export const GET = async () => {
             employmentStatusUntil: userData.employmentStatusUntil,
             desiredWage: userData.desiredWage,
             hiddenTill: userData.hiddenTill,
-            seaService: userData.seaService,
-            seaServiceUpdated: userData.seaServiceUpdated,
             message: 'Authenticated',
           });
         } else {

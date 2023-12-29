@@ -23,11 +23,13 @@ const SeamanDocumentsSchengenVisa = ({ documents, setSubmitForm }) => {
     };
 
     await axios.put(
-      '/api/profile/main/seaman/documents-data/us-visa-b1ocs',
+      '/api/profile/main/seaman/documents-data/schengen-visa',
       dataToSend
     );
     setShowForm(false);
-    setSubmitForm((prev) => !prev);
+    setTimeout(() => {
+      setSubmitForm((prev) => !prev);
+    }, 500);
   };
 
   const handleForm = () => {
@@ -35,8 +37,8 @@ const SeamanDocumentsSchengenVisa = ({ documents, setSubmitForm }) => {
     if (documents.schengen.number) {
       form.setFieldsValue({
         type: documents.schengen.type,
-        number: documents.b1ocs.number,
-        expiryDate: dayjs(documents.b1ocs.expiryDate),
+        number: documents.schengen.number,
+        expiryDate: dayjs(documents.schengen.expiryDate),
       });
     } else {
       form.resetFields();
@@ -44,13 +46,15 @@ const SeamanDocumentsSchengenVisa = ({ documents, setSubmitForm }) => {
   };
   const deleteData = async () => {
     await axios.put(
-      '/api/profile/main/seaman/documents-data/us-visa-b1ocs/delete',
+      '/api/profile/main/seaman/documents-data/schengen-visa/delete',
       {
         userId: sessionStatus.id,
       }
     );
     setShowForm(false);
-    setSubmitForm((prev) => !prev);
+    setTimeout(() => {
+      setSubmitForm((prev) => !prev);
+    }, 500);
   };
 
   return (

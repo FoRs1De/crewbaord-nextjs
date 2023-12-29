@@ -26,7 +26,9 @@ const SeamanDocumentsCoC = ({ documents, setSubmitForm }) => {
 
     await axios.put('/api/profile/main/seaman/documents-data/coc', dataToSend);
     setShowForm(false);
-    setSubmitForm((prev) => !prev);
+    setTimeout(() => {
+      setSubmitForm((prev) => !prev);
+    }, 500);
   };
 
   const handleForm = () => {
@@ -63,7 +65,9 @@ const SeamanDocumentsCoC = ({ documents, setSubmitForm }) => {
       userId: sessionStatus.id,
     });
     setShowForm(false);
-    setSubmitForm((prev) => !prev);
+    setTimeout(() => {
+      setSubmitForm((prev) => !prev);
+    }, 500);
   };
 
   return (
