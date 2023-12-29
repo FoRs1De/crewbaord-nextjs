@@ -1,5 +1,5 @@
 'use client';
-import countryList from '../assets/countries';
+import countryList from '../../../../assets/countries';
 import { LuFileEdit } from 'react-icons/lu';
 import { TiInputChecked } from 'react-icons/ti';
 import { useState } from 'react';
@@ -8,9 +8,8 @@ import { Modal, Form, Select, Input, Button, DatePicker } from 'antd';
 import { useSelector } from 'react-redux';
 import dayjs from 'dayjs';
 import { RiDeleteBin6Line } from 'react-icons/ri';
-import { BsInfoCircle } from 'react-icons/bs';
 
-const SeamanDocumentsEducation = ({ documents, setSubmitForm }) => {
+const SeamanDocumentsTravelPassport = ({ documents, setSubmitForm }) => {
   const [showForm, setShowForm] = useState(false);
   const { Option } = Select;
   const [form] = Form.useForm();
@@ -23,9 +22,8 @@ const SeamanDocumentsEducation = ({ documents, setSubmitForm }) => {
       userId,
       ...values,
     };
-
     await axios.put(
-      '/api/profile/main/seaman/documents-data/education',
+      '/api/profile/main/seaman/documents-data/travel-passport',
       dataToSend
     );
     setShowForm(false);
@@ -34,12 +32,12 @@ const SeamanDocumentsEducation = ({ documents, setSubmitForm }) => {
 
   const handleForm = () => {
     setShowForm(true);
-    if (documents.education.institutionName) {
+    if (documents.travelPassport.number) {
       form.setFieldsValue({
-        institutionType: documents.education.institutionType,
-        institutionName: documents.education.institutionName,
-        degree: documents.education.degree,
-        graduationDate: dayjs(documents.education.graduationDate),
+        number: documents.travelPassport.number,
+        country: documents.travelPassport.country,
+        issueDate: dayjs(documents.travelPassport.issueDate),
+        expiryDate: dayjs(documents.travelPassport.expiryDate),
       });
     } else {
       form.resetFields();
@@ -47,10 +45,8 @@ const SeamanDocumentsEducation = ({ documents, setSubmitForm }) => {
   };
   const deleteData = async () => {
     await axios.put(
-      '/api/profile/main/seaman/documents-data/education/delete',
-      {
-        userId: sessionStatus.id,
-      }
+      '/api/profile/main/seaman/documents-data/travel-passport/delete',
+      { userId: sessionStatus.id }
     );
     setShowForm(false);
     setSubmitForm((prev) => !prev);
@@ -63,7 +59,7 @@ const SeamanDocumentsEducation = ({ documents, setSubmitForm }) => {
           <Modal
             centered
             footer={false}
-            title={`Education`}
+            title={`Travel Passport`}
             open={showForm}
             maskClosable
             onCancel={() => {
@@ -73,7 +69,7 @@ const SeamanDocumentsEducation = ({ documents, setSubmitForm }) => {
             <Form
               className='mt-5'
               onFinish={submitForm}
-              name='Education'
+              name='travelPassport'
               form={form}
               layout='vertical'
             >
@@ -82,30 +78,61 @@ const SeamanDocumentsEducation = ({ documents, setSubmitForm }) => {
                   rules={[
                     {
                       required: true,
-                      message: 'Please select institution type!',
+                      message: 'Please select country!',
                     },
                   ]}
                   className='w-1/2'
-                  name='institutionType'
-                  label='Education institution type'
+                  name='country'
+                  label='Issue country'
                 >
-                  <Select allowClear placeholder='Select' showSearch>
-                    <Option value='Academy'>Academy</Option>
-                    <Option value='High School'>High School</Option>
-                    <Option value='Institute'>Institute</Option>
-                    <Option value='College'>College</Option>
-                    <Option value='University'>University</Option>
-                    <Option value='Other'>Specialized School</Option>
+                  <Select allowClear placeholder='Select country' showSearch>
+                    {countryList.map((country, index) => (
+                      <Option key={index} value={country}>
+                        {country}
+                      </Option>
+                    ))}
                   </Select>
                 </Form.Item>
                 <Form.Item
                   className='w-1/2'
-                  name='graduationDate'
-                  label='Graduation date'
+                  name='number'
+                  label='Number'
                   rules={[
                     {
                       required: true,
-                      message: `Please enter graduation date!`,
+                      message: `Please input number!`,
+                    },
+                  ]}
+                >
+                  <Input className='w-full' />
+                </Form.Item>
+              </div>
+              <div className='flex gap-5'>
+                <Form.Item
+                  className='w-1/2'
+                  name='issueDate'
+                  label='Date of issue'
+                  rules={[
+                    {
+                      required: true,
+                      message: `Please enter issue date!`,
+                    },
+                  ]}
+                >
+                  <DatePicker
+                    placeholder='DD.MM.YYYY'
+                    format={'DD.MM.YYYY'}
+                    className='w-full'
+                  />
+                </Form.Item>
+                <Form.Item
+                  className='w-1/2'
+                  name='expiryDate'
+                  label='Date of expiry'
+                  rules={[
+                    {
+                      required: true,
+                      message: `Please enter expiry date!`,
                     },
                   ]}
                 >
@@ -116,36 +143,8 @@ const SeamanDocumentsEducation = ({ documents, setSubmitForm }) => {
                   />
                 </Form.Item>
               </div>
-              <div className='flex flex-col '>
-                <Form.Item
-                  className='w-full'
-                  name='institutionName'
-                  label='Name of institution'
-                  rules={[
-                    {
-                      required: true,
-                      message: `Please input name!`,
-                    },
-                  ]}
-                >
-                  <Input className='w-full' />
-                </Form.Item>
-                <Form.Item
-                  className='w-full'
-                  name='degree'
-                  label='Degree'
-                  rules={[
-                    {
-                      required: true,
-                      message: `Please input degree!`,
-                    },
-                  ]}
-                >
-                  <Input />
-                </Form.Item>
-              </div>
 
-              {documents.education.institutionName ? (
+              {documents.travelPassport.number ? (
                 <div className='flex w-full justify-between items-center '>
                   <div>
                     <Button onClick={deleteData} danger>
@@ -186,19 +185,19 @@ const SeamanDocumentsEducation = ({ documents, setSubmitForm }) => {
             onClick={handleForm}
             className='flex items-center gap-1 hover:cursor-pointer select-none'
           >
-            {documents.education.institutionName ? (
+            {documents.travelPassport.number ? (
               <TiInputChecked className='text-2xl text-green-600' />
             ) : (
               <LuFileEdit className='text-gray-400 text-md ml-1 mr-1 ' />
             )}
             <p
               className={
-                !documents.education.institutionName
+                !documents.travelPassport.number
                   ? 'text-gray-400  w-40 hover:text-blue-600'
                   : ' w-40 hover:text-blue-600'
               }
             >
-              Education
+              {`Travel Passport`}
             </p>
           </div>
         </>
@@ -207,4 +206,4 @@ const SeamanDocumentsEducation = ({ documents, setSubmitForm }) => {
   );
 };
 
-export default SeamanDocumentsEducation;
+export default SeamanDocumentsTravelPassport;

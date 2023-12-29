@@ -7,7 +7,7 @@ import { GrEdit } from 'react-icons/gr';
 import { MdUpload } from 'react-icons/md';
 import { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { setUpdateTrigger } from '../redux/actions/updateTrigger';
+import { setUpdateTrigger } from '../../../redux/actions/updateTrigger';
 import ReactCrop from 'react-image-crop';
 import 'react-image-crop/dist/ReactCrop.css';
 import axios from 'axios';

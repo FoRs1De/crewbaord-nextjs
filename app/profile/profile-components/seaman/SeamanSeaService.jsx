@@ -13,12 +13,12 @@ import {
 import { ExclamationCircleFilled } from '@ant-design/icons';
 import { CgPlayListAdd } from 'react-icons/cg';
 import { useState } from 'react';
-import ranksSelect from '../assets/ranksSelect';
-import shipTypes from '../assets/shipTypes';
-import flagStates from '../assets/flagStates';
+import ranksSelect from '../../../assets/ranksSelect';
+import shipTypes from '../../../assets/shipTypes';
+import flagStates from '../../../assets/flagStates';
 import moment from 'moment';
 import { useDispatch, useSelector } from 'react-redux';
-import { setUpdateTrigger } from '../redux/actions/updateTrigger';
+import { setUpdateTrigger } from '../../../redux/actions/updateTrigger';
 import axios from 'axios';
 import { v4 as uuid } from 'uuid';
 import { RiDeleteBinLine } from 'react-icons/ri';

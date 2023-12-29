@@ -18,7 +18,7 @@ import dayjs from 'dayjs';
 import countryList from '@/app/assets/countries';
 import moment from 'moment';
 import { useDispatch, useSelector } from 'react-redux';
-import { setUpdateTrigger } from '../redux/actions/updateTrigger';
+import { setUpdateTrigger } from '../../../redux/actions/updateTrigger';
 
 const SeamanPersonalDetails = () => {
   const { Option } = Select;

@@ -1,5 +1,5 @@
 'use client';
-import countryList from '../assets/countries';
+import countryList from '../../../../assets/countries';
 
 import { LuFileEdit } from 'react-icons/lu';
 import { TiInputChecked } from 'react-icons/ti';

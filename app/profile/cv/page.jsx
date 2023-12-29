@@ -1,4 +1,4 @@
-import SeamanHeader from '../SeamanHeader';
+import SeamanHeader from '../profile-components/seaman/SeamanHeader';
 
 const CV = () => {
   return (

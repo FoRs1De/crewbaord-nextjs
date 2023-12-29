@@ -145,6 +145,8 @@ export const POST = async (req) => {
           currency: null,
           period: null,
         },
+        certificates: [],
+        certificatesUpdated: null,
         seaServiceUpdated: null,
         dataUpdated: null,
         registered: currentDateTime,

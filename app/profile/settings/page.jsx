@@ -1,4 +1,4 @@
-import SeamanHeader from '../SeamanHeader';
+import SeamanHeader from '../profile-components/seaman/SeamanHeader';
 import ChangeEmail from './ChangeEmail';
 import ChangePassword from './ChangePassword';
 import DeleteAccount from './DeleteAccount';

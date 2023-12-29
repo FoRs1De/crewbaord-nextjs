@@ -1,9 +1,10 @@
-import SeamanPersonalDetails from './SeamanPersonalDetails';
-import SeamanHeader from './SeamanHeader';
-import SeamanSeaService from './SeamanSeaService';
-import SeamanSideBar from './SeamanSideBar';
-import SeamanTopContent from './SeamanTopContent';
-import SeamanDocuments from './SeamanDocuments';
+import SeamanPersonalDetails from './profile-components/seaman/SeamanPersonalDetails';
+import SeamanHeader from './profile-components/seaman/SeamanHeader';
+import SeamanSeaService from './profile-components/seaman/SeamanSeaService';
+import SeamanSideBar from './profile-components/seaman/SeamanSideBar';
+import SeamanTopContent from './profile-components/seaman/SeamanTopContent';
+import SeamanDocuments from './profile-components/seaman/SeamanDocuments';
+import SeamanCertificates from './profile-components/seaman/SeamanCertificates';
 
 const Profile = () => {
   return (
@@ -16,6 +17,7 @@ const Profile = () => {
           <SeamanSeaService />
           <SeamanPersonalDetails />
           <SeamanDocuments />
+          <SeamanCertificates />
         </div>
       </main>
     </>
