@@ -18,7 +18,6 @@ import shipTypes from '../../../assets/shipTypes';
 import flagStates from '../../../assets/flagStates';
 import moment from 'moment';
 import { useSelector } from 'react-redux';
-
 import axios from 'axios';
 import { v4 as uuid } from 'uuid';
 import { RiDeleteBinLine } from 'react-icons/ri';
@@ -136,6 +135,33 @@ const SeamanSeaService = ({ setSubmitForm, seaServiceUpdated, seaService }) => {
     });
     setServiceRecordId(id);
     setShowForm(true);
+  };
+
+  const contractLength = (signOn, signOff) => {
+    const embarkation = moment(signOn);
+    const disembarkation = moment(signOff);
+    const daysOnBoard = disembarkation.diff(embarkation, 'days');
+    const monthsOnBoard = disembarkation.diff(embarkation, 'months');
+    const days = disembarkation.diff(embarkation, 'days') % 30;
+    if (monthsOnBoard > 0) {
+      return (
+        <div className='flex flex-col text-sm items-center  whitespace-nowrap w-16'>
+          <p className=''>
+            {monthsOnBoard} {monthsOnBoard === 1 ? 'month,' : 'months,'}
+          </p>
+          <p className=''>
+            {days} {daysOnBoard === 1 ? 'day' : 'days'}
+          </p>
+          <p>({daysOnBoard} days)</p>
+        </div>
+      );
+    } else if (daysOnBoard > 0) {
+      return (
+        <div className='flex flex-col text-sm items-center whitespace-nowrap w-16'>
+          <p className=''>{daysOnBoard} days</p>
+        </div>
+      );
+    }
   };
 
   return (
@@ -388,26 +414,38 @@ const SeamanSeaService = ({ setSubmitForm, seaServiceUpdated, seaService }) => {
                         className='collapse collapse-arrow border-2 border-gray-200 mb-2 '
                       >
                         <input type='checkbox' name='my-accordion-4' />
-                        <div className='collapse-title flex justify-between items-center'>
-                          <div>
-                            <h5>{serviceRecord.position}</h5>
-                            <div className='flex items-end gap-1'>
+                        <div className='collapse-title flex justify-between items-center gap-2'>
+                          <div className='flex flex-col sm:flex-row sm:items-end w-full'>
+                            <div className='w-64'>
+                              <h5>{serviceRecord.position}</h5>
                               <p>
-                                <strong>{serviceRecord.vesselName}</strong> from{' '}
-                                <strong>
-                                  {moment(serviceRecord.signOnDate).format(
-                                    'DD.MM.YYYY'
-                                  )}
-                                </strong>{' '}
-                                to{' '}
-                                <strong>
-                                  {moment(serviceRecord.signOffDate).format(
-                                    'DD.MM.YYYY'
-                                  )}
-                                </strong>
+                                <strong>{serviceRecord.vesselName}</strong>
                               </p>
                             </div>
+                            <div className=''>
+                              <div>
+                                <p>
+                                  <strong>
+                                    {moment(serviceRecord.signOnDate).format(
+                                      'DD.MM.YYYY'
+                                    )}
+                                  </strong>{' '}
+                                  -{' '}
+                                  <strong>
+                                    {moment(serviceRecord.signOffDate).format(
+                                      'DD.MM.YYYY'
+                                    )}
+                                  </strong>
+                                </p>
+                              </div>
+                            </div>
                           </div>
+                          <div>
+                            {contractLength(
+                              serviceRecord.signOnDate,
+                              serviceRecord.signOffDate
+                            )}
+                          </div>{' '}
                         </div>
                         <div className='collapse-content'>
                           <hr />
@@ -488,7 +526,7 @@ const SeamanSeaService = ({ setSubmitForm, seaServiceUpdated, seaService }) => {
               }
             >
               {seaServiceUpdated && (
-                <div className='flex flex-row items-center text-sm gap-1  border-sky-500 border px-2.5  rounded-lg shadow-sm bg-sky-100'>
+                <div className='flex flex-row items-center text-sm gap-1  px-2.5'>
                   <p>Updated:</p>
                   <p>{moment(seaServiceUpdated).format('DD.MM.YYYY')}</p>
                 </div>

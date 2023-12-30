@@ -2,7 +2,7 @@
 import { PiCertificate } from 'react-icons/pi';
 import { useState } from 'react';
 import axios from 'axios';
-import { Button, Modal, Form, Select, DatePicker, Input } from 'antd';
+import { Button, Modal, Form, Select, DatePicker, Input, Empty } from 'antd';
 import { MdOutlinePlaylistAdd } from 'react-icons/md';
 import { useSelector } from 'react-redux';
 import { v4 as uuid } from 'uuid';
@@ -52,6 +52,7 @@ const SeamanCertificates = ({
     } catch (err) {
       console.log(err.message);
     }
+    setCertificateId(null);
     setIsModalOpen(false);
     form.resetFields();
     setSubmitForm((prev) => !prev);
@@ -80,7 +81,7 @@ const SeamanCertificates = ({
       );
     } else if (monthsLeft > 0) {
       return (
-        <div className='flex flex-col text-sm items-center text-orange-500 font-semibold'>
+        <div className='flex flex-col text-sm items-center text-orange-500 font-semibold whitespace-nowrap'>
           <p>Expire in</p>
           <p className=''>{monthsLeft} months</p>
         </div>
@@ -110,6 +111,7 @@ const SeamanCertificates = ({
       expiryDate: dayjs(certificate.expiryDate),
     });
     setCertificateId(id);
+
     setIsModalOpen(true);
   };
 
@@ -153,77 +155,103 @@ const SeamanCertificates = ({
                 Certificates
               </h4>
             </div>
-            <div>
-              {certificates.map((certificate) => {
-                return (
-                  <div
-                    key={certificate.certificateId}
-                    className='collapse collapse-arrow border-2 border-gray-200 mb-2 '
-                  >
-                    <input type='checkbox' name='my-accordion-4' />
-                    <div className='collapse-title flex justify-between items-center'>
-                      <p className='text-lg font-semibold'>
-                        {certificate.name}
-                      </p>
+            {certificates.length > 0 ? (
+              <div>
+                {certificates.map((certificate) => {
+                  return (
+                    <div
+                      key={certificate.certificateId}
+                      className='collapse collapse-arrow border-2 border-gray-200 mb-2 '
+                    >
+                      <input type='checkbox' name='my-accordion-4' />
+                      <div className='collapse-title flex justify-between items-center'>
+                        <p className='text-lg font-semibold'>
+                          {certificate.name}
+                        </p>
 
-                      <div className='whitespace-nowrap ml-2'>
-                        {expiresIn(certificate.expiryDate)}
-                      </div>
-                    </div>
-                    <div className='collapse-content'>
-                      <div className='grid grid-cols-1 lg:grid-cols-2 xl:w-3/4'>
-                        <div className='flex pb-2'>
-                          <p className='w-36'>Number:</p>
-                          <p> {certificate.number}</p>
-                        </div>
-                        <div className='flex pb-2'>
-                          <p className='w-36'>Country of issue:</p>
-                          <p> {certificate.country}</p>
-                        </div>
-                        <div className='flex pb-2'>
-                          <p className='w-36'> Date of issue: </p>
-                          <p>
-                            {moment(certificate.issueDate).format('DD.MM.YYYY')}
-                          </p>
-                        </div>
-                        <div className='flex pb-2'>
-                          <p className='w-36'>Date of expiry:</p>
-                          <p>
-                            {moment(certificate.expiryDate).format(
-                              'DD.MM.YYYY'
-                            )}
-                          </p>
+                        <div className='whitespace-nowrap ml-2'>
+                          {expiresIn(certificate.expiryDate)}
                         </div>
                       </div>
-                      <div className='flex justify-end gap-5 mt-5'>
-                        <Button
-                          onClick={() =>
-                            editCertificate(certificate.certificateId)
-                          }
-                          className='flex gap-2 items-center'
-                        >
-                          <FiEdit3 className='text-lg' />
-                          Edit
-                        </Button>
-                        <Button
-                          onClick={() =>
-                            showDeleteConfirm(certificate.certificateId)
-                          }
-                          className='flex gap-2 items-center'
-                          danger
-                        >
-                          <RiDeleteBinLine className='text-lg' />
-                          Delete
-                        </Button>
-                      </div>{' '}
+                      <div className='collapse-content'>
+                        <div className='grid grid-cols-1 lg:grid-cols-2 xl:w-3/4'>
+                          <div className='flex pb-2'>
+                            <p className='w-36'>Number:</p>
+                            <p> {certificate.number}</p>
+                          </div>
+                          <div className='flex pb-2'>
+                            <p className='w-36'>Country of issue:</p>
+                            <p> {certificate.country}</p>
+                          </div>
+                          <div className='flex pb-2'>
+                            <p className='w-36'> Date of issue: </p>
+                            <p>
+                              {moment(certificate.issueDate).format(
+                                'DD.MM.YYYY'
+                              )}
+                            </p>
+                          </div>
+                          <div className='flex pb-2'>
+                            <p className='w-36'>Date of expiry:</p>
+                            <p>
+                              {moment(certificate.expiryDate).format(
+                                'DD.MM.YYYY'
+                              )}
+                            </p>
+                          </div>
+                        </div>
+                        <div className='flex justify-end gap-5 mt-5'>
+                          <Button
+                            onClick={() =>
+                              editCertificate(certificate.certificateId)
+                            }
+                            className='flex gap-2 items-center'
+                          >
+                            <FiEdit3 className='text-lg' />
+                            Edit
+                          </Button>
+                          <Button
+                            onClick={() =>
+                              showDeleteConfirm(certificate.certificateId)
+                            }
+                            className='flex gap-2 items-center'
+                            danger
+                          >
+                            <RiDeleteBinLine className='text-lg' />
+                            Delete
+                          </Button>
+                        </div>{' '}
+                      </div>
                     </div>
-                  </div>
-                );
-              })}
-            </div>
-            <div className='flex justify-end'>
+                  );
+                })}
+              </div>
+            ) : (
+              <div className='flex w-full justify-center items-center'>
+                <Empty
+                  image='https://gw.alipayobjects.com/zos/antfincdn/ZHrcdLPrvN/empty.svg'
+                  description={<span>No certificates yet...</span>}
+                ></Empty>
+              </div>
+            )}
+            <div
+              className={
+                certificatesUpdated
+                  ? 'flex w-full justify-between'
+                  : 'flex w-full justify-end'
+              }
+            >
+              {certificatesUpdated && (
+                <div className='flex flex-row items-center text-sm gap-1  px-2.5 '>
+                  <p>Updated:</p>
+                  <p>{moment(certificatesUpdated).format('DD.MM.YYYY')}</p>
+                </div>
+              )}
               <Button
-                onClick={() => setIsModalOpen(true)}
+                onClick={() => {
+                  form.resetFields();
+                  setIsModalOpen(true);
+                }}
                 type='primary'
                 className='flex items-center gap-2 w-32 justify-center'
               >

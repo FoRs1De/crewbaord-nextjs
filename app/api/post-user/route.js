@@ -146,6 +146,7 @@ export const POST = async (req) => {
           period: null,
         },
         certificates: [],
+        aboutMe: null,
         certificatesUpdated: null,
         seaServiceUpdated: null,
         dataUpdated: null,

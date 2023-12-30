@@ -42,11 +42,7 @@ const Profile = () => {
             <SeamanSideBar />
             <div className='  w-full md:w-fit md:flex-grow flex flex-col '>
               <SeamanTopContent />
-              <SeamanSeaService
-                setSubmitForm={setSubmitForm}
-                seaServiceUpdated={seaServiceUpdated}
-                seaService={seaService}
-              />
+
               <SeamanPersonalDetails
                 setSubmitForm={setSubmitForm}
                 personalDetails={personalDetails}
@@ -59,6 +55,11 @@ const Profile = () => {
                 certificates={certificates}
                 certificatesUpdated={certificatesUpdated}
                 setSubmitForm={setSubmitForm}
+              />
+              <SeamanSeaService
+                setSubmitForm={setSubmitForm}
+                seaServiceUpdated={seaServiceUpdated}
+                seaService={seaService}
               />
             </div>
           </>

@@ -67,7 +67,7 @@ const SeamanDocuments = ({ documents, setSubmitForm }) => {
             </div>
           </div>
           {documents.updated && (
-            <div className='flex flex-row items-center text-sm gap-1 w-fit  border-sky-500 border px-2.5 py-1.5 rounded-lg shadow-sm bg-sky-100'>
+            <div className='flex flex-row items-center text-sm gap-1 w-fit   px-2.5 py-1.5'>
               <p> Updated: </p>
               <p> {moment(documents.updated).format('DD.MM.YYYY')}</p>
             </div>

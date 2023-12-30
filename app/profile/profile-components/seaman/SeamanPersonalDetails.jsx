@@ -372,20 +372,15 @@ const SeamanPersonalDetails = ({ personalDetails, setSubmitForm }) => {
           </div>
           <div
             className={
-              personalDetails.personalDetailsUpdated
+              personalDetails.updated
                 ? 'w-full flex justify-between items-center'
                 : 'w-full flex justify-end items-center '
             }
           >
-            {personalDetails.personalDetailsUpdated && (
-              <div className='flex flex-row items-center text-sm gap-1  border-sky-500 border px-2.5 py-1.5 rounded-lg shadow-sm bg-sky-100'>
+            {personalDetails.updated && (
+              <div className='flex flex-row items-center text-sm gap-1   px-2.5 py-1.5 '>
                 <p> Updated: </p>
-                <p>
-                  {' '}
-                  {moment(personalDetails.personalDetailsUpdated).format(
-                    'DD.MM.YYYY'
-                  )}
-                </p>
+                <p> {moment(personalDetails.updated).format('DD.MM.YYYY')}</p>
               </div>
             )}
             <Button
