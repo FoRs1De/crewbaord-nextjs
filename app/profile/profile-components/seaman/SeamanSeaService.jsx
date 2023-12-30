@@ -45,7 +45,6 @@ const SeamanSeaService = ({ setSubmitForm, seaServiceUpdated, seaService }) => {
   };
   const submitData = async (value) => {
     try {
-      console.log(serviceRecordId);
       if (serviceRecordId) {
         const dataToSend = {
           ...value,
@@ -413,42 +412,39 @@ const SeamanSeaService = ({ setSubmitForm, seaServiceUpdated, seaService }) => {
                         <div className='collapse-content'>
                           <hr />
                           <div className='mt-4'>
-                            <div className='flex flex-wrap '>
-                              <div className='flex flex-col w-64  lg:w-72 xl:w-96'>
-                                <div className='flex pb-2'>
-                                  <p className='w-36'> Vessel type:</p>{' '}
-                                  <p>{serviceRecord.vesselType}</p>
-                                </div>
-                                <div className='flex pb-2'>
-                                  <p className='w-36'>Year built:</p>
-                                  <p>{serviceRecord.vesselYearBuilt}</p>
-                                </div>
-                                <div className='flex pb-2'>
-                                  <p className='w-36'>ME type:</p>
-                                  <p>{serviceRecord.mainEngineType}</p>
-                                </div>
-                                <div className='flex pb-2'>
-                                  <p className='w-36'>Ship owner:</p>
-                                  <p>{serviceRecord.shipOwner}</p>
-                                </div>
+                            <div className='grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 '>
+                              <div className='flex pb-2'>
+                                <p className='w-36'> Vessel type:</p>{' '}
+                                <p>{serviceRecord.vesselType}</p>
                               </div>
-                              <div className='flex flex-col md:w-72 lg:w-72 xl:w-96'>
-                                <div className='flex  pb-2'>
-                                  <p className='w-36'>Vessel flag:</p>{' '}
-                                  <p>{serviceRecord.vesselFlag}</p>
-                                </div>
-                                <div className='flex  pb-2'>
-                                  <p className='w-36'>Vessel DWT:</p>{' '}
-                                  <p>{serviceRecord.vesselDWT}</p>
-                                </div>
-                                <div className='flex pb-2'>
-                                  <p className='w-36'>Main engine, kW:</p>
-                                  <p>{serviceRecord.mainEngineKw}</p>
-                                </div>
-                                <div className='flex pb-2'>
-                                  <p className='w-36'>Crewing agency:</p>
-                                  <p>{serviceRecord.crewing}</p>
-                                </div>
+                              <div className='flex pb-2'>
+                                <p className='w-36'>Year built:</p>
+                                <p>{serviceRecord.vesselYearBuilt}</p>
+                              </div>
+                              <div className='flex pb-2'>
+                                <p className='w-36'>ME type:</p>
+                                <p>{serviceRecord.mainEngineType}</p>
+                              </div>
+
+                              <div className='flex  pb-2'>
+                                <p className='w-36'>Vessel flag:</p>{' '}
+                                <p>{serviceRecord.vesselFlag}</p>
+                              </div>
+                              <div className='flex  pb-2'>
+                                <p className='w-36'>Vessel DWT:</p>{' '}
+                                <p>{serviceRecord.vesselDWT}</p>
+                              </div>
+                              <div className='flex pb-2'>
+                                <p className='w-36'>Main engine, kW:</p>
+                                <p>{serviceRecord.mainEngineKw}</p>
+                              </div>
+                              <div className='flex pb-2'>
+                                <p className='w-36'>Ship owner:</p>
+                                <p>{serviceRecord.shipOwner}</p>
+                              </div>
+                              <div className='flex pb-2'>
+                                <p className='w-36'>Crewing agency:</p>
+                                <p>{serviceRecord.crewing}</p>
                               </div>
                             </div>
                           </div>

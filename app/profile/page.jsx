@@ -55,7 +55,11 @@ const Profile = () => {
                 setSubmitForm={setSubmitForm}
                 documents={documents}
               />
-              <SeamanCertificates />
+              <SeamanCertificates
+                certificates={certificates}
+                certificatesUpdated={certificatesUpdated}
+                setSubmitForm={setSubmitForm}
+              />
             </div>
           </>
         )}

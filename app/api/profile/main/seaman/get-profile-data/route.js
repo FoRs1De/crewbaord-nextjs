@@ -42,7 +42,7 @@ export const GET = async (req) => {
             lastName: userData.lastName,
             ...userData.personalDetails,
           },
-          cetificates: userData.cetificates,
+          certificates: userData.certificates,
           certificatesUpdated: userData.certificatesUpdated,
         });
       }
