@@ -6,8 +6,10 @@ import SeamanSideBar from './profile-components/seaman/SeamanSideBar';
 import SeamanTopContent from './profile-components/seaman/SeamanTopContent';
 import SeamanDocuments from './profile-components/seaman/SeamanDocuments';
 import SeamanCertificates from './profile-components/seaman/SeamanCertificates';
+import SeamanAboutMe from './profile-components/seaman/SeamanAboutMe';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
+import { set } from 'lodash';
 
 const Profile = () => {
   const [documents, setDocuments] = useState(null);
@@ -15,9 +17,11 @@ const Profile = () => {
   const [seaServiceUpdated, setSeaServiceUpdated] = useState(false);
   const [personalDetails, setPersonalDetails] = useState(null);
   const [certificates, setCertificates] = useState(null);
-  const [certificatesUpdated, setCertificatesUpdated] = useState(false);
+  const [certificatesUpdated, setCertificatesUpdated] = useState(null);
   const [submitForm, setSubmitForm] = useState(false);
   const [dataLoaded, setDataLoaded] = useState(false);
+  const [aboutMe, setAboutMe] = useState(null);
+  const [aboutMeUpdated, setAboutMeUpdated] = useState(null);
 
   useEffect(() => {
     const getUserData = async () => {
@@ -28,10 +32,13 @@ const Profile = () => {
       setPersonalDetails(res.data.personalDetails);
       setCertificates(res.data.certificates);
       setCertificatesUpdated(res.data.certificatesUpdated);
+      setAboutMe(res.data.aboutMe);
+      setAboutMeUpdated(res.data.aboutMeUpdated);
       setDataLoaded(true);
     };
     getUserData();
   }, [submitForm]);
+
   return (
     <>
       <SeamanHeader />
@@ -51,6 +58,7 @@ const Profile = () => {
                 setSubmitForm={setSubmitForm}
                 documents={documents}
               />
+
               <SeamanCertificates
                 certificates={certificates}
                 certificatesUpdated={certificatesUpdated}
@@ -60,6 +68,11 @@ const Profile = () => {
                 setSubmitForm={setSubmitForm}
                 seaServiceUpdated={seaServiceUpdated}
                 seaService={seaService}
+              />
+              <SeamanAboutMe
+                setSubmitForm={setSubmitForm}
+                aboutMe={aboutMe}
+                aboutMeUpdated={aboutMeUpdated}
               />
             </div>
           </>

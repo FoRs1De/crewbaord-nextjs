@@ -416,7 +416,7 @@ const SeamanSeaService = ({ setSubmitForm, seaServiceUpdated, seaService }) => {
                         <input type='checkbox' name='my-accordion-4' />
                         <div className='collapse-title flex justify-between items-center gap-2'>
                           <div className='flex flex-col sm:flex-row sm:items-end w-full'>
-                            <div className='w-64'>
+                            <div className='sm:w-64 w-48'>
                               <h5>{serviceRecord.position}</h5>
                               <p>
                                 <strong>{serviceRecord.vesselName}</strong>

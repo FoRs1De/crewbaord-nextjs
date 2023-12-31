@@ -44,6 +44,8 @@ export const GET = async (req) => {
           },
           certificates: userData.certificates,
           certificatesUpdated: userData.certificatesUpdated,
+          aboutMe: userData.aboutMe,
+          aboutMeUpdated: userData.aboutMeUpdated,
         });
       }
     }
