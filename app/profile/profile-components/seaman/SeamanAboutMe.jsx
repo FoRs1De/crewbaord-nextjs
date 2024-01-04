@@ -76,9 +76,9 @@ const SeamanAboutMe = ({ setSubmitForm, aboutMe, aboutMeUpdated }) => {
               {aboutMe ? (
                 <>
                   <p>{aboutMe}</p>
-                  <div className='flex justify-between items-center'>
+                  <div className='flex justify-between items-center mt-3'>
                     <div>
-                      <p className='text-sm text-gray-400 mt-2'>
+                      <p className='text-sm  mt-2'>
                         Updated: {moment(aboutMeUpdated).format('DD.MM.YYYY')}
                       </p>
                     </div>
@@ -109,7 +109,7 @@ const SeamanAboutMe = ({ setSubmitForm, aboutMe, aboutMeUpdated }) => {
                       }
                     />
                   </div>
-                  <div className='flex justify-end'>
+                  <div className='flex justify-end mt-3'>
                     <Button
                       onClick={editAboutMe}
                       type='primary'
