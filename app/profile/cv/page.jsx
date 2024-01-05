@@ -1,6 +1,7 @@
 'use client';
 import SeamanHeader from '../profile-components/seaman/SeamanHeader';
 import MainData from './MainData';
+import Experience from './Experience';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 
@@ -30,8 +31,13 @@ const CV = () => {
   return (
     <>
       <SeamanHeader />
-      <main className='flex-col mx-auto container flex-1 p-2 '>
-        {dataLoaded && <MainData mainData={mainData} />}
+      <main className='flex flex-col mx-auto container flex-1 px-2 pt-5 gap-4 pb-10 '>
+        {dataLoaded && (
+          <>
+            <MainData mainData={mainData} />
+            <Experience seaService={seaService} />
+          </>
+        )}
       </main>
     </>
   );

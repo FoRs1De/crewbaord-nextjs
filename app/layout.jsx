@@ -22,7 +22,7 @@ export default function RootLayout({ children }) {
       <StoreProvider>
         <GoogleOAuthProvider clientId={process.env.GOOGLE_CLIENT_ID}>
           <body className=''>
-            <div className='flex flex-col min-h-screen'>
+            <div className='flex flex-col min-h-screen '>
               <TopHeader />
               <Header />
               {children}

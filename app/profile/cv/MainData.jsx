@@ -27,7 +27,7 @@ const MainData = ({ mainData }) => {
             <h3> {mainData.lastName}</h3>
           </div>
           <hr className='my-5' />
-          <div className='flex flex-col lg:flex-row gap-2 lg:gap-14'>
+          <div className='flex flex-col lg:flex-row gap-2 lg:gap-36 '>
             <div className=' flex flex-col gap-2'>
               <div className='flex'>
                 <p className='w-36'>Rank:</p>{' '}
