@@ -12,10 +12,11 @@ import {
 } from 'antd';
 import { ExclamationCircleFilled } from '@ant-design/icons';
 import { CgPlayListAdd } from 'react-icons/cg';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import ranksSelect from '../../../assets/ranksSelect';
 import shipTypes from '../../../assets/shipTypes';
 import flagStates from '../../../assets/flagStates';
+import countryList from '@/app/assets/countries';
 import moment from 'moment';
 import { useSelector } from 'react-redux';
 import axios from 'axios';
@@ -129,7 +130,7 @@ const SeamanSeaService = ({ setSubmitForm, seaServiceUpdated, seaService }) => {
       mainEngineType: record.mainEngineType,
       mainEngineKw: record.mainEngineKw,
       shipOwner: record.shipOwner,
-      crewing: record.crewing,
+      country: record.country,
       signOnDate: dayjs(record.signOnDate),
       signOffDate: dayjs(record.signOffDate),
     });
@@ -337,10 +338,22 @@ const SeamanSeaService = ({ setSubmitForm, seaServiceUpdated, seaService }) => {
                 </Form.Item>
                 <Form.Item
                   className='w-full md:w-1/2'
-                  name='crewing'
-                  label='Crewing Agency'
+                  name='country'
+                  label='Owner country'
+                  rules={[
+                    {
+                      required: true,
+                      message: 'Please fill in!',
+                    },
+                  ]}
                 >
-                  <Input />
+                  <Select showSearch>
+                    {countryList.map((ship, index) => (
+                      <Option key={index} value={ship}>
+                        {ship}
+                      </Option>
+                    ))}
+                  </Select>
                 </Form.Item>
               </div>
               <div className='flex flex-col md:flex-row md:gap-5'>
@@ -477,12 +490,12 @@ const SeamanSeaService = ({ setSubmitForm, seaServiceUpdated, seaService }) => {
                                 <p>{serviceRecord.mainEngineKw}</p>
                               </div>
                               <div className='flex pb-2'>
-                                <p className='w-36'>Ship owner:</p>
+                                <p className='w-36'>Shipowner:</p>
                                 <p>{serviceRecord.shipOwner}</p>
                               </div>
                               <div className='flex pb-2'>
-                                <p className='w-36'>Crewing agency:</p>
-                                <p>{serviceRecord.crewing}</p>
+                                <p className='w-36'>Owner country:</p>
+                                <p>{serviceRecord.country}</p>
                               </div>
                             </div>
                           </div>

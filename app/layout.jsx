@@ -4,6 +4,7 @@ import Footer from './components/footer/Footer';
 import TopHeader from './components/header/TopHeader';
 import { StoreProvider } from './redux/StoreProvider';
 import { GoogleOAuthProvider } from '@react-oauth/google';
+import { WebVitals } from './components/web-vitals';
 
 export const metadata = {
   title: 'CREWBOARD',
@@ -22,6 +23,7 @@ export default function RootLayout({ children }) {
       <StoreProvider>
         <GoogleOAuthProvider clientId={process.env.GOOGLE_CLIENT_ID}>
           <body className=''>
+            <WebVitals />
             <div className='flex flex-col min-h-screen '>
               <TopHeader />
               <Header />
