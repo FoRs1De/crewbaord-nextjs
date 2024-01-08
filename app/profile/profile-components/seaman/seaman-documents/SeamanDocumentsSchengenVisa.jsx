@@ -36,8 +36,8 @@ const SeamanDocumentsSchengenVisa = ({ documents, setSubmitForm }) => {
     setShowForm(true);
     if (documents.schengen.number) {
       form.setFieldsValue({
-        type: documents.schengen.type,
         number: documents.schengen.number,
+        issueDate: dayjs(documents.schengen.issueDate),
         expiryDate: dayjs(documents.schengen.expiryDate),
       });
     } else {
@@ -80,12 +80,12 @@ const SeamanDocumentsSchengenVisa = ({ documents, setSubmitForm }) => {
             >
               <Form.Item
                 className='w-full'
-                name='type'
-                label='Visa type'
+                name='number'
+                label='Visa number'
                 rules={[
                   {
                     required: true,
-                    message: `Please enter type!`,
+                    message: `Please enter number!`,
                   },
                 ]}
               >
@@ -94,16 +94,20 @@ const SeamanDocumentsSchengenVisa = ({ documents, setSubmitForm }) => {
               <div className='flex gap-5 '>
                 <Form.Item
                   className='w-1/2'
-                  name='number'
-                  label='Visa number'
+                  name='issueDate'
+                  label='Issue date'
                   rules={[
                     {
                       required: true,
-                      message: `Please enter number!`,
+                      message: `Please enter issue date!`,
                     },
                   ]}
                 >
-                  <Input className='w-full' />
+                  <DatePicker
+                    placeholder='DD.MM.YYYY'
+                    format={'DD.MM.YYYY'}
+                    className='w-full'
+                  />
                 </Form.Item>
                 <Form.Item
                   className='w-1/2'

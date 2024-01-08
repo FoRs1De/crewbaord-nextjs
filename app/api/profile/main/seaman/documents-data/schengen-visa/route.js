@@ -11,8 +11,8 @@ export const PUT = async (req) => {
       { _id: new ObjectId(userId) },
       {
         $set: {
-          'documents.schengen.type': data.type,
           'documents.schengen.number': data.number,
+          'documents.schengen.issueDate': data.issueDate,
           'documents.schengen.expiryDate': data.expiryDate,
           'documents.updated': new Date(),
         },

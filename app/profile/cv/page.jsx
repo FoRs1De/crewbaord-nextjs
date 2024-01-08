@@ -2,6 +2,7 @@
 import SeamanHeader from '../profile-components/seaman/SeamanHeader';
 import MainData from './MainData';
 import Experience from './Experience';
+import Documents from './Documents';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 
@@ -36,6 +37,7 @@ const CV = () => {
           <>
             <MainData mainData={mainData} />
             <Experience seaService={seaService} />
+            <Documents documents={documents} />
           </>
         )}
       </main>

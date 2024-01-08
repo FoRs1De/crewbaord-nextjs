@@ -12,6 +12,7 @@ export const PUT = async (req) => {
       {
         $set: {
           'documents.b1ocs.number': data.number,
+          'documents.b1ocs.issueDate': data.issueDate,
           'documents.b1ocs.expiryDate': data.expiryDate,
           'documents.updated': new Date(),
         },

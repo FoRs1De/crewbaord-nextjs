@@ -25,7 +25,7 @@ const Experience = ({ seaService }) => {
         <div>
           {/* Big devices only */}
           <div className='hidden lg:flex'>
-            <table className='table table-sm mt-2'>
+            <table className='table table-sm mt-2 '>
               <thead className='bg-sky-100 border'>
                 <tr>
                   <th className='text-center '>Position</th>
@@ -47,30 +47,33 @@ const Experience = ({ seaService }) => {
                           {record.position}
                         </p>
                       </td>
-                      <td className='text-sm border '>
+                      <td className='text-sm border px-0'>
                         <div className='flex flex-col items-center gap-1'>
                           <p>{record.vesselName}</p>
+                          <hr className='w-full' />
                           <p>{record.vesselFlag}</p>
                         </div>
                       </td>
-                      <td className='text-sm border'>
+                      <td className='text-sm border px-0'>
                         <div className='flex flex-col items-center gap-1'>
                           <p>{record.vesselType}</p>
+                          <hr className='w-full' />
                           <p>{record.vesselDWT}</p>
                         </div>
                       </td>
-                      <td className='text-sm border'>
+                      <td className='text-sm border px-0'>
                         <div className='flex flex-col items-center gap-1'>
                           <p>{record.vesselYearBuilt}</p>
                         </div>
                       </td>
-                      <td className='text-sm border'>
+                      <td className='text-sm border px-0'>
                         <div className='flex flex-col items-center gap-1'>
                           <p>{record.mainEngineType}</p>
+                          <hr className='w-full' />
                           <p>{record.mainEngineKw}</p>
                         </div>
                       </td>
-                      <td className='text-sm border'>
+                      <td className='text-sm border px-0 '>
                         <div className='flex flex-col items-center gap-1'>
                           <div className='flex gap-2'>
                             <p>
@@ -86,6 +89,7 @@ const Experience = ({ seaService }) => {
                               className='tooltip'
                               data-tip={`${contractLength(
                                 record.signOnDate,
+
                                 record.signOffDate
                               )}`}
                             >
@@ -94,9 +98,10 @@ const Experience = ({ seaService }) => {
                           </div>
                         </div>
                       </td>
-                      <td className='text-sm border'>
+                      <td className='text-sm border px-0 '>
                         <div className='flex flex-col items-center gap-1'>
                           <p>{record.shipOwner}</p>
+                          <hr className='w-full' />
                           <p>{record.country}</p>
                         </div>
                       </td>

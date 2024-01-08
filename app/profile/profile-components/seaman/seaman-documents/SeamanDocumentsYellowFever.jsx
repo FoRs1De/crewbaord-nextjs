@@ -4,14 +4,15 @@ import { LuFileEdit } from 'react-icons/lu';
 import { TiInputChecked } from 'react-icons/ti';
 import { useState } from 'react';
 import axios from 'axios';
-import { Modal, Form, Input, Button, DatePicker } from 'antd';
+import { Modal, Form, Select, Button, DatePicker } from 'antd';
 import { useSelector } from 'react-redux';
 import dayjs from 'dayjs';
 import { RiDeleteBin6Line } from 'react-icons/ri';
+import countryList from '@/app/assets/countries';
 
 const SeamanDocumentsYellowFever = ({ documents, setSubmitForm }) => {
   const [showForm, setShowForm] = useState(false);
-
+  const { Option } = Select;
   const [form] = Form.useForm();
 
   const sessionStatus = useSelector((state) => state.authReducer);
@@ -82,15 +83,21 @@ const SeamanDocumentsYellowFever = ({ documents, setSubmitForm }) => {
                 <Form.Item
                   className='w-full'
                   name='place'
-                  label='Place of vaccination'
+                  label='Country of vaccination'
                   rules={[
                     {
                       required: true,
-                      message: `Please input place!`,
+                      message: `Please input country!`,
                     },
                   ]}
                 >
-                  <Input className='w-full' />
+                  <Select allowClear placeholder='Select country' showSearch>
+                    {countryList.map((country, index) => (
+                      <Option key={index} value={country}>
+                        {country}
+                      </Option>
+                    ))}
+                  </Select>
                 </Form.Item>
                 <Form.Item
                   className='w-full'

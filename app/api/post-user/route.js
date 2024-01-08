@@ -125,15 +125,17 @@ export const POST = async (req) => {
           },
           c1d: {
             number: null,
+            issueDate: null,
             expiryDate: null,
           },
           b1ocs: {
             number: null,
+            issueDate: null,
             expiryDate: null,
           },
           schengen: {
-            type: null,
             number: null,
+            issueDate: null,
             expiryDate: null,
           },
           updated: null,

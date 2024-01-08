@@ -38,6 +38,7 @@ const SeamanDocumentsUsVisaC1D = ({ documents, setSubmitForm }) => {
     if (documents.c1d.number) {
       form.setFieldsValue({
         number: documents.c1d.number,
+        issueDate: dayjs(documents.c1d.issueDate),
         expiryDate: dayjs(documents.c1d.expiryDate),
       });
     } else {
@@ -92,23 +93,42 @@ const SeamanDocumentsUsVisaC1D = ({ documents, setSubmitForm }) => {
                 >
                   <Input className='w-full' />
                 </Form.Item>
-                <Form.Item
-                  className='w-full'
-                  name='expiryDate'
-                  label='Expiry date'
-                  rules={[
-                    {
-                      required: true,
-                      message: `Please enter expiry date!`,
-                    },
-                  ]}
-                >
-                  <DatePicker
-                    placeholder='DD.MM.YYYY'
-                    format={'DD.MM.YYYY'}
-                    className='w-full'
-                  />
-                </Form.Item>
+                <div className='flex gap-5'>
+                  <Form.Item
+                    className='w-1/2'
+                    name='issueDate'
+                    label='Issue date'
+                    rules={[
+                      {
+                        required: true,
+                        message: `Please enter issue date!`,
+                      },
+                    ]}
+                  >
+                    <DatePicker
+                      placeholder='DD.MM.YYYY'
+                      format={'DD.MM.YYYY'}
+                      className='w-full'
+                    />
+                  </Form.Item>
+                  <Form.Item
+                    className='w-1/2'
+                    name='expiryDate'
+                    label='Expiry date'
+                    rules={[
+                      {
+                        required: true,
+                        message: `Please enter expiry date!`,
+                      },
+                    ]}
+                  >
+                    <DatePicker
+                      placeholder='DD.MM.YYYY'
+                      format={'DD.MM.YYYY'}
+                      className='w-full'
+                    />
+                  </Form.Item>
+                </div>
               </div>
 
               {documents.c1d.number ? (
