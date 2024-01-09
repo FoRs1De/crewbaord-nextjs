@@ -4,7 +4,8 @@ const Documents = ({ documents }) => {
   return (
     <div className="flex flex-col  gap-2   bg-white shadow-lg rounded-lg p-4 mt-4'">
       <h3>Documents</h3>
-      <div className='flex overflow-x-auto'>
+      {/*Large screens*/}
+      <div className=' overflow-x-auto hidden lg:flex'>
         <table className='table table-xs sm:table-sm  mt-2'>
           <thead className='bg-sky-100 border'>
             <tr>
@@ -153,6 +154,205 @@ const Documents = ({ documents }) => {
             )}
           </tbody>
         </table>
+      </div>
+      {/*Small screens*/}
+      <div className='flex flex-col lg:hidden'>
+        <>
+          {documents.seamansBook.number && (
+            <div className='mt-4'>
+              <hr className='mb-2' />
+              <h5>{`Seaman's Book`}</h5>
+              <div className='flex flex-col sm:flex-row gap-2 mt-2 '>
+                <div className='flex flex-col gap-2 sm:w-1/2'>
+                  <div className='flex'>
+                    <p className='w-32'>Number:</p>
+                    <p>{documents.seamansBook.number}</p>
+                  </div>
+                  <div className='flex'>
+                    <p className='w-32'>Issue country:</p>
+                    <p>{documents.seamansBook.country}</p>
+                  </div>
+                </div>
+                <div className='flex flex-col gap-2 sm:w-1/2'>
+                  <div className='flex'>
+                    <p className='w-32'>Issue date:</p>
+                    <p>
+                      {moment(documents.seamansBook.issueDate).format(
+                        'DD.MM.YYYY'
+                      )}
+                    </p>
+                  </div>
+                  <div className='flex'>
+                    <p className='w-32'>Expiry date:</p>
+                    <p>
+                      {moment(documents.seamansBook.expiryDate).format(
+                        'DD.MM.YYYY'
+                      )}
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+        </>
+        <>
+          {documents.travelPassport.number && (
+            <div className='mt-4'>
+              <hr className='mb-2' />
+              <h5>Travel Passport</h5>
+              <div className='flex flex-col sm:flex-row  gap-2 mt-2'>
+                <div className='flex flex-col gap-2 sm:w-1/2'>
+                  <div className='flex'>
+                    <p className='w-32'>Number:</p>
+                    <p>{documents.travelPassport.number}</p>
+                  </div>
+                  <div className='flex'>
+                    <p className='w-32'>Issue country:</p>
+                    <p>{documents.travelPassport.country}</p>
+                  </div>
+                </div>
+                <div className='flex flex-col gap-2 sm:w-1/2'>
+                  <div className='flex'>
+                    <p className='w-32'>Issue date:</p>
+                    <p>
+                      {moment(documents.travelPassport.issueDate).format(
+                        'DD.MM.YYYY'
+                      )}
+                    </p>
+                  </div>
+                  <div className='flex'>
+                    <p className='w-32'>Expiry date:</p>
+                    <p>
+                      {moment(documents.travelPassport.expiryDate).format(
+                        'DD.MM.YYYY'
+                      )}
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+        </>
+        <>
+          {documents.yellowFever.issueDate && (
+            <div className='mt-4'>
+              <hr className='mb-2' />
+              <h5>Yellow Fever</h5>
+              <div className='flex flex-col sm:flex-row  gap-2 mt-2'>
+                <div className='flex flex-col gap-2 sm:w-1/2'>
+                  <div className='flex'>
+                    <p className='w-32'>Issue country:</p>
+                    <p>{documents.yellowFever.place}</p>
+                  </div>
+                </div>
+                <div className='flex flex-col gap-2 sm:w-1/2'>
+                  <div className='flex'>
+                    <p className='w-32'>Issue date:</p>
+                    <p>
+                      {moment(documents.yellowFever.issueDate).format(
+                        'DD.MM.YYYY'
+                      )}
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+        </>
+        <>
+          {documents.c1d.number && (
+            <div className='mt-4'>
+              <hr className='mb-2' />
+              <h5>US Visa C1/D</h5>
+              <div className='flex flex-col sm:flex-row  gap-2 mt-2'>
+                <div className='flex flex-col gap-2 sm:w-1/2'>
+                  <div className='flex'>
+                    <p className='w-32'>Number:</p>
+                    <p>{documents.c1d.number}</p>
+                  </div>
+                </div>
+                <div className='flex flex-col gap-2 sm:w-1/2'>
+                  <div className='flex'>
+                    <p className='w-32'>Issue date:</p>
+                    <p>
+                      {moment(documents.c1d.issueDate).format('DD.MM.YYYY')}
+                    </p>
+                  </div>
+                  <div className='flex'>
+                    <p className='w-32'>Expiry date:</p>
+                    <p>
+                      {moment(documents.c1d.expiryDate).format('DD.MM.YYYY')}
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+        </>
+        <>
+          {documents.b1ocs.number && (
+            <div className='mt-4'>
+              <hr className='mb-2' />
+              <h5>US Visa B1/OCS</h5>
+              <div className='flex flex-col sm:flex-row  gap-2 mt-2'>
+                <div className='flex flex-col gap-2 sm:w-1/2'>
+                  <div className='flex'>
+                    <p className='w-32'>Number:</p>
+                    <p>{documents.b1ocs.number}</p>
+                  </div>
+                </div>
+                <div className='flex flex-col gap-2 sm:w-1/2'>
+                  <div className='flex'>
+                    <p className='w-32'>Issue date:</p>
+                    <p>
+                      {moment(documents.b1ocs.issueDate).format('DD.MM.YYYY')}
+                    </p>
+                  </div>
+                  <div className='flex'>
+                    <p className='w-32'>Expiry date:</p>
+                    <p>
+                      {moment(documents.b1ocs.expiryDate).format('DD.MM.YYYY')}
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+        </>
+        <>
+          {documents.schengen.number && (
+            <div className='mt-4'>
+              <hr className='mb-2' />
+              <h5>Schengen Visa</h5>
+              <div className='flex flex-col sm:flex-row  gap-2 mt-2'>
+                <div className='flex flex-col gap-2 sm:w-1/2'>
+                  <div className='flex'>
+                    <p className='w-32'>Number:</p>
+                    <p>{documents.schengen.number}</p>
+                  </div>
+                </div>
+                <div className='flex flex-col gap-2 sm:w-1/2'>
+                  <div className='flex'>
+                    <p className='w-32'>Issue date:</p>
+                    <p>
+                      {moment(documents.schengen.issueDate).format(
+                        'DD.MM.YYYY'
+                      )}
+                    </p>
+                  </div>
+                  <div className='flex'>
+                    <p className='w-32'>Expiry date:</p>
+                    <p>
+                      {moment(documents.schengen.expiryDate).format(
+                        'DD.MM.YYYY'
+                      )}
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+        </>
       </div>
     </div>
   );
